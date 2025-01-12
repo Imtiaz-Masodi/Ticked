@@ -7,7 +7,7 @@ function generateToken(payload = {}, expiry = constants.JWT_DEFAULT_EXPIRY) {
 
 function generateLoginToken(payload) {
   if (!Boolean(payload?.id)) throw new Error(constants.USER_ID_REQUIRED);
-  return generateToken(payload, "1m" || constants.JWT_LOGIN_TOKEN_EXPIRY);
+  return generateToken(payload, constants.JWT_LOGIN_TOKEN_EXPIRY);
 }
 
 function parseToken(token = "") {

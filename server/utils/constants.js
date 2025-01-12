@@ -21,6 +21,8 @@ module.exports = {
   USER_CREATED_SUCCESSFULLY: "User created successfully!",
   INVALID_USER_CREDENTIALS: "Invalid email or password",
   VALID_USER_CREDENTIALS: "Sign Success!",
+  WRONG_PASSWORD: "Wrong password",
+  PASSWORD_UPDATED: "Password updated successfully!",
 
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",

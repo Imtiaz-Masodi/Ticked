@@ -1,7 +1,11 @@
 const express = require("express");
 const userController = require("../controllers/UserController");
 const { authentication } = require("../middlewares/authentication");
-const { validateUserSchema, validateUserSchemaForSignIn } = require("../middlewares/validateUserSchema");
+const {
+  validateUserSchema,
+  validateUserSchemaForSignIn,
+  validateSchemaForPassword,
+} = require("../middlewares/validateUserSchema");
 
 const router = express.Router();
 
@@ -11,5 +15,6 @@ router.post("/signin", validateUserSchemaForSignIn, userController.validateUserC
 // Below are secured routes
 router.use(authentication);
 router.get("/me", userController.getUserDetails);
+router.post("/update-password", validateSchemaForPassword, userController.updatePassword);
 
 module.exports = router;

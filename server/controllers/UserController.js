@@ -9,7 +9,6 @@ async function createUser(req, res) {
     const { name, email, password } = req.body;
     const user = new User({ name, email, password });
 
-    // ToDo: Validate name, email and password
     const userWithEmailExists = await User.userExistsWithEmail(email);
     if (userWithEmailExists) {
       res.status(400).send(new ApiResponse(false, constants.USER_EMAIL_DUPLICATE));
@@ -31,8 +30,6 @@ async function createUser(req, res) {
 async function validateUserCredentials(req, res) {
   try {
     const { email, password } = req.body;
-    // ToDo: Validate email and password
-
     const user = await User.findOne({ email });
     if (!user) {
       res.status(400).send(new ApiResponse(false, constants.INVALID_USER_CREDENTIALS));
@@ -60,8 +57,29 @@ async function getUserDetails(req, res) {
   }
 }
 
+async function updatePassword(req, res) {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const { user } = req.stash;
+
+    const isValidPassword = await user.comparePassword(currentPassword);
+    if (!isValidPassword) {
+      res.status(400).send(new ApiResponse(false, constants.WRONG_PASSWORD));
+      return;
+    }
+
+    user.password = newPassword;
+    const updatedUser = await user.save();
+
+    res.send(new ApiResponse(true, constants.PASSWORD_UPDATED, { updatedUser }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
 module.exports = {
   createUser,
   validateUserCredentials,
   getUserDetails,
+  updatePassword,
 };
