@@ -1,11 +1,26 @@
 const express = require("express");
+const mongoDB = require("./db/mongo");
+const { handleCors } = require("./utils");
+const { PORT } = require("./utils/constants");
+
+const accountRouter = require("./routes/AccountRoutes");
+const { initializeRequest } = require("./middlewares/initializeRequest");
+
+const SERVER_PORT = PORT || 3001;
 const app = express();
-const PORT = process.env.PORT || 3001;
+
+app.use(handleCors);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(initializeRequest);
+
+app.use("/account", accountRouter);
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Task Management API server is up and running!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server started and running on port ${PORT}`);
+app.listen(SERVER_PORT, () => {
+  mongoDB.connect();
+  console.log(`Server started and running on port ${SERVER_PORT}`);
 });

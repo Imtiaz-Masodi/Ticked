@@ -4,7 +4,7 @@
   "description": "Simple task management full-stack application",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "clear && node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -14,6 +14,9 @@
   "author": "Mohd Imtiaz",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.21.2"
+    "bcrypt": "^5.1.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.2"
   }
 }
