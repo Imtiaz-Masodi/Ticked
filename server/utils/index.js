@@ -30,8 +30,16 @@ function sendErrorResponse(res, errorStatus = 500, errorMessage) {
   }
 }
 
+function generateRandomColorHexCode() {
+  // Generate a random integer between 0 and 16777215 (0xFFFFFF)
+  const randomColor = Math.floor(Math.random() * 0xffffff);
+  // Convert the integer to a hex string and pad with leading zeros if necessary
+  return `#${randomColor.toString(16).padStart(6, "0")}`;
+}
+
 module.exports = {
   handleCors,
   handleCommonError,
   handleInvalidMongoSchemaError,
+  generateRandomColorHexCode,
 };

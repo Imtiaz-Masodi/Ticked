@@ -24,6 +24,10 @@ module.exports = {
   WRONG_PASSWORD: "Wrong password",
   PASSWORD_UPDATED: "Password updated successfully!",
 
+  CATEGORY_CREATED: "Category created!",
+
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
+
+  COLOR_HEX_CODE_PATTERN: /^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/,
 };

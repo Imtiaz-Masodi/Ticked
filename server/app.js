@@ -4,6 +4,7 @@ const { handleCors } = require("./utils");
 const { PORT } = require("./utils/constants");
 
 const accountRouter = require("./routes/AccountRoutes");
+const categoryRouter = require("./routes/CategoryRoute");
 const { initializeRequest } = require("./middlewares/initializeRequest");
 
 const SERVER_PORT = PORT || 3001;
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(initializeRequest);
 
 app.use("/account", accountRouter);
+app.use("/category", categoryRouter);
 
 app.get("/", (req, res) => {
   res.send("Task Management API server is up and running!");
