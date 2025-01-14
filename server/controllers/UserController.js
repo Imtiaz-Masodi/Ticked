@@ -21,7 +21,9 @@ async function createUser(req, res) {
     }
 
     await user.save();
-    res.status(201).send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, user));
+    res
+      .status(201)
+      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo() }));
   } catch (ex) {
     handleCommonError(res, ex);
   }
@@ -51,7 +53,7 @@ async function validateUserCredentials(req, res) {
 
 async function getUserDetails(req, res) {
   try {
-    res.send(new ApiResponse(true, "", req.stash.user));
+    res.send(new ApiResponse(true, "", { user: req.stash.user.omitSensitiveInfo() }));
   } catch (ex) {
     handleCommonError(res, ex);
   }
@@ -71,7 +73,7 @@ async function updatePassword(req, res) {
     user.password = newPassword;
     const updatedUser = await user.save();
 
-    res.send(new ApiResponse(true, constants.PASSWORD_UPDATED, { updatedUser }));
+    res.send(new ApiResponse(true, constants.PASSWORD_UPDATED));
   } catch (ex) {
     handleCommonError(res, ex);
   }

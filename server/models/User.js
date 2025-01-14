@@ -24,6 +24,14 @@ userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
+userSchema.methods.omitSensitiveInfo = function () {
+  const user = this.toObject();
+  delete user.password;
+  if (!user.accountDeactivated) delete user.accountDeactivated;
+  if (user.accountVerified) delete user.accountVerified;
+  return user;
+};
+
 userSchema.statics.userExistsWithEmail = async function (email) {
   const user = await this.findOne({ email });
   return user !== null;

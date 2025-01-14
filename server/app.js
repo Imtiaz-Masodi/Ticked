@@ -3,7 +3,7 @@ const mongoDB = require("./db/mongo");
 const { handleCors } = require("./utils");
 const { PORT } = require("./utils/constants");
 
-const accountRouter = require("./routes/AccountRoutes");
+const accountRouter = require("./routes/AccountRoute");
 const categoryRouter = require("./routes/CategoryRoute");
 const { initializeRequest } = require("./middlewares/initializeRequest");
 
