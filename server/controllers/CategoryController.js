@@ -1,6 +1,6 @@
 const Category = require("../models/Category");
 const ApiResponse = require("../pojo/ApiResponse");
-const { handleCommonError, generateRandomColorHexCode } = require("../utils");
+const { handleCommonError, generateRandomColorHexCode, isValidObjectId } = require("../utils");
 const constants = require("../utils/constants");
 
 const COMMON_CATEGORIES = Object.freeze([
@@ -8,6 +8,18 @@ const COMMON_CATEGORIES = Object.freeze([
   { _id: "2", name: "Work", preDefined: true, categoryColorCode: "#3B5998" },
   { _id: "3", name: "Others", preDefined: true, categoryColorCode: "#E4E1D2" },
 ]);
+
+async function isValidCategoryId(categoryId, userId) {
+  const isCommonCategoryId = COMMON_CATEGORIES.reduce((a, c) => {
+    a.push(c._id);
+    return a;
+  }, []).includes(categoryId);
+  if (isCommonCategoryId) return true;
+
+  if (!isValidObjectId(categoryId)) return false;
+  const category = await Category.findOne({ _id: categoryId, createdBy: userId });
+  return category?.id === categoryId;
+}
 
 async function getAllCategoriesByUserId(userId) {
   const categories = (await Category.find({ createdBy: userId })) || [];
@@ -56,4 +68,5 @@ module.exports = {
   COMMON_CATEGORIES,
   fetchAllCategoriesByUserId,
   createCategory,
+  isValidCategoryId,
 };

@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const ApiResponse = require("../pojo/ApiResponse");
 const constants = require("./constants");
 
@@ -37,9 +38,14 @@ function generateRandomColorHexCode() {
   return `#${randomColor.toString(16).padStart(6, "0")}`;
 }
 
+function isValidObjectId(id) {
+  return mongoose.Types.ObjectId.isValid(id);
+}
+
 module.exports = {
   handleCors,
   handleCommonError,
   handleInvalidMongoSchemaError,
   generateRandomColorHexCode,
+  isValidObjectId,
 };

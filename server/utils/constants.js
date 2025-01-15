@@ -25,6 +25,14 @@ module.exports = {
   PASSWORD_UPDATED: "Password updated successfully!",
 
   CATEGORY_CREATED: "Category created!",
+  INVALID_CATEGORY_ID: "Invalid category id",
+  INVALID_PRIORITY: "Invalid priority value",
+
+  TASK_DELETED: "Task deleted!",
+  TASK_CREATED: "Task created successfully",
+  INVALID_TASK_ID: "Invalid task id",
+  TASK_COMPLETED: "Task marked as completed",
+  TASK_UPDATED: "Task updated successfully",
 
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
