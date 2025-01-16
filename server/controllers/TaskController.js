@@ -109,7 +109,7 @@ async function deleteTask(req, res) {
       return;
     }
 
-    res.send(new ApiResponse(true, constants.TASK_DELETED));
+    res.send(new ApiResponse(true, constants.TASK_DELETED, { task }));
   } catch (ex) {
     handleCommonError(res, ex);
   }
