@@ -1,7 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const mongoDB = require("./db/mongo");
 const { handleCors } = require("./utils");
-const { PORT } = require("./utils/constants");
+const PORT = process.env.PORT;
 
 const accountRouter = require("./routes/AccountRoute");
 const categoryRouter = require("./routes/CategoryRoute");

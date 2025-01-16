@@ -1,5 +1,4 @@
 module.exports = {
-  PORT: 3001,
   MONGO_DB_URI: "mongodb://localhost:27017/task-management",
   MONGO_DB_NAME: "task-management",
   MONGO_USERNAME: "",
