@@ -25,7 +25,9 @@ module.exports = {
   PASSWORD_UPDATED: "Password updated successfully!",
 
   CATEGORY_CREATED: "Category created!",
+  CATEGORY_UPDATED: "Category updated!",
   INVALID_CATEGORY_ID: "Invalid category id",
+  CATEGORY_DELETED: "Category deleted",
   INVALID_PRIORITY: "Invalid priority value",
 
   TASK_DELETED: "Task deleted!",

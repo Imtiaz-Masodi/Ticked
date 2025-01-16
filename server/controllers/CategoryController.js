@@ -64,9 +64,56 @@ async function createCategory(req, res) {
   }
 }
 
+async function updateCategory(req, res) {
+  try {
+    const { user } = req.stash;
+    const { categoryId } = req.params;
+    const { categoryName, categoryColorCode } = req.body;
+
+    const category = await Category.findOneAndUpdate(
+      { _id: categoryId, createdBy: user.id },
+      { name: categoryName, categoryColorCode },
+      { new: true, runValidators: true }
+    );
+
+    if (!category) {
+      res.status(400).send(new ApiResponse(false, constants.INVALID_CATEGORY_ID));
+      return;
+    }
+
+    res.send(new ApiResponse(true, constants.CATEGORY_UPDATED, { category }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
+async function deleteCategory(req, res) {
+  try {
+    const { user } = req.stash;
+    const { categoryId } = req.params;
+
+    if (!(await isValidCategoryId(categoryId, user.id))) {
+      res.status(400).send(new ApiResponse(false, constants.INVALID_CATEGORY_ID));
+      return;
+    }
+
+    const category = await Category.findOneAndDelete({ _id: categoryId });
+    if (!category) {
+      res.status(400).send(new ApiResponse(false, constants.INVALID_CATEGORY_ID));
+      return;
+    }
+
+    res.send(new ApiResponse(true, constants.CATEGORY_DELETED, { category }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
 module.exports = {
   COMMON_CATEGORIES,
+  isValidCategoryId,
   fetchAllCategoriesByUserId,
   createCategory,
-  isValidCategoryId,
+  updateCategory,
+  deleteCategory,
 };
