@@ -31,7 +31,7 @@ const Input = ({
 
   return (
     <div>
-      <label className="block m-1 text-stone-700">{label}</label>
+      <label className="block mb-1 text-xs font-light text-stone-700">{label}</label>
       <div
         className={`
           flex items-center border border-gray-300 rounded-sm px-2 py-1 w-full
@@ -42,7 +42,7 @@ const Input = ({
       >
         <input
           name={name}
-          className={`w-full bg-transparent focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed ${className}`}
+          className={`w-full bg-transparent font-light focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed ${className}`}
           type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
           placeholder={placeholder}
           disabled={disabled}
