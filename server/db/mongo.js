@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { MONGO_DB_URI, MONGO_DB_NAME, MONGO_USERNAME, MONGO_PASSWORD } = require("../utils/constants");
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI || MONGO_DB_URI;
 const connectOptions = {
   dbName: MONGO_DB_NAME,
   user: MONGO_USERNAME,
