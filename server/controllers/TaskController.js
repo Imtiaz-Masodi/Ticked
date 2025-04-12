@@ -26,7 +26,7 @@ async function createTask(req, res) {
       return;
     }
 
-    const task = new Task({ title, description, completed: false, dueDate, priority, category: categoryId, user });
+    const task = new Task({ title, description, completed: false, dueDate, priority, categoryId, user });
     await task.save();
     res.status(201).send(new ApiResponse(true, constants.TASK_CREATED, { task }));
   } catch (ex) {

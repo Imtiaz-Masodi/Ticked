@@ -22,8 +22,13 @@ function parseToken(token = "") {
   });
 }
 
+function isValidJWTToken(token) {
+  return token.split(".").length === 3;
+}
+
 module.exports = {
   generateToken,
   generateLoginToken,
   parseToken,
+  isValidJWTToken,
 };

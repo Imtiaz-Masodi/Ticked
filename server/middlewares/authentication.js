@@ -10,6 +10,9 @@ async function authentication(req, res, next) {
     if (!token) {
       res.status(401).send(new ApiResponse(false, constants.AUTH_TOKEN_REQUIRED));
       return;
+    } else if (!jwt.isValidJWTToken(token)) {
+      res.status(401).send(new ApiResponse(false, constants.INVALID_AUTH_TOKEN));
+      return;
     }
 
     const parsedToken = await jwt.parseToken(token);
@@ -19,6 +22,10 @@ async function authentication(req, res, next) {
     }
 
     const user = await User.findById(parsedToken.id);
+    if (!user) {
+      res.status(401).send(new ApiResponse(false, constants.INVALID_AUTH_TOKEN));
+      return;
+    }
     req.stash.user = user;
     next();
   } catch (ex) {
