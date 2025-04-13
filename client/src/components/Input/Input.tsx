@@ -1,27 +1,25 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { InputTypes } from "./Input.enum";
 
-type InputProps = {
-  name: string;
+type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  type?: InputTypes;
-  placeholder?: string;
   errorMessage?: string;
-  className?: string;
-  disabled?: boolean;
-  onChange: () => void;
+  labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>;
 };
 
 const Input = ({
   name,
   label,
+  value = "",
   type = InputTypes.text,
   placeholder = "",
   className = "",
   disabled = false,
   errorMessage,
+  labelProps = {},
+  onChange,
 }: InputProps) => {
   const [displayPassword, setDisplayPassword] = useState(false);
   const handleTogglePasswordVisibility = () => {
@@ -29,9 +27,22 @@ const Input = ({
     setDisplayPassword(!displayPassword);
   };
 
+  const handleOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return;
+      onChange?.(e);
+    },
+    [disabled, onChange]
+  );
+
   return (
     <div>
-      <label className="block mb-1 text-xs font-light text-stone-700">{label}</label>
+      <label
+        className={`block mb-1 text-xs font-light text-stone-700`}
+        {...labelProps}
+      >
+        {label}
+      </label>
       <div
         className={`
           flex items-center border border-gray-300 rounded-sm px-2 py-1 w-full
@@ -42,21 +53,36 @@ const Input = ({
       >
         <input
           name={name}
+          value={value}
           className={`w-full bg-transparent font-light focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed ${className}`}
-          type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
+          type={
+            type === InputTypes.password
+              ? displayPassword
+                ? InputTypes.text
+                : InputTypes.password
+              : type
+          }
           placeholder={placeholder}
           disabled={disabled}
+          onChange={handleOnChange}
         />
         {type === InputTypes.password && (
           <div
-            className={`cursor-pointer ${disabled && "hover:cursor-not-allowed"}`}
+            className={`cursor-pointer ${
+              disabled && "hover:cursor-not-allowed"
+            }`}
             onClick={handleTogglePasswordVisibility}
           >
-            <Icon name={displayPassword ? Icons.hidden : Icons.visible} disabled={disabled} />
+            <Icon
+              name={displayPassword ? Icons.hidden : Icons.visible}
+              disabled={disabled}
+            />
           </div>
         )}
       </div>
-      {errorMessage && <div className="m-1 text-sm text-red-700">{errorMessage}</div>}
+      {errorMessage && (
+        <div className="m-1 text-sm text-red-700">{errorMessage}</div>
+      )}
     </div>
   );
 };

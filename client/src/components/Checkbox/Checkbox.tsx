@@ -1,12 +1,11 @@
+import React, { useCallback } from "react";
 import { Size } from "../../utils/enums";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 
-type CheckboxProps = {
+type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
   label: string;
-  name: string;
-  size?: Size;
-  disabled?: boolean;
+  checkboxSize?: Size;
 };
 
 const sizeStyles = Object.freeze({
@@ -15,7 +14,22 @@ const sizeStyles = Object.freeze({
   [Size.lg]: "size-6 text-lg rounded-md",
 });
 
-const Checkbox = ({ label, name, disabled, size }: CheckboxProps) => {
+const Checkbox = ({
+  label,
+  name,
+  disabled,
+  checkboxSize = Size.md,
+  checked,
+  onChange,
+}: CheckboxProps) => {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (disabled) return;
+      onChange?.(e);
+    },
+    [disabled, onChange]
+  );
+
   return (
     <div className="flex flex-row justify-start items-center gap-2 cursor-pointer">
       <input
@@ -27,23 +41,25 @@ const Checkbox = ({ label, name, disabled, size }: CheckboxProps) => {
             border border-primary rounded-sm bg-white shrink-0 
             checked:bg-primary checked:border-none 
             disabled:border-gray-300 disabled:checked:bg-gray-300 disabled:cursor-not-allowed
-            ${size && sizeStyles[size]}
+            ${checkboxSize && sizeStyles[checkboxSize]}
         `}
+        checked={checked}
         disabled={disabled}
+        onChange={handleChange}
       />
       <Icon
         name={Icons.check}
         className={`
             absolute hidden justify-center items-center size-4 text-white
             peer-checked:flex peer-checked:text-2xl pointer-events-none cursor-pointer
-            ${size && sizeStyles[size]}
+            ${checkboxSize && sizeStyles[checkboxSize]}
         `}
       />
       <label
         htmlFor={name}
         className={`
             cursor-pointer peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed whitespace-nowrap
-            ${size && sizeStyles[size]} size-auto
+            ${checkboxSize && sizeStyles[checkboxSize]} size-auto
           `}
       >
         {label}
