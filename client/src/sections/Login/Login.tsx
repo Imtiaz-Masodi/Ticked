@@ -1,15 +1,37 @@
-import { useFormik } from "formik";
+import { useState } from "react";
+import { FormikHelpers, useFormik } from "formik";
 import { Button } from "../../components/Button";
 import { ButtonType } from "../../components/Button/Button.enum";
 import { Size } from "../../utils/enums";
 import { LoginForm } from "./LoginForm";
 import { LoginFormValues } from "./Login.types";
 import { validateForm } from "./Login.helper";
+import { authService } from "../../api/authService";
+import { ERROR_LOGIN_FAILED } from "../../utils/constants";
 
 const Login = () => {
-  const handleSubmit = (values: LoginFormValues) => {
-    console.log("Submitting: ", values);
-    // ToDo: Add login logic here
+  const [, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (
+    values: LoginFormValues,
+    { setSubmitting }: FormikHelpers<LoginFormValues>
+  ) => {
+    setErrorMessage(null);
+
+    try {
+      const response = await authService.login(values);
+      if (response.success) {
+        // ToDo: Redirect to home page
+        alert("Login success");
+      } else {
+        setErrorMessage(response.message || ERROR_LOGIN_FAILED);
+      }
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      setErrorMessage(`${ERROR_LOGIN_FAILED} ${errorMessage}`);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const formik = useFormik({
@@ -18,6 +40,7 @@ const Login = () => {
     validate: validateForm,
   });
 
+  // ToDo: Add UI for displaying errors
   return (
     <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
       <div className="my-4">

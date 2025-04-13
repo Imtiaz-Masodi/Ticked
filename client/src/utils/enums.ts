@@ -3,3 +3,8 @@ export enum Size {
   md = "md",
   lg = "lg",
 }
+
+export enum ApiResponseStatus {
+  success = "success",
+  failed = "failed",
+}
