@@ -1,7 +1,10 @@
+import { Login } from "./sections/Login";
+import "./App.css";
+
 function App() {
   return (
     <>
-      <p>Task Management App is under developement</p>
+      <Login />
     </>
   );
 }
