@@ -1,4 +1,4 @@
-import { FormikFormProps } from "../../utils/types";
+import { FormikFormProps } from "../../types/FormikFormProps";
 
 export type LoginFormValues = {
   email: string;
