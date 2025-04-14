@@ -63,7 +63,7 @@ export function LoginForm(props: LoginFormProps) {
       </div>
 
       <Button onClick={handleSubmit} isLoading={isSubmitting}>
-        Submit
+        Sign In
       </Button>
     </>
   );

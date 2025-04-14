@@ -12,8 +12,10 @@ import {
   validateForm,
   LoginFormValues,
 } from "../../sections/LoginForm";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSubmit = async (
@@ -25,8 +27,7 @@ const Login = () => {
     try {
       const response = await authService.login(values);
       if (response.success) {
-        // ToDo: Redirect to home page
-        alert("Login success");
+        navigate("/");
       } else {
         setErrorMessage(response.message || ERROR_LOGIN_FAILED);
       }
@@ -69,7 +70,7 @@ const Login = () => {
         <Button
           size={Size.sm}
           type={ButtonType.link}
-          onClick={() => {}}
+          onClick={() => navigate("/register")}
           className="ps-1 pe-1"
           disabled={formik.isSubmitting}
         >

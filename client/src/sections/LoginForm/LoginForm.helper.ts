@@ -1,11 +1,12 @@
 import { LoginFormValues } from "./LoginForm.types";
+import { EMAIL_REGEX } from "../../utils/constants";
 
 export function validateForm(values: LoginFormValues) {
   const errors: Partial<LoginFormValues> = {};
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   if (!values.email) {
     errors.email = "Email is required";
-  } else if (emailRegex.test(values.email) === false) {
+  } else if (EMAIL_REGEX.test(values.email) === false) {
     errors.email = "Email is invalid";
   }
   if (!values.password) {
