@@ -47,9 +47,7 @@ const Login = () => {
   return (
     <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
       <div className="my-4">
-        <div className="mb-8">
-          <AppLogo />
-        </div>
+        <AppLogo className="mb-8" />
         <div className="text-center text-2xl font-thin sm:text-3xl">
           Log in to your account
         </div>
