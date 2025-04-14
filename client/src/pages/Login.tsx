@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { FormikHelpers, useFormik } from "formik";
-import { Button } from "../../components/Button";
-import { ButtonType } from "../../components/Button/Button.enum";
-import { Size } from "../../utils/enums";
-import { authService } from "../../api/authService";
-import { ERROR_LOGIN_FAILED } from "../../utils/constants";
-import { Notification, NotificationType } from "../../components/Notification";
-import { AppLogo } from "../../components/AppLogo";
-import { LoginForm, validateForm, LoginFormValues } from "../../sections/LoginForm";
+import { Button } from "../components/Button";
+import { ButtonType } from "../components/Button/Button.enum";
+import { Size } from "../utils/enums";
+import { authService } from "../api/authService";
+import { ERROR_LOGIN_FAILED } from "../utils/constants";
+import { Notification, NotificationType } from "../components/Notification";
+import { AppLogo } from "../components/AppLogo";
+import { LoginForm, validateForm, LoginFormValues } from "../sections/LoginForm";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {

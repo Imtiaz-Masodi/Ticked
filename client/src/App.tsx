@@ -2,8 +2,8 @@ import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
-const Home = lazy(() => import("./pages/Home/Home"));
-const Login = lazy(() => import("./pages/Login/Login"));
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 
 function App() {
