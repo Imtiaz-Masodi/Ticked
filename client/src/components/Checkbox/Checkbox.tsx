@@ -14,14 +14,7 @@ const sizeStyles = Object.freeze({
   [Size.lg]: "size-6 text-lg rounded-md",
 });
 
-const Checkbox = ({
-  label,
-  name,
-  disabled,
-  checkboxSize = Size.md,
-  checked,
-  onChange,
-}: CheckboxProps) => {
+const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onChange }: CheckboxProps) => {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (disabled) return;

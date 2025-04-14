@@ -8,6 +8,7 @@ import HRComponent from "../../assets/svg/hr.svg";
 import AccountComponent from "../../assets/svg/account.svg";
 import NotificationComponent from "../../assets/svg/notification.svg";
 import LogoutComponent from "../../assets/svg/logout.svg";
+import AddComponent from "../../assets/svg/add.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -24,6 +25,7 @@ export enum Icons {
   account = "account",
   notification = "notification",
   logout = "logout",
+  add = "add",
 }
 
 type IconMapType = {
@@ -39,4 +41,5 @@ export const IconMap: IconMapType = {
   [Icons.account]: AccountComponent,
   [Icons.notification]: NotificationComponent,
   [Icons.logout]: LogoutComponent,
+  [Icons.add]: AddComponent,
 };

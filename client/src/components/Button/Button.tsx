@@ -69,8 +69,8 @@ const Button = ({
         disabled:hover:shadow-none disabled:cursor-not-allowed
         ${sizeStyles[size]}
         ${typeStyles[type]}
-        ${iconOnly && "ps-2 pe-2"}
-        ${isLoading && "cursor-not-allowed"}
+        ${iconOnly ? "ps-2 pe-2" : ""}
+        ${isLoading ? "cursor-not-allowed" : ""}
         ${className}
       `}
       onClick={handleOnClick}
