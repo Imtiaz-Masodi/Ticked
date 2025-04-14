@@ -4,7 +4,7 @@ function getUserToken(): string | null {
   return localStorage.getItem(AUTH_TOKEN);
 }
 
-function saveUserToken(token: string): void {
+function saveUserToken(token: string = ""): void {
   localStorage.setItem(AUTH_TOKEN, token);
 }
 
