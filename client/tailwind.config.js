@@ -1,18 +1,20 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require("tailwindcss/colors");
+
 export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       colors: {
         primary: {
-          light: "#a3b18a",
-          DEFAULT: "#588157",
-          dark: "#3a5a40",
+          light: colors.sky[300],
+          DEFAULT: colors.sky[500],
+          dark: colors.sky[700],
         },
         secondary: {
-          light: "#e9c588",
-          DEFAULT: "#da9141",
-          dark: "#a85b26",
+          light: colors.emerald[300],
+          DEFAULT: colors.emerald[500],
+          dark: colors.emerald[700],
         },
       },
     },
