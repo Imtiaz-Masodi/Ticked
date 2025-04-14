@@ -2,6 +2,7 @@ import { Size } from "../../utils/enums";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { ButtonType } from "./Button.enum";
+import PulseLoader from "../Loader/PulseLoader/PulseLoader";
 
 type ButtonProps = {
   children?: React.ReactNode;
@@ -13,6 +14,7 @@ type ButtonProps = {
   endIcon?: keyof typeof Icons;
   iconOnly?: boolean;
   className?: string;
+  isLoading?: boolean;
 };
 
 const sizeStyles = Object.freeze({
@@ -47,22 +49,44 @@ const Button = ({
   type = ButtonType.solid,
   disabled = false,
   iconOnly = false,
+  isLoading = false,
   className,
   onClick,
 }: ButtonProps) => {
+  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (disabled || isLoading) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    onClick();
+  };
+
   return (
     <button
       className={`
         transition-all flex justify-center items-center gap-2 text-nowrap
         disabled:hover:shadow-none disabled:cursor-not-allowed
-        ${sizeStyles[size]} ${typeStyles[type]} ${iconOnly && "ps-2 pe-2"} ${className}
+        ${sizeStyles[size]}
+        ${typeStyles[type]}
+        ${iconOnly && "ps-2 pe-2"}
+        ${isLoading && "cursor-not-allowed"}
+        ${className}
       `}
-      onClick={onClick}
+      onClick={handleOnClick}
       disabled={disabled}
     >
-      {startIcon && <Icon name={startIcon} disabled={disabled} />}
-      {children}
-      {endIcon && <Icon name={endIcon} disabled={disabled} />}
+      {isLoading ? (
+        <div className="py-2">
+          <PulseLoader />
+        </div>
+      ) : (
+        <>
+          {startIcon && <Icon name={startIcon} disabled={disabled} />}
+          {children}
+          {endIcon && <Icon name={endIcon} disabled={disabled} />}
+        </>
+      )}
     </button>
   );
 };
