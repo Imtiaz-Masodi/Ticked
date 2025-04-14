@@ -21,9 +21,10 @@ async function createUser(req, res) {
     }
 
     await user.save();
+    const authToken = generateLoginToken({ id: user.id });
     res
       .status(201)
-      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo() }));
+      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo(), authToken  }));
   } catch (ex) {
     handleCommonError(res, ex);
   }
