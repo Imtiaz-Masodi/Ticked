@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { authHelper } from "../helpers/authHelper";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
-import FloatingActionButton from "../components/FloatingActionButton/FloatingActionButton";
+import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 
 function Home() {
