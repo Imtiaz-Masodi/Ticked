@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { AUTH_TOKEN } from "../utils/constants";
 
 // Create an Axios instance
@@ -28,7 +28,10 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("API Error:", error.response || error.message);
+    if (error instanceof AxiosError && error.response?.data) {
+      return error.response;
+    }
+
     return Promise.reject(error);
   }
 );

@@ -23,10 +23,7 @@ async function login(
       localStorage.setItem(AUTH_TOKEN, payload.authToken);
       return { success: true };
     } else {
-      return {
-        success: false,
-        message,
-      };
+      return { success: false, message };
     }
   } catch (error) {
     return {
