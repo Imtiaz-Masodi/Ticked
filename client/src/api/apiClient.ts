@@ -3,7 +3,7 @@ import { authHelper } from "../helpers/authHelper";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
-  baseURL: "https://task-management-app-54i1.onrender.com",
+  baseURL: "https://ticked.onrender.com",
   headers: { "Content-Type": "application/json" },
   timeout: 60000,
 });

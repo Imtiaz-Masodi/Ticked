@@ -10,8 +10,8 @@ type ButtonProps = {
   type?: ButtonType;
   size?: Size;
   disabled?: boolean;
-  startIcon?: keyof typeof Icons;
-  endIcon?: keyof typeof Icons;
+  startIcon?: Icons;
+  endIcon?: Icons;
   iconOnly?: boolean;
   className?: string;
   isLoading?: boolean;
