@@ -10,6 +10,7 @@ export default {
           light: colors.sky[300],
           DEFAULT: colors.sky[500],
           dark: colors.sky[700],
+          darker: colors.sky[900],
         },
         secondary: {
           light: colors.emerald[300],

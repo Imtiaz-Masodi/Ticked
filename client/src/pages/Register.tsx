@@ -48,20 +48,14 @@ function Register() {
   return (
     <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
       <div className="my-4">
-        <AppLogo className="mb-8" />
-        <div className="text-center text-2xl font-thin sm:text-3xl">
-          Don't have an account?
-        </div>
+        <AppLogo size={Size.lg} className="mb-8" />
+        <div className="text-center text-2xl font-thin sm:text-3xl">Don't have an account?</div>
         <div className="text-center text-sm text-gray-500 font-thin">
           Create your account. It's free and only takes a minute.
         </div>
       </div>
 
-      {errorMessage && (
-        <Notification type={NotificationType.ERROR}>
-          {errorMessage}
-        </Notification>
-      )}
+      {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
 
       <RegistrationForm {...formik} />
 

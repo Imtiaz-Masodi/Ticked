@@ -1,23 +1,30 @@
+import { Size } from "../../utils/enums";
+
 type AppLogoProps = {
-  className?: string;
-  iconClasses?: string;
-  labelClasses?: string;
+  size?: Size;
   logoOnly?: boolean;
+  className?: string;
+  darkMode?: boolean;
 };
 
-function AppLogo({
-  className = "",
-  iconClasses = "",
-  labelClasses = "",
-  logoOnly = false,
-}: AppLogoProps) {
+const logoVariantsIconStyle = Object.freeze({
+  [Size.sm]: "h-6",
+  [Size.md]: "h-9",
+  [Size.lg]: "h-12",
+});
+
+const logoVariantsLabelStyle = Object.freeze({
+  [Size.sm]: "text-xl",
+  [Size.md]: "text-2xl",
+  [Size.lg]: "text-4xl",
+});
+
+function AppLogo({ size = Size.md, logoOnly = false, darkMode = false, className = "" }: AppLogoProps) {
   return (
     <div className={`flex items-center justify-center gap-2 ${className}`}>
-      <img src="/logo.png" alt="Ticked Logo" className={`h-9 ${iconClasses}`} />
+      <img src="/logo.png" alt="Ticked Logo" className={`${logoVariantsIconStyle[size]}`} />
       {!logoOnly && (
-        <span
-          className={`text-2xl font-medium sm:text-3xl text-stone-700 ${labelClasses}`}
-        >
+        <span className={`font-medium ${darkMode ? "text-zinc-100" : "text-zinc-700"} ${logoVariantsLabelStyle[size]}`}>
           Ticked
         </span>
       )}

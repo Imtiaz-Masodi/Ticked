@@ -5,6 +5,9 @@ import SettingsComponent from "../../assets/svg/settings.svg";
 import SearchComponent from "../../assets/svg/search.svg";
 import CheckComponent from "../../assets/svg/check.svg";
 import HRComponent from "../../assets/svg/hr.svg";
+import AccountComponent from "../../assets/svg/account.svg";
+import NotificationComponent from "../../assets/svg/notification.svg";
+import LogoutComponent from "../../assets/svg/logout.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -18,6 +21,9 @@ export enum Icons {
   search = "search",
   check = "check",
   hr = "hr",
+  account = "account",
+  notification = "notification",
+  logout = "logout",
 }
 
 type IconMapType = {
@@ -30,4 +36,7 @@ export const IconMap: IconMapType = {
   [Icons.search]: SearchComponent,
   [Icons.check]: CheckComponent,
   [Icons.hr]: HRComponent,
+  [Icons.account]: AccountComponent,
+  [Icons.notification]: NotificationComponent,
+  [Icons.logout]: LogoutComponent,
 };

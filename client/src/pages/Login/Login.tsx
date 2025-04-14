@@ -7,21 +7,14 @@ import { authService } from "../../api/authService";
 import { ERROR_LOGIN_FAILED } from "../../utils/constants";
 import { Notification, NotificationType } from "../../components/Notification";
 import { AppLogo } from "../../components/AppLogo";
-import {
-  LoginForm,
-  validateForm,
-  LoginFormValues,
-} from "../../sections/LoginForm";
+import { LoginForm, validateForm, LoginFormValues } from "../../sections/LoginForm";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSubmit = async (
-    values: LoginFormValues,
-    { setSubmitting }: FormikHelpers<LoginFormValues>
-  ) => {
+  const handleSubmit = async (values: LoginFormValues, { setSubmitting }: FormikHelpers<LoginFormValues>) => {
     setErrorMessage(null);
 
     try {
@@ -48,20 +41,12 @@ const Login = () => {
   return (
     <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
       <div className="my-4">
-        <AppLogo className="mb-8" />
-        <div className="text-center text-2xl font-thin sm:text-3xl">
-          Log in to your account
-        </div>
-        <div className="text-center text-sm text-gray-500 font-thin">
-          Welcome back! Please enter your details
-        </div>
+        <AppLogo size={Size.lg} className="mb-8" />
+        <div className="text-center text-2xl font-thin sm:text-3xl">Log in to your account</div>
+        <div className="text-center text-sm text-gray-500 font-thin">Welcome back! Please enter your details</div>
       </div>
 
-      {errorMessage && (
-        <Notification type={NotificationType.ERROR}>
-          {errorMessage}
-        </Notification>
-      )}
+      {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
 
       <LoginForm {...formik} />
 
