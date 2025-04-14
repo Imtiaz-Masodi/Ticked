@@ -1,6 +1,6 @@
 module.exports = {
-  MONGO_DB_URI: "mongodb://localhost:27017/task-management",
-  MONGO_DB_NAME: "task-management",
+  MONGO_DB_URI: "mongodb://localhost:27017/ticked",
+  MONGO_DB_NAME: "ticked",
   MONGO_USERNAME: "",
   MONGO_PASSWORD: "",
 
