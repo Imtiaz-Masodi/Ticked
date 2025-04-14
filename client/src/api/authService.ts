@@ -1,7 +1,7 @@
-import { LoginFormValues } from "../sections/Login/Login.types";
+import { authHelper } from "../helpers/authHelper";
+import { LoginFormValues } from "../sections/LoginForm";
 import { ApiResponse } from "../types/ApiResponse";
 import { LoginResponseType } from "../types/LoginResponseType";
-import { AUTH_TOKEN } from "../utils/constants";
 import { ApiResponseStatus } from "../utils/enums";
 import { axiosInstance } from "./apiClient";
 
@@ -20,7 +20,7 @@ async function login(
     );
     const { status, message, payload } = response.data;
     if (status == ApiResponseStatus.success && payload?.authToken) {
-      localStorage.setItem(AUTH_TOKEN, payload.authToken);
+      authHelper.saveUserToken(payload.authToken);
       return { success: true };
     } else {
       return { success: false, message };

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { AUTH_TOKEN } from "../utils/constants";
+import { authHelper } from "../helpers/authHelper";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 // Add a request interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem(AUTH_TOKEN);
+    const token = authHelper.getUserToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
