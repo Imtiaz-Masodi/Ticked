@@ -22,7 +22,7 @@ app.use("/category", categoryRouter);
 app.use("/task", taskRouter);
 
 app.get("/", (req, res) => {
-  res.send("Task Management API server is up and running!");
+  res.send("Ticked - Task Management App API server is up and running!");
 });
 
 app.listen(SERVER_PORT, () => {

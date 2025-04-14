@@ -1,5 +1,5 @@
 {
-  "name": "task-management-app-server",
+  "name": "ticked-server",
   "version": "1.0.0",
   "description": "Simple task management full-stack application",
   "main": "app.js",

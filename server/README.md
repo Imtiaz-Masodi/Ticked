@@ -1,4 +1,4 @@
-Project Overview: Task Management App
+Project Overview: Ticked - Task Management Application
 
 The goal of this app is to allow users to create an account, log in, and manage their tasks. They should be able to:
 
