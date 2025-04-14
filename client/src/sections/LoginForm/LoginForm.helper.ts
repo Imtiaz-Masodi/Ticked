@@ -1,4 +1,4 @@
-import { LoginFormValues } from "./Login.types";
+import { LoginFormValues } from "./LoginForm.types";
 
 export function validateForm(values: LoginFormValues) {
   const errors: Partial<LoginFormValues> = {};

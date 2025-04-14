@@ -3,13 +3,15 @@ import { FormikHelpers, useFormik } from "formik";
 import { Button } from "../../components/Button";
 import { ButtonType } from "../../components/Button/Button.enum";
 import { Size } from "../../utils/enums";
-import { LoginForm } from "./LoginForm";
-import { LoginFormValues } from "./Login.types";
-import { validateForm } from "./Login.helper";
 import { authService } from "../../api/authService";
 import { ERROR_LOGIN_FAILED } from "../../utils/constants";
 import { Notification, NotificationType } from "../../components/Notification";
 import { AppLogo } from "../../components/AppLogo";
+import {
+  LoginForm,
+  validateForm,
+  LoginFormValues,
+} from "../../sections/LoginForm";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

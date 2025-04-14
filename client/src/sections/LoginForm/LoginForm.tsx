@@ -3,7 +3,7 @@ import { ButtonType } from "../../components/Button/Button.enum";
 import { Checkbox } from "../../components/Checkbox";
 import { Input, InputTypes } from "../../components/Input";
 import { Size } from "../../utils/enums";
-import { LoginFormProps } from "./Login.types";
+import { LoginFormProps } from "./LoginForm.types";
 
 export function LoginForm(props: LoginFormProps) {
   const {
