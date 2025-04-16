@@ -31,7 +31,7 @@ const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onCh
         id={name}
         className={`
             appearance-none peer size-4 
-            border border-primary rounded-sm bg-white shrink-0 
+            border border-gray-300 rounded-sm bg-transparent shrink-0 
             checked:bg-primary checked:border-none 
             disabled:border-gray-300 disabled:checked:bg-gray-300 disabled:cursor-not-allowed
             ${checkboxSize && sizeStyles[checkboxSize]}
@@ -52,7 +52,7 @@ const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onCh
         htmlFor={name}
         className={`
             cursor-pointer peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed whitespace-nowrap
-            ${checkboxSize && sizeStyles[checkboxSize]} size-auto
+            text-zinc-700 ${checkboxSize && sizeStyles[checkboxSize]} size-auto
           `}
       >
         {label}

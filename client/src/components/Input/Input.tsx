@@ -37,16 +37,13 @@ const Input = ({
 
   return (
     <div>
-      <label
-        className={`block mb-1 text-xs font-light text-stone-700`}
-        {...labelProps}
-      >
+      <label className={`block mb-1 ml-1 text-xs font-medium text-zinc-700`} {...labelProps}>
         {label}
       </label>
       <div
         className={`
-          flex items-center border border-gray-300 rounded-sm px-2 py-1 w-full
-          focus-within:outline-2 focus-within:outline focus-within:outline-primary-light focus-within:-outline-offset-1
+          flex items-center border border-gray-300 rounded-md px-3 py-1.5 w-full
+          focus-within:outline-2 focus-within:outline focus-within:outline-zinc-500 focus-within:-outline-offset-1
           ${errorMessage ? "border-red-700 focus-visible:text-black" : ""}
           ${disabled && "bg-gray-200"}
         `}
@@ -54,35 +51,22 @@ const Input = ({
         <input
           name={name}
           value={value}
-          className={`w-full bg-transparent font-light focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed ${className}`}
-          type={
-            type === InputTypes.password
-              ? displayPassword
-                ? InputTypes.text
-                : InputTypes.password
-              : type
-          }
+          className={`w-full bg-transparent text-zinc-800 font-light focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed ${className}`}
+          type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
           placeholder={placeholder}
           disabled={disabled}
           onChange={handleOnChange}
         />
         {type === InputTypes.password && (
           <div
-            className={`cursor-pointer ${
-              disabled && "hover:cursor-not-allowed"
-            }`}
+            className={`cursor-pointer ${disabled && "hover:cursor-not-allowed"}`}
             onClick={handleTogglePasswordVisibility}
           >
-            <Icon
-              name={displayPassword ? Icons.hidden : Icons.visible}
-              disabled={disabled}
-            />
+            <Icon name={displayPassword ? Icons.hidden : Icons.visible} disabled={disabled} />
           </div>
         )}
       </div>
-      {errorMessage && (
-        <div className="m-1 text-sm text-red-700">{errorMessage}</div>
-      )}
+      {errorMessage && <div className="m-1 text-sm text-red-700">{errorMessage}</div>}
     </div>
   );
 };
