@@ -5,9 +5,9 @@ export type Task = {
   title: string;
   description: string;
   completed: boolean;
-  createdOn: Date;
-  updatedOn?: Date;
-  dueDate?: Date;
+  createdOn: string;
+  updatedOn?: string;
+  dueDate?: string;
   priority: Priority;
   categoryId: string;
   user: User;
