@@ -3,4 +3,6 @@ export enum InputTypes {
   password = "password",
   email = "email",
   number = "number",
+  date = "date",
+  time = "time",
 }
