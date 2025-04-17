@@ -4,6 +4,12 @@ export enum Size {
   lg = "lg",
 }
 
+export enum Priority {
+  low = "Low",
+  medium = "Medium",
+  high = "High",
+}
+
 export enum ApiResponseStatus {
   success = "success",
   failed = "failed",
