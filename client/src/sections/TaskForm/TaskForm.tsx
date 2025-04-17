@@ -1,16 +1,29 @@
+import { useEffect, useMemo } from "react";
 import { Button } from "../../components/Button";
 import { Dropdown } from "../../components/Dropdown";
 import { Input, InputTypes } from "../../components/Input";
+import { useGetCategoriesQuery } from "../../store/api/categoryApi";
+import { Category } from "../../types/Category";
+import { PriorityType } from "../../types/PriorityType";
 import { priorityOptions } from "../../utils/options";
 import { TaskFormProps } from "./TaskForm.types";
 
 function TaskForm(props: TaskFormProps) {
   const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit, ...formik } = props;
+  const { data } = useGetCategoriesQuery();
+  const categories = useMemo(() => data?.payload?.categories || [], [data]);
 
-  const handleDropdownChange = (name: string, value: string) => {
+  const handleDropdownChange = <T,>(name: string, value: T) => {
     formik.setFieldValue(name, value);
     formik.setFieldTouched(name, true);
   };
+
+  useEffect(() => {
+    if (categories?.length > 0 && !values?.category) {
+      formik.setFieldValue("category", categories[0]);
+      formik.setFieldTouched("category", true);
+    }
+  }, [categories, formik, values?.category]);
 
   return (
     <>
@@ -34,21 +47,23 @@ function TaskForm(props: TaskFormProps) {
         errorMessage={touched.description ? errors.description : undefined}
         disabled={isSubmitting}
       />
-      <Input
-        name="categoryId"
+
+      <Dropdown<Category>
+        name="category"
         label="Category"
-        value={values?.categoryId}
-        type={InputTypes.text}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        errorMessage={touched.categoryId ? errors.categoryId : undefined}
+        value={values?.category}
+        options={categories}
+        getLabel={(category) => category.name}
+        onChange={handleDropdownChange}
+        errorMessage={touched.category ? errors.category : undefined}
         disabled={isSubmitting}
       />
 
-      <Dropdown
+      <Dropdown<PriorityType>
         name="priority"
         label="Priority"
         value={values?.priority}
+        getLabel={(priority) => priority.label}
         options={priorityOptions}
         onChange={handleDropdownChange}
         errorMessage={touched.priority ? errors.priority : undefined}

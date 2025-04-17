@@ -1,13 +1,14 @@
+import { Category } from "../../types/Category";
 import { FormikFormProps } from "../../types/FormikFormProps";
-import { Priority } from "../../utils/enums";
+import { PriorityType } from "../../types/PriorityType";
 
 export type TaskFormValues = {
   title: string;
   description?: string;
   dueDate?: string;
   dueTime?: string;
-  priority: Priority;
-  categoryId: string;
+  priority: PriorityType;
+  category?: Category;
 };
 
 export type TaskFormProps = FormikFormProps<TaskFormValues>;
