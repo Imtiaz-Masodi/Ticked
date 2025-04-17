@@ -2,17 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 
-type DropdownProps = {
+type DropdownProps<T> = {
   name: string;
   label?: string;
-  value?: string;
+  value?: T;
   errorMessage?: string;
   disabled?: boolean;
-  options: ReadonlyArray<{ value: string; label: string }>;
-  onChange?: (name: string, value: string) => void;
+  options: ReadonlyArray<T>;
+  getLabel: (option: T) => string;
+  onChange?: (name: string, value: T) => void;
 };
 
-function Dropdown({ name, label, value, options, disabled = false, onChange }: DropdownProps) {
+function Dropdown<T>({ name, label, value, options, disabled = false, getLabel, onChange }: DropdownProps<T>) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,23 +42,23 @@ function Dropdown({ name, label, value, options, disabled = false, onChange }: D
         }}
         disabled={disabled}
       >
-        <span className="text-sm font-light text-zinc-800">{value}</span>
+        <span className="text-sm font-light text-zinc-800">{value ? getLabel(value) : ""}</span>
         <Icon name={Icons.down} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
       {!disabled && isOpen && (
         <div className="absolute z-10 mt-1 w-full bg-white border border-zinc-300 rounded-md shadow-lg">
           <ul className="max-h-60 overflow-auto m-2">
-            {options.map((option) => (
+            {options.map((option: T) => (
               <li
-                key={option.value}
+                key={getLabel(option)}
                 className={`px-3 py-2 text-sm text-zinc-800 hover:bg-zinc-100 cursor-pointer`}
                 onClick={() => {
-                  onChange?.(name, option.value);
+                  onChange?.(name, option);
                   setIsOpen(false);
                 }}
               >
-                {option.label}
+                {getLabel(option)}
               </li>
             ))}
           </ul>
