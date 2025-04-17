@@ -1,6 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { Task } from "../../types/Task";
 import { customBaseQuery } from "./customBaseQuery";
+import { ApiResponse } from "../../types/ApiResponse";
 
 export const taskApi = createApi({
   reducerPath: "taskApi",
@@ -8,34 +9,34 @@ export const taskApi = createApi({
   endpoints: (builder) => ({
     getTasks: builder.query<Task[], void>({
       query: () => ({
-        url: "/tasks",
+        url: "/task/list",
         method: "GET",
       }),
     }),
-    createTask: builder.mutation({
+    createTask: builder.mutation<ApiResponse<unknown>, Task>({
       query: (task) => ({
-        url: "/tasks",
+        url: "/task/create",
         method: "POST",
         data: task,
       }),
     }),
     updateTask: builder.mutation({
-      query: ({ id, ...task }) => ({
-        url: `/tasks/${id}`,
+      query: ({ task }) => ({
+        url: `/tasks/update`,
         method: "PUT",
         data: task,
       }),
     }),
     updateTaskAsCompleted: builder.mutation({
       query: (task) => ({
-        url: "/tasks",
+        url: "/task/mark-complete",
         method: "PUT",
         data: task,
       }),
     }),
     deleteTask: builder.mutation({
       query: (id) => ({
-        url: `/tasks/${id}`,
+        url: `/task/delete/${id}`,
         method: "DELETE",
       }),
     }),
