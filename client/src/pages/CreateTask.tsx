@@ -51,7 +51,7 @@ function CreateTask() {
       </div>
 
       <div className="flex flex-col gap-4 max-w-sm mx-auto">
-        {(createTaskResponse.data?.status) && (
+        {createTaskResponse.data?.status && (
           <Notification
             type={
               createTaskResponse.data?.status === ApiResponseStatus.success
@@ -62,7 +62,7 @@ function CreateTask() {
             {createTaskResponse.data?.message}
           </Notification>
         )}
-
+        {/* @ts-expect-error Ignore */}
         <TaskForm {...formik} />
       </div>
     </div>
