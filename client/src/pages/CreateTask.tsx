@@ -1,19 +1,46 @@
-import { useFormik } from "formik";
+import { FormikHelpers, useFormik } from "formik";
 import { TaskForm, TaskFormValues } from "../sections/TaskForm";
-import { Priority } from "../utils/enums";
+import { ApiResponseStatus, Priority } from "../utils/enums";
 import { getTomorrowDateString } from "../helpers/dateHelper";
+import { Category } from "../types/Category";
+import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
+import { useCreateTaskMutation } from "../store/api/taskApi";
+import { Task } from "../types/Task";
+import { Notification, NotificationType } from "../components/Notification";
 
 function CreateTask() {
+  const [triggerCreateTask, createTaskResponse] = useCreateTaskMutation();
+
+  const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
+    try {
+      const response = await triggerCreateTask({
+        title: values.title,
+        description: values.description || "",
+        dueDate: `${values.dueDate}T${values.dueTime}:00`,
+        priority: values.priority.value,
+        categoryId: values.category!._id,
+      } as Task);
+
+      if (response.data?.status === ApiResponseStatus.success) {
+        formik.resetForm();
+      }
+    } catch (ex) {
+      console.log((ex as Error).message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const formik = useFormik<TaskFormValues>({
     initialValues: {
       title: "",
-      priority: Priority.medium,
-      categoryId: "",
+      priority: { label: "Medium", value: Priority.medium },
+      category: { _id: "3", name: "Others" } as Category,
       dueDate: getTomorrowDateString(),
       dueTime: "12:00",
     },
-    onSubmit: (values) => {},
-    validate: (values) => {},
+    onSubmit: handleFormSubmit,
+    validate: validateTaskForm,
   });
 
   return (
@@ -24,6 +51,18 @@ function CreateTask() {
       </div>
 
       <div className="flex flex-col gap-4 max-w-sm mx-auto">
+        {(createTaskResponse.data?.status) && (
+          <Notification
+            type={
+              createTaskResponse.data?.status === ApiResponseStatus.success
+                ? NotificationType.SUCCESS
+                : NotificationType.ERROR
+            }
+          >
+            {createTaskResponse.data?.message}
+          </Notification>
+        )}
+
         <TaskForm {...formik} />
       </div>
     </div>
