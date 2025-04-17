@@ -1,4 +1,6 @@
-export type FormikFormProps<TValues> = {
+import { FormikHelpers } from "formik";
+
+export type FormikFormProps<TValues> = FormikHelpers<TValues> & {
   values: TValues;
   errors: {
     [key in keyof TValues]?: string;
