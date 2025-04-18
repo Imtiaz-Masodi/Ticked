@@ -6,3 +6,9 @@ export const priorityOptions: readonly PriorityType[] = Object.freeze([
   { label: "Medium", value: Priority.medium },
   { label: "High", value: Priority.high },
 ]);
+
+export const priorityColorMap: Record<Priority, string> = Object.freeze({
+  [Priority.low]: "#4CAF50", // Green
+  [Priority.medium]: "#FF9800", // Orange
+  [Priority.high]: "#F44336", // Red
+});
