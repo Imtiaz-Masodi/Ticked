@@ -1,107 +1,73 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-type SwipeableStateType = {
+type TouchStateType = {
   startX: number | null;
-  startY: number | null;
   endX: number | null;
-  endY: number | null;
   x: number | null;
-  y: number | null;
   initTimeStamp: number | null;
 };
 
-const swipeableInitialState: SwipeableStateType = {
+const touchInitialState: TouchStateType = Object.freeze({
   startX: null,
-  startY: null,
   endX: null,
-  endY: null,
   x: null,
-  y: null,
   initTimeStamp: null,
-};
+});
 
 function Swipeable() {
+  const touchRef = useRef<TouchStateType>(touchInitialState);
   const swipeableContainerRef = useRef<HTMLDivElement | null>(null);
-  const [touchState, setTouchState] = useState<SwipeableStateType>(swipeableInitialState);
-  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(null);
 
   const handleTouchStart = (event: React.TouchEvent) => {
     event.stopPropagation();
 
-    const { clientX: touchX, clientY: touchY } = event.touches[0];
-    setSwipeDirection(null);
-    setTouchState({
-      startX: touchX,
-      startY: touchY,
-      endX: null,
-      endY: null,
-      x: null,
-      y: null,
-      initTimeStamp: new Date().getTime(),
-    });
+    const { clientX: touchX } = event.touches[0];
+    touchRef.current = { ...touchInitialState };
+    touchRef.current.startX = touchX;
+    touchRef.current.initTimeStamp = new Date().getTime();
   };
 
   const handleTouchMove = (event: React.TouchEvent) => {
-    console.log("handleTouchMove");
     event.stopPropagation();
+    if (touchRef.current.startX === null) return;
 
-    const { clientX: touchX, clientY: touchY } = event.touches[0];
-    setTouchState((prevState) => ({
-      ...prevState,
-      x: touchX,
-      y: touchY,
-    }));
+    const { clientX: touchX } = event.touches[0];
+    const transformX = touchX - touchRef.current.startX;
+
+    swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
+    touchRef.current.x = touchX;
   };
 
   const handleTouchEnd = (event: React.TouchEvent) => {
     event.stopPropagation();
 
-    const endX = touchState.x || null;
-    const endY = touchState.y || null;
-    setTouchState((prevState) => ({
-      ...prevState,
-      endX,
-      endY,
-    }));
+    const endX = touchRef.current.x || null;
+    touchRef.current.endX = endX;
 
     if (!endX) return;
 
     if (
-      (touchState.startX && endX && Math.abs(touchState?.startX - endX) > 200) ||
-      new Date().getTime() - (touchState.initTimeStamp || 0) < 300
+      (touchRef.current.startX && endX && Math.abs(touchRef.current?.startX - endX) > 300) ||
+      new Date().getTime() - (touchRef.current.initTimeStamp || 0) < 300
     ) {
-      const diffX = touchState.startX! - endX;
+      const diffX = touchRef.current.startX! - endX;
       if (diffX > 0) {
-        setSwipeDirection("left");
+        const transformX = -(swipeableContainerRef.current?.offsetWidth || window.innerWidth);
+        swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
       } else {
-        setSwipeDirection("right");
+        const transformX = swipeableContainerRef.current?.offsetWidth || window.innerWidth;
+        swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
       }
 
       setTimeout(() => {
-        setTouchState(swipeableInitialState);
-        setSwipeDirection(null);
+        touchRef.current = { ...touchInitialState };
+        swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
       }, 500);
     } else {
-      setTouchState(swipeableInitialState);
-      setSwipeDirection(null);
+      touchRef.current = { ...touchInitialState };
+      swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
     }
   };
-
-  let transformX =
-    swipeDirection === "left"
-      ? -(swipeableContainerRef.current?.offsetWidth || window.innerWidth)
-      : swipeDirection === "right"
-      ? swipeableContainerRef.current?.offsetWidth || window.innerWidth
-      : null;
-
-  if (!transformX && touchState.startX !== null && touchState.x) {
-    transformX = (touchState?.endX || touchState?.x || 0) - touchState.startX;
-  } else if (!transformX) {
-    transformX = 0;
-  }
-
-  console.log("transformX", transformX);
-  console.log("swipeDirection", swipeDirection);
 
   return (
     <div
@@ -109,9 +75,8 @@ function Swipeable() {
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
-      ref={swipeableContainerRef}
     >
-      <div className={`px-4 py-6 bg-sky-300 transition-transform`} style={{ transform: `translateX(${transformX}px)` }}>
+      <div className={`px-4 py-6 bg-sky-300 transition-transform`} ref={swipeableContainerRef}>
         Scrollable content
       </div>
     </div>
