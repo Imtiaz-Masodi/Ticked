@@ -13,7 +13,10 @@ function TaskItem({ task }: TaskItemProps) {
 
   return (
     <div className="task-item-container w-full px-4 py-1.5 bg-white shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden">
-      <div className="w-1 flex -ms-4 -my-1.5" style={{ backgroundColor: priorityColorMap[task.priority] }}></div>
+      <div
+        className="w-1 flex -ms-4 -my-1.5 flex-shrink-0"
+        style={{ backgroundColor: priorityColorMap[task.priority] }}
+      ></div>
       <div className="flex flex-col justify-center flex-grow gap-1">
         <h2 className="text-xl text-zinc-700 leading-tight">{task.title}</h2>
 
