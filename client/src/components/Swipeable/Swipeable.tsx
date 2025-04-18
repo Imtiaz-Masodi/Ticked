@@ -46,12 +46,12 @@ function Swipeable() {
 
     if (!endX) return;
 
+    swipeableContainerRef.current?.style.setProperty("transition", "transform 0.3s ease-in-out");
     if (
       (touchRef.current.startX && endX && Math.abs(touchRef.current?.startX - endX) > 300) ||
       new Date().getTime() - (touchRef.current.initTimeStamp || 0) < 300
     ) {
       const diffX = touchRef.current.startX! - endX;
-      swipeableContainerRef.current?.style.setProperty("transition", "transform 0.3s ease-in-out");
       if (diffX > 0) {
         const transformX = -(swipeableContainerRef.current?.offsetWidth || window.innerWidth);
         swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
@@ -63,12 +63,15 @@ function Swipeable() {
       setTimeout(() => {
         touchRef.current = { ...touchInitialState };
         swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
-        swipeableContainerRef.current?.style.setProperty("transition", "none");
       }, 500);
     } else {
       touchRef.current = { ...touchInitialState };
       swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
     }
+
+    setTimeout(() => {
+      swipeableContainerRef.current?.style.setProperty("transition", "none");
+    }, 800);
   };
 
   return (
