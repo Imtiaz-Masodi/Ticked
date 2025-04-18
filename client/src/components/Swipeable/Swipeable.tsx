@@ -63,7 +63,7 @@ function Swipeable() {
       setTimeout(() => {
         touchRef.current = { ...touchInitialState };
         swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
-        swipeableContainerRef.current?.style.setProperty("transition", "transform 0.15s ease-in-out");
+        swipeableContainerRef.current?.style.setProperty("transition", "none");
       }, 500);
     } else {
       touchRef.current = { ...touchInitialState };
@@ -78,7 +78,7 @@ function Swipeable() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div className={`px-4 py-6 bg-sky-300 transition-transform`} ref={swipeableContainerRef}>
+      <div className={`px-4 py-6 bg-sky-300`} ref={swipeableContainerRef}>
         Scrollable content
       </div>
     </div>
