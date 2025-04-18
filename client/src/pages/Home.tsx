@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
+import Swipeable from "../components/Swipeable/Swipeable";
 
 function Home() {
   const navigate = useNavigate();
@@ -21,6 +22,8 @@ function Home() {
     <div className="mt-2">
       <TasksList />
       <FloatingActionButton icon={Icons.add} onClick={() => navigate("/task/new")} />
+
+      <Swipeable />
     </div>
   );
 }
