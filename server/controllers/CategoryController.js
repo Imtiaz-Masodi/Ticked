@@ -6,7 +6,7 @@ const constants = require("../utils/constants");
 const COMMON_CATEGORIES = Object.freeze([
   { _id: "1", name: "Personal", preDefined: true, categoryColorCode: "#4E9B8F" },
   { _id: "2", name: "Work", preDefined: true, categoryColorCode: "#3B5998" },
-  { _id: "3", name: "Others", preDefined: true, categoryColorCode: "#E4E1D2" },
+  { _id: "3", name: "Others", preDefined: true, categoryColorCode: "#A78C00" },
 ]);
 
 async function isValidCategoryId(categoryId, userId) {
