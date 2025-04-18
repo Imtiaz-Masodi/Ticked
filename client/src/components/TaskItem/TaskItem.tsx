@@ -12,10 +12,10 @@ function TaskItem({ task }: TaskItemProps) {
   const category = data?.payload?.categories.find((category) => category._id === task.categoryId) || null;
 
   return (
-    <div className="task-item-container w-full h-16 px-4 py-1.5 bg-white shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden">
+    <div className="task-item-container w-full px-4 py-1.5 bg-white shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden">
       <div className="w-1 flex -ms-4 -my-1.5" style={{ backgroundColor: priorityColorMap[task.priority] }}></div>
-      <div className="flex flex-col justify-center flex-grow">
-        <h2 className="text-xl text-zinc-700">{task.title}</h2>
+      <div className="flex flex-col justify-center flex-grow gap-1">
+        <h2 className="text-xl text-zinc-700 leading-tight">{task.title}</h2>
 
         <div className="flex items-center gap-2">
           {category && (
