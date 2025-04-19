@@ -9,6 +9,7 @@ const handleTouchStart = (
 ) => {
   return (event: React.TouchEvent) => {
     event.stopPropagation();
+    document.body.style.overflow = "hidden";
 
     if (!swipingLeftAllowed && !swipingRightAllowed) return;
 
@@ -61,6 +62,7 @@ const handleTouchEnd = (
 ) => {
   return (event: React.TouchEvent) => {
     event.stopPropagation();
+    document.body.style.overflow = "unset";
 
     const endX = touchRef.current.x || null;
     touchRef.current.endX = endX;
