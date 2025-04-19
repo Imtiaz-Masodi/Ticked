@@ -1,88 +1,46 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
+import { SwipeableProps, TouchStateType } from "./Swipeable.types";
+import { touchInitialState } from "./Swipeable.options";
+import { touchEventHandlers } from "./Swipeable.helper";
 
-type TouchStateType = {
-  startX: number | null;
-  endX: number | null;
-  x: number | null;
-  initTimeStamp: number | null;
-};
-
-const touchInitialState: TouchStateType = Object.freeze({
-  startX: null,
-  endX: null,
-  x: null,
-  initTimeStamp: null,
-});
-
-function Swipeable() {
+function Swipeable({
+  children,
+  className,
+  swipingLeftBgContent,
+  swipingRightBgContent,
+  onSwipeLeft,
+  onSwipeRight,
+}: SwipeableProps) {
   const touchRef = useRef<TouchStateType>(touchInitialState);
   const swipeableContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const handleTouchStart = (event: React.TouchEvent) => {
-    event.stopPropagation();
-
-    const { clientX: touchX } = event.touches[0];
-    touchRef.current = { ...touchInitialState };
-    touchRef.current.startX = touchX;
-    touchRef.current.initTimeStamp = new Date().getTime();
-  };
-
-  const handleTouchMove = (event: React.TouchEvent) => {
-    event.stopPropagation();
-    if (touchRef.current.startX === null) return;
-
-    const { clientX: touchX } = event.touches[0];
-    const transformX = touchX - touchRef.current.startX;
-
-    swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
-    touchRef.current.x = touchX;
-  };
-
-  const handleTouchEnd = (event: React.TouchEvent) => {
-    event.stopPropagation();
-
-    const endX = touchRef.current.x || null;
-    touchRef.current.endX = endX;
-
-    if (!endX) return;
-
-    swipeableContainerRef.current?.style.setProperty("transition", "transform 0.3s ease-in-out");
-    if (
-      (touchRef.current.startX && endX && Math.abs(touchRef.current?.startX - endX) > 300) ||
-      new Date().getTime() - (touchRef.current.initTimeStamp || 0) < 300
-    ) {
-      const diffX = touchRef.current.startX! - endX;
-      if (diffX > 0) {
-        const transformX = -(swipeableContainerRef.current?.offsetWidth || window.innerWidth);
-        swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
-      } else {
-        const transformX = swipeableContainerRef.current?.offsetWidth || window.innerWidth;
-        swipeableContainerRef.current?.style.setProperty("transform", `translateX(${transformX}px)`);
-      }
-
-      setTimeout(() => {
-        touchRef.current = { ...touchInitialState };
-        swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
-      }, 500);
-    } else {
-      touchRef.current = { ...touchInitialState };
-      swipeableContainerRef.current?.style.setProperty("transform", "translateX(0px)");
-    }
-
-    setTimeout(() => {
-      swipeableContainerRef.current?.style.setProperty("transition", "none");
-    }, 800);
-  };
+  const swipingLeftAllowed = useMemo(() => {
+    return !!(swipingLeftBgContent && onSwipeLeft);
+  }, [swipingLeftBgContent, onSwipeLeft]);
+  const swipingRightAllowed = useMemo(() => {
+    return !!(swipingRightBgContent && onSwipeRight);
+  }, [swipingRightBgContent, onSwipeRight]);
 
   return (
     <div
-      className="mt-8 bg-gray-200 w-full overflow-x-hidden"
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
+      className={`w-full overflow-x-hidden relative transition-all ${className}`}
+      onTouchStart={touchEventHandlers.handleTouchStart(touchRef, swipingLeftAllowed, swipingRightAllowed)}
+      onTouchMove={touchEventHandlers.handleTouchMove(
+        touchRef,
+        swipeableContainerRef,
+        swipingLeftAllowed,
+        swipingRightAllowed
+      )}
+      onTouchEnd={touchEventHandlers.handleTouchEnd(touchRef, swipeableContainerRef, onSwipeLeft, onSwipeRight)}
     >
-      <div className={`px-4 py-6 bg-sky-300`} ref={swipeableContainerRef}>
-        Scrollable content
+      <div id="swipe-content-right" className="absolute top-0 left-0 w-full h-full opacity-0 overflow-hidden">
+        {swipingRightBgContent}
+      </div>
+      <div id="swipe-content-left" className="absolute top-0 left-0 w-full h-full opacity-0 overflow-hidden">
+        {swipingLeftBgContent}
+      </div>
+      <div ref={swipeableContainerRef} className="relative z-10">
+        {children}
       </div>
     </div>
   );
