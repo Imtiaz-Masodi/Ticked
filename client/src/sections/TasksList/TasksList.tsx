@@ -15,9 +15,11 @@ function TasksList() {
         <Swipeable
           className="rounded-md"
           swipingLeftBgContent={
-            <SwipeableBgContent text="Mark as Complete" icon={Icons.settings} themeColorClasses="bg-green-500" />
+            <SwipeableBgContent text="Done" icon={Icons.taskDone} themeColorClasses="bg-green-500" />
           }
-          swipingRightBgContent={<SwipeableBgContent text="Archive" icon={Icons.add} themeColorClasses="bg-red-500" />}
+          swipingRightBgContent={
+            <SwipeableBgContent text="Backlog" icon={Icons.archive} themeColorClasses="bg-red-500" />
+          }
           onSwipeLeft={() => {}}
           onSwipeRight={() => {}}
           key={task._id}
