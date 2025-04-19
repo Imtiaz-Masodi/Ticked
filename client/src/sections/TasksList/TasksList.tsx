@@ -1,4 +1,5 @@
-import { Swipeable } from "../../components/Swipeable";
+import { Icons } from "../../components/Icon/IconMap";
+import { Swipeable, SwipeableBgContent } from "../../components/Swipeable";
 import { TaskItem } from "../../components/TaskItem";
 import { useGetTasksQuery } from "../../store/api/taskApi";
 import { Task } from "../../types/Task";
@@ -14,13 +15,9 @@ function TasksList() {
         <Swipeable
           className="rounded-md"
           swipingLeftBgContent={
-            <div className="bg-sky-500 h-full text-right flex justify-end items-center px-4 text-white">
-              Mark as Complete
-            </div>
+            <SwipeableBgContent text="Mark as Complete" icon={Icons.settings} themeColorClasses="bg-green-500" />
           }
-          swipingRightBgContent={
-            <div className="bg-rose-500 h-full flex justify-start items-center px-4 text-white">Archive</div>
-          }
+          swipingRightBgContent={<SwipeableBgContent text="Archive" icon={Icons.add} themeColorClasses="bg-red-500" />}
           onSwipeLeft={() => {}}
           onSwipeRight={() => {}}
           key={task._id}
