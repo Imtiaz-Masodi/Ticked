@@ -16,7 +16,11 @@ function Header() {
   }, [location]);
 
   return (
-    <div className="h-16 px-6 md:px-8 py-2 fixed top-0 left-0 w-full flex items-center justify-between bg-white border-b border-b-zinc-200 z-10">
+    <div
+      className={`h-16 px-6 ${
+        showBack ? "pl-4" : ""
+      } md:px-8 py-2 fixed top-0 left-0 w-full flex items-center justify-between bg-white border-b border-b-zinc-200 z-10 transition-all`}
+    >
       <div className="flex items-center">
         <Icon
           name={Icons.arrowBack}
