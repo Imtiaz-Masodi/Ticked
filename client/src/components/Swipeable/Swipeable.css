@@ -1,0 +1,3 @@
+#swipe-content-left > #swipeable-item-bg-content {
+  flex-direction: row-reverse;
+}

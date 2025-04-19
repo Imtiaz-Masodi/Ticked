@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { SwipeableProps, TouchStateType } from "./Swipeable.types";
 import { touchInitialState } from "./Swipeable.options";
 import { touchEventHandlers } from "./Swipeable.helper";
+import "./Swipeable.css";
 
 function Swipeable({
   children,
