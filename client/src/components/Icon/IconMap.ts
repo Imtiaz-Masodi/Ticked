@@ -11,6 +11,16 @@ import LogoutComponent from "../../assets/svg/logout.svg";
 import AddComponent from "../../assets/svg/add.svg";
 import ArrowBackComponent from "../../assets/svg/arrow_back.svg";
 import DownComponent from "../../assets/svg/down.svg";
+import ArchiveComponent from "../../assets/svg/archive.svg";
+import CategoryComponent from "../../assets/svg/category.svg";
+import DeleteComponent from "../../assets/svg/delete.svg";
+import LabelComponent from "../../assets/svg/label.svg";
+import MenuComponent from "../../assets/svg/menu.svg";
+import TaskDoneComponent from "../../assets/svg/task_done.svg";
+import TaskComponent from "../../assets/svg/task.svg";
+import CloudComponent from "../../assets/svg/cloud.svg";
+import CloudOffComponent from "../../assets/svg/cloud_off.svg";
+import CloudUploadComponent from "../../assets/svg/cloud_upload.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -30,6 +40,16 @@ export enum Icons {
   add = "add",
   arrowBack = "arrow-back",
   down = "down",
+  archive = "archive",
+  category = "category",
+  delete = "delete",
+  label = "label",
+  menu = "menu",
+  task = "task",
+  taskDone = "task-done",
+  cloud = "cloud",
+  cloudOff = "cloud-off",
+  cloudUpload = "cloud-upload",
 }
 
 type IconMapType = {
@@ -48,4 +68,14 @@ export const IconMap: IconMapType = {
   [Icons.add]: AddComponent,
   [Icons.arrowBack]: ArrowBackComponent,
   [Icons.down]: DownComponent,
+  [Icons.archive]: ArchiveComponent,
+  [Icons.category]: CategoryComponent,
+  [Icons.delete]: DeleteComponent,
+  [Icons.label]: LabelComponent,
+  [Icons.menu]: MenuComponent,
+  [Icons.task]: TaskComponent,
+  [Icons.taskDone]: TaskDoneComponent,
+  [Icons.cloud]: CloudComponent,
+  [Icons.cloudOff]: CloudOffComponent,
+  [Icons.cloudUpload]: CloudUploadComponent,
 };
