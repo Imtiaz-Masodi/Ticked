@@ -33,16 +33,16 @@ function Dropdown<T>({ name, label, value, options, disabled = false, getLabel, 
 
   return (
     <div className="w-full relative" ref={dropdownRef}>
-      <label className="block mb-1 ml-1 text-xs font-medium text-zinc-700">{label}</label>
+      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600">{label}</label>
       <button
-        className="w-full flex items-center justify-between rounded-md border border-zinc-300 px-3 py-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-500 disabled:bg-gray-200 disabled:cursor-not-allowed"
+        className="w-full flex items-center justify-between rounded-md border border-zinc-300 px-3 py-2 focus-visible:outline-offset-2 focus-visible:outline-black/40 disabled:bg-gray-200 disabled:cursor-not-allowed"
         onClick={() => {
           if (disabled) return;
           setIsOpen(!isOpen);
         }}
         disabled={disabled}
       >
-        <span className="text-sm font-light text-zinc-800">{value ? getLabel(value) : ""}</span>
+        <span className="text-sm text-zinc-700">{value ? getLabel(value) : ""}</span>
         <Icon name={Icons.down} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
