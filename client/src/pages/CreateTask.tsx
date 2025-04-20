@@ -46,8 +46,8 @@ function CreateTask() {
   return (
     <div className="pt-6 px-4">
       <div className="my-8">
-        <div className="text-center text-2xl font-thin sm:text-3xl">Create Task</div>
-        <div className="text-center text-sm text-gray-500 font-thin">Start organizing your tasks effortlessly</div>
+        <div className="text-center text-2xl sm:text-3xl text-black/70">Create Task</div>
+        <div className="text-center text-sm text-zinc-400 font-light">Start organizing your tasks effortlessly</div>
       </div>
 
       <div className="flex flex-col gap-4 max-w-sm mx-auto">
