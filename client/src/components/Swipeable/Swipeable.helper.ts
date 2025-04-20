@@ -9,7 +9,6 @@ const handleTouchStart = (
 ) => {
   return (event: React.TouchEvent) => {
     event.stopPropagation();
-    document.body.style.overflow = "hidden";
 
     if (!swipingLeftAllowed && !swipingRightAllowed) return;
 
@@ -27,7 +26,6 @@ const handleTouchMove = (
   swipingRightAllowed: boolean
 ) => {
   return (event: React.TouchEvent) => {
-    event.stopPropagation();
     if (touchRef.current.startX === null) return;
 
     const { clientX: touchX } = event.touches[0];
@@ -60,8 +58,7 @@ const handleTouchEnd = (
   onSwipeLeft?: () => void,
   onSwipeRight?: () => void
 ) => {
-  return (event: React.TouchEvent) => {
-    event.stopPropagation();
+  return () => {
     document.body.style.overflow = "unset";
 
     const endX = touchRef.current.x || null;
