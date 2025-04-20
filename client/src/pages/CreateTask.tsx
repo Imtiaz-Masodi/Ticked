@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { FormikHelpers, useFormik } from "formik";
 import { TaskForm, TaskFormValues } from "../sections/TaskForm";
 import { ApiResponseStatus, Priority } from "../utils/enums";
@@ -42,6 +43,12 @@ function CreateTask() {
     onSubmit: handleFormSubmit,
     validate: validateTaskForm,
   });
+
+  useEffect(() => {
+    const rootContainer = document.getElementById("root-container");
+    if (rootContainer) rootContainer.style.backgroundColor = "white";
+    return () => document.getElementById("root-container")?.removeAttribute("style");
+  }, []);
 
   return (
     <div className="pt-6 px-4">
