@@ -10,7 +10,7 @@ type AppLogoProps = {
 const logoVariantsIconStyle = Object.freeze({
   [Size.sm]: "h-6",
   [Size.md]: "h-9",
-  [Size.lg]: "h-12",
+  [Size.lg]: "h-11",
 });
 
 const logoVariantsLabelStyle = Object.freeze({
