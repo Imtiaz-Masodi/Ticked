@@ -18,6 +18,9 @@ export default {
           dark: colors.emerald[700],
         },
       },
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
     },
   },
   plugins: [],
