@@ -23,9 +23,10 @@ export const useSwipeable = ({
     (event: React.TouchEvent) => {
       if (!swipingLeftAllowed && !swipingRightAllowed) return;
 
-      const { clientX: touchX } = event.touches[0];
+      const { clientX: touchX, clientY: touchY } = event.touches[0];
       touchRef.current = { ...touchInitialState };
       touchRef.current.startX = touchX;
+      touchRef.current.startY = touchY;
       touchRef.current.initTimeStamp = new Date().getTime();
     },
     [swipingLeftAllowed, swipingRightAllowed]
@@ -33,9 +34,17 @@ export const useSwipeable = ({
 
   const handleTouchMove = useCallback(
     (event: React.TouchEvent) => {
+      if (touchRef.current.swipeDirectionAxis === null) {
+        // Determine the swipe axis based on the initial touch position
+        const { clientX: touchX, clientY: touchY } = event.touches[0];
+        const diffX = Math.abs(touchX - (touchRef.current.startX || 0));
+        const diffY = Math.abs(touchY - (touchRef.current.startY || 0));
+        touchRef.current.swipeDirectionAxis = diffX > diffY ? "x" : "y";
+      }
+
       if (
         touchRef.current.startX === null ||
-        Math.abs(event.touches[0].clientX - touchRef.current.startX) < 100
+        touchRef.current.swipeDirectionAxis !== "x"
       )
         return;
       document.body.style.overflow = "hidden";
@@ -80,9 +89,8 @@ export const useSwipeable = ({
       document.body.style.overflow = "unset";
 
       const endX = touchRef.current.x || null;
-      touchRef.current.endX = endX;
 
-      if (!endX) return;
+      if (!endX || touchRef.current.swipeDirectionAxis !== "x") return;
       event.stopPropagation();
 
       swipeableContainerRef.current?.style.setProperty(

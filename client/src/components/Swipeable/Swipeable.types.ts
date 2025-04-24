@@ -8,7 +8,9 @@ export type SwipeableProps = React.PropsWithChildren<{
 
 export type TouchStateType = {
   startX: number | null;
-  endX: number | null;
+  startY: number | null;
   x: number | null;
+  y: number | null;
   initTimeStamp: number | null;
+  swipeDirectionAxis: "x" | "y" | null;
 };
