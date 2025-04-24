@@ -28,6 +28,8 @@ export const useSwipeable = ({
       touchRef.current.startX = touchX;
       touchRef.current.startY = touchY;
       touchRef.current.initTimeStamp = new Date().getTime();
+
+      swipeableContainerRef.current?.style.setProperty("transition", "none");
     },
     [swipingLeftAllowed, swipingRightAllowed]
   );
@@ -72,6 +74,10 @@ export const useSwipeable = ({
           ?.querySelector("#swipe-content-right")
           ?.classList.add("opacity-0");
       } else {
+        swipeableContainerRef.current?.style.setProperty(
+          "transform",
+          "translateX(0px)"
+        );
         return;
       }
 
