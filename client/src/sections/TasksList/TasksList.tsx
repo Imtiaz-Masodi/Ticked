@@ -3,10 +3,15 @@ import { Swipeable, SwipeableBgContent } from "../../components/Swipeable";
 import { TaskItem } from "../../components/TaskItem";
 import { useGetTasksQuery } from "../../store/api/taskApi";
 import { Task } from "../../types/Task";
+import { NoData } from "../../components/NoData";
 
 function TasksList() {
-  const { data } = useGetTasksQuery();
+  const { data, isLoading } = useGetTasksQuery();
   const tasks = data?.payload?.tasks || [];
+
+  if (!tasks.length && !isLoading) {
+    return <NoData />;
+  }
 
   return (
     <div className="max-w-screen-md mx-auto flex flex-col items-center justify-center px-2 gap-2">
