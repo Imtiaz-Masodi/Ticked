@@ -5,9 +5,9 @@ export enum Size {
 }
 
 export enum Priority {
-  low = "Low",
-  medium = "Medium",
-  high = "High",
+  low = "low",
+  medium = "medium",
+  high = "high",
 }
 
 export enum ApiResponseStatus {
