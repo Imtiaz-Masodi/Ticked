@@ -10,11 +10,16 @@ const taskSchema = Joi.object({
   completed: Joi.boolean().default(false),
   dueDate: Joi.date().iso().optional().messages({
     "date.base": '"dueDate" must be a valid date',
-    "date.iso": '"dueDate" must be a valid ISO date string in format YYYY-MM-DD',
+    "date.iso":
+      '"dueDate" must be a valid ISO date string in format YYYY-MM-DD',
   }),
-  priority: Joi.string().optional().valid("Low", "Medium", "High").default("Medium").messages({
-    "any.only": 'priority must be one of "Low", "Medium", or "High"',
-  }),
+  priority: Joi.string()
+    .optional()
+    .valid("low", "medium", "high")
+    .default("medium")
+    .messages({
+      "any.only": 'priority must be one of "low", "medium", or "high"',
+    }),
 });
 
 module.exports = { taskSchema };

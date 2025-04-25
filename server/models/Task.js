@@ -3,23 +3,37 @@ const mongoose = require("mongoose");
 const taskSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
-  completed: { type: Boolean, default: false },
-  createdOn: { type: Date, default: Date.now },
-  updatedOn: { type: Date },
-  dueDate: { type: Date },
+  status: {
+    type: String,
+    enum: ["backlog", "todo", "inprogress", "completed"],
+    default: "todo",
+  },
   priority: {
     type: String,
-    enum: ["Low", "Medium", "High"],
-    default: "Medium",
+    enum: ["low", "medium", "high"],
+    default: "medium",
   },
   categoryId: { type: String, default: "3" },
-  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  dueDate: { type: Date },
+  deleted: { type: Boolean, default: false },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  createdOn: { type: Date, default: Date.now },
+  updatedOn: { type: Date, default: Date.now },
 });
 
-taskSchema.index({ completed: -1, categoryId: 1, priority: 1 });
+taskSchema.index({ userId: 1, categoryId: 1, deleted: -1 });
+taskSchema.index({ userId: 1, categoryId: 1, status: 1, deleted: -1 });
+taskSchema.index({ userId: 1, status: 1, deleted: -1 });
+taskSchema.index({ userId: 1, deleted: 1 });
 
-taskSchema.statics.isValidTaskId = async function (taskId, userId) {
-  const task = await this.findOne({ _id: taskId, user: userId });
+taskSchema.pre("save", async function (next) {
+  this.updatedOn = Date.now();
+  next();
+});
+
+taskSchema.statics.isValidTaskId = async function (taskId, userId, callbackTaskItem) {
+  const task = await this.findOne({ _id: taskId, userId });
+  callbackTaskItem?.(task);
   return Boolean(task);
 };
 

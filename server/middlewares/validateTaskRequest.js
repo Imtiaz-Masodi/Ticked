@@ -3,24 +3,36 @@ const Task = require("../models/Task");
 const ApiResponse = require("../pojo/ApiResponse");
 const { isValidObjectId } = require("../utils");
 const constants = require("../utils/constants");
+const { TaskPriority, TaskStatus } = require("../utils/enums");
 
 async function validateTaskQueryParams(req, res, next) {
   const { user } = req.stash;
-  const { completed, categoryId, priority } = req.query;
+  const { categoryId, priority, status, deleted } = req.query;
 
-  if (categoryId !== undefined && !(await isValidCategoryId(categoryId, user.id))) {
+  if (
+    categoryId !== undefined &&
+    !(await isValidCategoryId(categoryId, user.id))
+  ) {
     res.status(400).send(new ApiResponse(false, constants.INVALID_CATEGORY_ID));
     return;
   }
-  if (priority !== undefined && !["Low", "Medium", "High"].includes(priority)) {
+  if (
+    priority !== undefined &&
+    !Object.values(TaskPriority).includes(priority)
+  ) {
     res.status(400).send(new ApiResponse(false, constants.INVALID_PRIORITY));
+    return;
+  }
+  if (status !== undefined && !Object.values(TaskStatus).includes(status)) {
+    res.status(400).send(new ApiResponse(false, constants.INVALID_STATUS));
     return;
   }
 
   const searchQuery = {
-    completed: completed ? completed === "true" : undefined,
+    status,
     categoryId,
     priority,
+    deleted: deleted === "both" ? undefined : deleted === "true",
   };
   Object.keys(searchQuery).forEach((key) => {
     if (searchQuery[key] === undefined) delete searchQuery[key];
@@ -31,22 +43,35 @@ async function validateTaskQueryParams(req, res, next) {
   next();
 }
 
-async function validateTaskIdToDelete(req, res, next) {
-  const { user } = req.stash;
-  const { taskId } = req.params;
-  if (!isValidObjectId(taskId)) {
-    res.status(400).send(new ApiResponse(false, constants.INVALID_TASK_ID));
-    return;
-  }
+const validateTaskId =
+  (skipItemDeletedVerification = false) =>
+  async (req, res, next) => {
+    const { user } = req.stash;
+    const { taskId } = req.params;
+    let task = null;
+    if (
+      !isValidObjectId(taskId) ||
+      !(await Task.isValidTaskId(
+        taskId,
+        user.id,
+        (taskItem) => (task = taskItem)
+      ))
+    ) {
+      res.status(400).send(new ApiResponse(false, constants.INVALID_TASK_ID));
+      return;
+    }
 
-  if (!(await Task.isValidTaskId(taskId, user.id))) {
-    res.status(400).send(new ApiResponse(false, constants.INVALID_TASK_ID));
-    return;
-  }
-  next();
-}
+    if (!skipItemDeletedVerification && task.deleted) {
+      res
+        .status(400)
+        .send(new ApiResponse(false, constants.INVALID_TASK_ON_DELETED_ITEM));
+      return;
+    }
+
+    next();
+  };
 
 module.exports = {
   validateTaskQueryParams,
-  validateTaskIdToDelete,
+  validateTaskId,
 };
