@@ -11,5 +11,9 @@ export default defineConfig({
       svgrOptions: { exportType: "default", ref: true, svgo: false, titleProp: true },
       include: "**/*.svg",
     }),
-  ]
+  ],
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  }
 });
