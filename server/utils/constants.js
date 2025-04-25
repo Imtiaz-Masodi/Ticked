@@ -28,12 +28,19 @@ module.exports = {
   INVALID_CATEGORY_ID: "Invalid category id",
   CATEGORY_DELETED: "Category deleted",
   INVALID_PRIORITY: "Invalid priority value",
+  INVALID_STATUS: "Invalid status value",
 
   TASK_DELETED: "Task deleted!",
   TASK_CREATED: "Task created successfully",
   INVALID_TASK_ID: "Invalid task id",
+  INVALID_STATUS_VALUE:
+    "Invalid status value. It should be todo, inprogress, completed or backlog",
   TASK_COMPLETED: "Task marked as completed",
+  TASK_RESTORED: "Task restored",
+  TASK_MOVED_TO_BACKLOG: "Task moved to backlog",
   TASK_UPDATED: "Task updated successfully",
+  TASK_STATUS_UPDATED: "Task status updated successfully",
+  INVALID_TASK_ON_DELETED_ITEM: "Cannot perform this action on deleted item",
 
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
