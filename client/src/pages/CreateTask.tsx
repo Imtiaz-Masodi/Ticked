@@ -12,7 +12,10 @@ import { Notification, NotificationType } from "../components/Notification";
 function CreateTask() {
   const [triggerCreateTask, createTaskResponse] = useCreateTaskMutation();
 
-  const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
+  const handleFormSubmit = async (
+    values: TaskFormValues,
+    { setSubmitting }: FormikHelpers<TaskFormValues>
+  ) => {
     try {
       const response = await triggerCreateTask({
         title: values.title,
@@ -47,17 +50,22 @@ function CreateTask() {
   useEffect(() => {
     const rootContainer = document.getElementById("root-container");
     if (rootContainer) rootContainer.style.backgroundColor = "white";
-    return () => document.getElementById("root-container")?.removeAttribute("style");
+    return () =>
+      document.getElementById("root-container")?.removeAttribute("style");
   }, []);
 
   return (
     <div className="pt-6 px-4">
       <div className="my-8">
-        <div className="text-center text-2xl sm:text-3xl text-black/70">Create Task</div>
-        <div className="text-center text-sm text-zinc-400 font-light">Start organizing your tasks effortlessly</div>
+        <div className="text-center text-2xl sm:text-3xl text-black/70">
+          Create Task
+        </div>
+        <div className="text-center text-sm text-zinc-400 font-light">
+          Start organizing your tasks effortlessly
+        </div>
       </div>
 
-      <div className="flex flex-col gap-4 max-w-sm mx-auto">
+      <div className="flex flex-col gap-4 max-w-sm mx-auto px-6">
         {createTaskResponse.data?.status && (
           <Notification
             type={
