@@ -1,8 +1,9 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
 import CreateTask from "./pages/CreateTask";
 import { RootContainer } from "./sections/RootContainer";
+import NotFound from "./pages/NotFound";
+import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
