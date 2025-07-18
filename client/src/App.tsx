@@ -8,6 +8,7 @@ import "./App.css";
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const Categories = lazy(() => import("./pages/Categories"));
 
 function App() {
   return (
@@ -39,6 +40,15 @@ function App() {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <CreateTask />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/categories"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Categories />
               </Suspense>
             }
           />
