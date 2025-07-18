@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { Size } from "../../utils/enums";
 import { useMobileDetect } from "../../hooks/useMediaQuery";
+import { NAV_ITEMS } from "../../utils/navigationConfig";
 import { AppLogo } from "../AppLogo";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
@@ -18,11 +19,13 @@ function Header({ onMenuIconClick }: HeaderProps) {
   const isMobile = useMobileDetect();
 
   useEffect(() => {
-    setShowBack(location.pathname !== "/");
+    // Check if current path is in NAV_ITEMS
+    const isNavItem = NAV_ITEMS.some((item) => item.path === location.pathname);
+    setShowBack(!isNavItem);
   }, [location]);
 
-  // Show hamburger icon only on mobile when on home page, or show back icon on other pages
-  const shouldShowIcon = showBack || (location.pathname === "/" && isMobile);
+  // Always show icon on mobile, and show hamburger for NAV_ITEMS or back for other routes
+  const shouldShowIcon = isMobile || showBack;
 
   return (
     <div
