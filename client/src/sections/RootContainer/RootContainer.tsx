@@ -1,16 +1,25 @@
-import { Outlet, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import { NavigationDrawer } from "../../components/NavigationDrawer";
 import { NAV_ITEMS } from "../../utils/navigationConfig";
+import { authHelper } from "../../helpers/authHelper";
 
 function RootContainer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const isUserLoggedIn = authHelper.isUserLoggedIn();
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleToggleDrawer = () => {
     setIsDrawerOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (!isUserLoggedIn) {
+      navigate("/login");
+    }
+  }, [isUserLoggedIn, navigate]);
 
   return (
     <div id="root-container" className="min-h-screen bg-zinc-50">
