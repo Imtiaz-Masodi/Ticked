@@ -14,7 +14,7 @@ function TasksList() {
   }
 
   return (
-    <div className="w-full mx-auto flex flex-col items-center justify-center px-2 gap-2 mt-3">
+    <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-2 gap-2 mt-3">
       <p className="text-sm font-bold text-zinc-600 self-start mx-2">Todo</p>
       {tasks.map((task: Task) => (
         <Swipeable

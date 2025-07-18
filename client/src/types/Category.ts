@@ -4,4 +4,5 @@ export type Category = {
   categoryColorCode: string;
   createdOn: string;
   createdBy: string;
+  preDefined?: boolean;
 };

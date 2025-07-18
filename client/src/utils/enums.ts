@@ -15,6 +15,13 @@ export enum ApiResponseStatus {
   failed = "failed",
 }
 
+export enum TaskStatus {
+  backlog = "backlog",
+  todo = "todo",
+  inprogress = "inprogress",
+  completed = "completed",
+}
+
 /**
  * Common breakpoints for responsive design
  */

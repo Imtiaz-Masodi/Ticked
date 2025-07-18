@@ -1,4 +1,4 @@
-import { Priority } from "../utils/enums";
+import { Priority, TaskStatus } from "../utils/enums";
 import { User } from "./User";
 
 export type Task = {
@@ -11,5 +11,6 @@ export type Task = {
   dueDate?: string;
   priority: Priority;
   categoryId: string;
+  status: TaskStatus;
   user: User;
 };
