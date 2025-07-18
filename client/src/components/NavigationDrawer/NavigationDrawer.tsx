@@ -44,10 +44,17 @@ export const NavigationDrawer = ({
 
   return (
     <>
-      {/* Overlay for mobile */}
-      {isMobile && isOpen && (
+      {/* Overlay for mobile with CSS fade effect */}
+      {isMobile && (
         <div
-          className="fixed inset-0 top-[64px] bg-black bg-opacity-50 z-20"
+          className={`
+            fixed inset-0 top-[64px] bg-black z-20 transition-opacity duration-300 ease-in-out
+            ${
+              isOpen
+                ? "opacity-50 pointer-events-auto z-10"
+                : "opacity-0 pointer-events-none -z-10"
+            }
+          `}
           onClick={onClose}
         />
       )}

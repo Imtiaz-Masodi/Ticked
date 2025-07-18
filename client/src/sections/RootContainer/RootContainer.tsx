@@ -21,7 +21,7 @@ function RootContainer() {
         navItems={NAV_ITEMS}
         activeNavItemPath={location.pathname}
       />
-      <div className="py-16 md:pl-64 container mx-auto transition-all duration-300">
+      <div className="py-16 md:pl-64 mx-2 transition-all duration-300">
         <Outlet />
       </div>
     </div>
