@@ -2,6 +2,7 @@ import { getUserFriendlyDate } from "../../helpers/dateHelper";
 import { useGetCategoriesQuery } from "../../store/api/categoryApi";
 import { Task } from "../../types/Task";
 import { priorityColorMap } from "../../utils/options";
+import { SkeletonBox } from "../Skeleton";
 
 type TaskItemProps = React.PropsWithChildren<{
   task: Task;
@@ -21,10 +22,12 @@ function TaskItem({ task }: TaskItemProps) {
         <h2 className="text-xl text-zinc-700 leading-tight">{task.title}</h2>
 
         <div className="flex items-center gap-2">
-          {category && (
+          {category ? (
             <p style={{ color: category.categoryColorCode }} className="text-xs">
               {category.name}
             </p>
+          ) : (
+            <SkeletonBox width="w-10" height="h-3" />
           )}
           <p className="text-xs text-zinc-700">{getUserFriendlyDate(task.dueDate)}</p>
         </div>
