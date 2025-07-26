@@ -1,6 +1,7 @@
 import { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { axiosInstance } from "../../api/apiClient";
+import { handleAuthenticationError } from "./authMiddleware";
 
 type CustomBaseQueryType = {
   url: string;
@@ -17,6 +18,12 @@ export const customBaseQuery =
       return { data: result.data };
     } catch (axiosError) {
       const err = axiosError as AxiosError;
+
+      // Handle 401 Unauthorized errors
+      if (err.response?.status === 401) {
+        handleAuthenticationError();
+      }
+
       return {
         error: {
           status: err.response?.status,

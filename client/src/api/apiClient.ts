@@ -2,10 +2,11 @@ import axios, { AxiosError } from "axios";
 import { authHelper } from "../helpers/authHelper";
 
 // Create an Axios instance
+const isProduction = process.env.NODE_ENV === 'production';
 const axiosInstance = axios.create({
-  baseURL: "https://ticked.onrender.com",
+  baseURL: isProduction ? "https://ticked.onrender.com" : "http://localhost:3001",
   headers: { "Content-Type": "application/json" },
-  timeout: 60000,
+  timeout: 10000,
 });
 
 // Add a request interceptor
@@ -28,6 +29,12 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
+    // For 401 errors, let them through to be handled by RTK Query middleware
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      return Promise.reject(error);
+    }
+
+    // For other errors with response data, return the response
     if (error instanceof AxiosError && error.response?.data) {
       return error.response;
     }
