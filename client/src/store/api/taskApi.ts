@@ -30,9 +30,9 @@ export const taskApi = createApi({
         data: task,
       }),
     }),
-    updateTask: builder.mutation({
+    updateTask: builder.mutation<ApiResponse<unknown>, { task: Task }>({
       query: ({ task }) => ({
-        url: `/tasks/update`,
+        url: `/task/update/${task._id}`,
         method: "PUT",
         data: task,
       }),
@@ -58,5 +58,6 @@ export const {
   useGetTasksByCategoryQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,
+  useUpdateTaskAsCompletedMutation,
   useDeleteTaskMutation,
 } = taskApi;
