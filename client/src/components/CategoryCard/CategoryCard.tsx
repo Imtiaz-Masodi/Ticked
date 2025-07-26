@@ -7,6 +7,7 @@ import { ButtonType } from "../Button/Button.enum";
 import { Icons } from "../Icon/IconMap";
 import Badge from "../Badge/Badge";
 import { Tooltip } from "../Tooltip";
+import { SkeletonBox, SkeletonGrid } from "../Skeleton";
 
 interface CategoryCardProps {
   category: Category;
@@ -99,7 +100,7 @@ function CategoryCard({ category }: CategoryCardProps) {
         <div className="flex justify-between items-center">
           <span className="text-sm font-medium text-zinc-700">Total Tasks</span>
           {isLoading ? (
-            <div className="w-8 h-6 bg-gray-200 animate-pulse rounded"></div>
+            <SkeletonBox width="w-8" height="h-6" />
           ) : (
             <span className="text-lg font-bold text-zinc-900">
               {totalTasks}
@@ -108,14 +109,7 @@ function CategoryCard({ category }: CategoryCardProps) {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 gap-3">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="h-12 bg-gray-200 animate-pulse rounded-lg"
-              ></div>
-            ))}
-          </div>
+          <SkeletonGrid items={4} columns={2} itemHeight="h-10" />
         ) : totalTasks > 0 ? (
           <div className="grid grid-cols-2 gap-3">
             <div className="flex justify-between items-center p-2 bg-blue-50 rounded-lg">
