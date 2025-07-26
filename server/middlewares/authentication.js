@@ -29,8 +29,12 @@ async function authentication(req, res, next) {
     req.stash.user = user;
     next();
   } catch (ex) {
+    console.error("ERROR: ", ex.name, ex.message);
     if (ex.name === "TokenExpiredError") {
       res.status(401).send(new ApiResponse(false, constants.AUTH_TOKEN_EXPIRED));
+      return;
+    } else if (ex.name === "JsonWebTokenError") {
+      res.status(401).send(new ApiResponse(false, constants.INVALID_AUTH_TOKEN));
       return;
     }
     handleCommonError(res, ex);
