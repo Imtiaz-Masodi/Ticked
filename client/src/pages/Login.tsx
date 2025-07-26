@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormikHelpers, useFormik } from "formik";
 import { Button } from "../components/Button";
 import { ButtonType } from "../components/Button/Button.enum";
@@ -9,10 +9,18 @@ import { Notification, NotificationType } from "../components/Notification";
 import { AppLogo } from "../components/AppLogo";
 import { LoginForm, validateForm, LoginFormValues } from "../sections/LoginForm";
 import { useNavigate } from "react-router-dom";
+import { authHelper } from "../helpers/authHelper";
 
 const Login = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Check if user is already logged in on component mount
+  useEffect(() => {
+    if (authHelper.isUserLoggedIn()) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleSubmit = async (values: LoginFormValues, { setSubmitting }: FormikHelpers<LoginFormValues>) => {
     setErrorMessage(null);
