@@ -36,6 +36,7 @@ export function LoginForm(props: LoginFormProps) {
         type={InputTypes.password}
         placeholder="Enter password"
         onChange={handleChange}
+        onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
         onBlur={handleBlur}
         errorMessage={touched.password ? errors.password : undefined}
         disabled={isSubmitting}

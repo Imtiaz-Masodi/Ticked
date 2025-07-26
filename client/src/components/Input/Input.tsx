@@ -20,6 +20,7 @@ const Input = ({
   errorMessage,
   labelProps = {},
   onChange,
+  onKeyDown,
 }: InputProps) => {
   const [displayPassword, setDisplayPassword] = useState(false);
   const handleTogglePasswordVisibility = () => {
@@ -57,6 +58,7 @@ const Input = ({
           placeholder={placeholder}
           disabled={disabled}
           onChange={handleOnChange}
+          onKeyDown={onKeyDown}
         />
         {type === InputTypes.password && (
           <div
