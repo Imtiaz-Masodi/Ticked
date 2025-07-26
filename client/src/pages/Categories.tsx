@@ -22,12 +22,12 @@ function Categories() {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <h1 className="text-2xl font-bold text-zinc-600 self-start mx-2 mb-4">
+      <h1 className="text-xl font-medium text-zinc-600 self-start mx-2 mb-4">
         Categories
       </h1>
 
       {isLoading && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {[...Array(3)].map((_, i) => (
             <CategoryCardSkeleton key={i} />
           ))}
@@ -48,7 +48,7 @@ function Categories() {
       )}
 
       {!isLoading && categories.length && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category: Category) => (
             <CategoryCard key={category._id} category={category} />
           ))}

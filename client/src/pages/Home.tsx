@@ -11,7 +11,7 @@ function Home() {
   if (!isUserLoggedIn) return null;
 
   return (
-    <div className="mt-2">
+    <div className="mx-2 mt-2">
       <TasksList />
       <FloatingActionButton
         icon={Icons.add}

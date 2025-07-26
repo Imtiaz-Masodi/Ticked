@@ -61,13 +61,13 @@ function CategoryCard({ category }: CategoryCardProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-center gap-3 mb-4">
+      <div className="flex items-center gap-3 mb-6">
         <div
           className="w-5 h-5 rounded-full flex-shrink-0"
           style={{ backgroundColor: category.categoryColorCode }}
         />
         <div className="flex-grow">
-          <h3 className="text-lg font-semibold text-zinc-800">
+          <h3 className="text-xl leading-tight text-zinc-700">
             {category.name}
           </h3>
           {category.createdOn && (
@@ -96,13 +96,13 @@ function CategoryCard({ category }: CategoryCardProps) {
         )}
       </div>
 
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
+      <div className="space-y-2">
+        <div className="flex justify-between items-center mx-1">
           <span className="text-sm font-medium text-zinc-700">Total Tasks</span>
           {isLoading ? (
-            <SkeletonBox width="w-8" height="h-6" />
+            <SkeletonBox width="w-5" height="h-5" />
           ) : (
-            <span className="text-lg font-bold text-zinc-900">
+            <span className="text-md font-semibold text-zinc-900">
               {totalTasks}
             </span>
           )}
@@ -143,7 +143,7 @@ function CategoryCard({ category }: CategoryCardProps) {
           </div>
         ) : (
           <div className="text-center py-4">
-            <p className="text-sm text-zinc-500">
+            <p className="text-sm text-zinc-500 mt-4">
               No tasks in this category yet
             </p>
           </div>
