@@ -6,7 +6,7 @@ const taskSchema = Joi.object({
     "string.min": "{{#label}} should have at least {{#limit}} characters long.",
     "string.max": "{{#label}} cannot be more than {{#limit}} characters long.",
   }),
-  description: Joi.string().optional(),
+  description: Joi.string().allow("").optional(),
   completed: Joi.boolean().default(false),
   dueDate: Joi.date().iso().optional().messages({
     "date.base": '"dueDate" must be a valid date',
