@@ -9,7 +9,11 @@ function Backlog() {
 
   return (
     <div className="mx-2 mt-2">
-      <TasksList status={[TaskStatus.backlog]} title="Backlog Tasks" />
+      <TasksList
+        title="Backlog Tasks"
+        status={TaskStatus.backlog}
+        leftAction={TaskStatus.todo}
+      />
     </div>
   );
 }

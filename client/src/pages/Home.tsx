@@ -13,7 +13,12 @@ function Home() {
 
   return (
     <div className="mx-2 mt-2">
-      <TasksList status={[TaskStatus.todo, TaskStatus.inprogress]} title="Active Tasks" />
+      <TasksList
+        title="Active Tasks"
+        status={[TaskStatus.todo, TaskStatus.inprogress]}
+        leftAction={TaskStatus.completed}
+        rightAction={TaskStatus.backlog}
+      />
       <FloatingActionButton
         icon={Icons.add}
         onClick={() => navigate("/task/new")}

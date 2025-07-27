@@ -9,7 +9,12 @@ function Completed() {
 
   return (
     <div className="mx-2 mt-2">
-      <TasksList status={[TaskStatus.completed]} title="Completed Tasks" />
+      <TasksList
+        title="Completed Tasks"
+        status={TaskStatus.completed}
+        leftAction={TaskStatus.inprogress}
+        rightAction={TaskStatus.backlog}
+      />
     </div>
   );
 }
