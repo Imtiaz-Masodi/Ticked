@@ -11,6 +11,7 @@ const Register = lazy(() => import("./pages/Register"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Backlog = lazy(() => import("./pages/Backlog"));
 const Completed = lazy(() => import("./pages/Completed"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 function App() {
   return (
@@ -69,6 +70,15 @@ function App() {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <Completed />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/settings"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Settings />
               </Suspense>
             }
           />
