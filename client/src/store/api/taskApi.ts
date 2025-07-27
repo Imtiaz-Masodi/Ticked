@@ -7,16 +7,14 @@ export const taskApi = createApi({
   reducerPath: "taskApi",
   baseQuery: customBaseQuery(),
   endpoints: (builder) => ({
-    getTasks: builder.query<ApiResponse<{ tasks: Task[] }>, void>({
-      query: () => ({
+    getTasks: builder.query<ApiResponse<{ tasks: Task[] }>, { status?: string[] } | undefined>({
+      query: ({ status } = {}) => ({
         url: "/task/list",
         method: "GET",
+        params: status ? { status } : undefined,
       }),
     }),
-    getTasksByCategory: builder.query<
-      ApiResponse<{ tasks: Task[] }>,
-      { categoryId: string }
-    >({
+    getTasksByCategory: builder.query<ApiResponse<{ tasks: Task[] }>, { categoryId: string }>({
       query: ({ categoryId }) => ({
         url: "/task/list",
         method: "GET",
@@ -37,11 +35,11 @@ export const taskApi = createApi({
         data: task,
       }),
     }),
-    updateTaskAsCompleted: builder.mutation({
-      query: (task) => ({
-        url: "/task/mark-complete",
+    updateTaskStatus: builder.mutation<ApiResponse<unknown>, { taskId: string; taskStatus: string }>({
+      query: ({ taskId, taskStatus }) => ({
+        url: `/task/update-status/${taskId}`,
         method: "PUT",
-        data: task,
+        data: { status: taskStatus },
       }),
     }),
     deleteTask: builder.mutation({
@@ -58,6 +56,6 @@ export const {
   useGetTasksByCategoryQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,
-  useUpdateTaskAsCompletedMutation,
+  useUpdateTaskStatusMutation,
   useDeleteTaskMutation,
 } = taskApi;

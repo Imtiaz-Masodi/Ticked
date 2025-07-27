@@ -9,6 +9,8 @@ const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Categories = lazy(() => import("./pages/Categories"));
+const Backlog = lazy(() => import("./pages/Backlog"));
+const Completed = lazy(() => import("./pages/Completed"));
 
 function App() {
   return (
@@ -49,6 +51,24 @@ function App() {
             element={
               <Suspense fallback={<div>Loading...</div>}>
                 <Categories />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/backlogs"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Backlog />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/completed"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Completed />
               </Suspense>
             }
           />
