@@ -24,7 +24,7 @@ function AppLogo({ size = Size.md, logoOnly = false, darkMode = false, className
     <div className={`flex items-center justify-center gap-2 ${className}`}>
       <img src="/logo.png" alt="Ticked Logo" className={`${logoVariantsIconStyle[size]}`} />
       {!logoOnly && (
-        <span className={`font-medium ${darkMode ? "text-zinc-100" : "text-zinc-700"} ${logoVariantsLabelStyle[size]}`}>
+        <span className={`font-medium select-none ${darkMode ? "text-zinc-100" : "text-zinc-700"} ${logoVariantsLabelStyle[size]}`}>
           Ticked
         </span>
       )}
