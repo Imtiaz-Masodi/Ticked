@@ -21,6 +21,7 @@ import TaskComponent from "../../assets/svg/task.svg";
 import CloudComponent from "../../assets/svg/cloud.svg";
 import CloudOffComponent from "../../assets/svg/cloud_off.svg";
 import CloudUploadComponent from "../../assets/svg/cloud_upload.svg";
+import NewTaskComponent from "../../assets/svg/new_task.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -50,6 +51,7 @@ export enum Icons {
   cloud = "cloud",
   cloudOff = "cloud-off",
   cloudUpload = "cloud-upload",
+  newTask = "new-task",
 }
 
 type IconMapType = {
@@ -78,4 +80,5 @@ export const IconMap: IconMapType = {
   [Icons.cloud]: CloudComponent,
   [Icons.cloudOff]: CloudOffComponent,
   [Icons.cloudUpload]: CloudUploadComponent,
+  [Icons.newTask]: NewTaskComponent,
 };
