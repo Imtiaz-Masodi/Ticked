@@ -22,6 +22,10 @@ import CloudComponent from "../../assets/svg/cloud.svg";
 import CloudOffComponent from "../../assets/svg/cloud_off.svg";
 import CloudUploadComponent from "../../assets/svg/cloud_upload.svg";
 import NewTaskComponent from "../../assets/svg/new_task.svg";
+import CloseComponent from "../../assets/svg/close.svg";
+import InfoComponent from "../../assets/svg/info.svg";
+import ErrorComponent from "../../assets/svg/error.svg";
+import WarningComponent from "../../assets/svg/warning.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -52,6 +56,10 @@ export enum Icons {
   cloudOff = "cloud-off",
   cloudUpload = "cloud-upload",
   newTask = "new-task",
+  close = "close",
+  info = "info",
+  error = "error",
+  warning = "warning",
 }
 
 type IconMapType = {
@@ -81,4 +89,8 @@ export const IconMap: IconMapType = {
   [Icons.cloudOff]: CloudOffComponent,
   [Icons.cloudUpload]: CloudUploadComponent,
   [Icons.newTask]: NewTaskComponent,
+  [Icons.close]: CloseComponent,
+  [Icons.info]: InfoComponent,
+  [Icons.error]: ErrorComponent,
+  [Icons.warning]: WarningComponent,
 };
