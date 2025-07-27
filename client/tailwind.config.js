@@ -21,6 +21,37 @@ export default {
       fontFamily: {
         inter: ["Inter", "sans-serif"],
       },
+      animation: {
+        "toast-progress": "toast-progress linear forwards",
+        "toast-enter": "toast-enter 0.3s ease-out",
+        "toast-exit": "toast-exit 0.3s ease-in",
+      },
+      keyframes: {
+        "toast-progress": {
+          "0%": { width: "100%" },
+          "100%": { width: "0%" },
+        },
+        "toast-enter": {
+          "0%": {
+            opacity: "0",
+            transform: "translateX(100%) scale(0.95)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateX(0) scale(1)",
+          },
+        },
+        "toast-exit": {
+          "0%": {
+            opacity: "1",
+            transform: "translateX(0) scale(1)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateX(100%) scale(0.95)",
+          },
+        },
+      },
     },
   },
   plugins: [],

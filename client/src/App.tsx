@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CreateTask from "./pages/CreateTask";
 import { RootContainer } from "./sections/RootContainer";
 import NotFound from "./pages/NotFound";
+import { ToastContainer } from "./components/Toast";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -16,6 +17,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route
           path="/login"
