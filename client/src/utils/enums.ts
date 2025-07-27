@@ -22,6 +22,13 @@ export enum TaskStatus {
   completed = "completed",
 }
 
+export enum TaskStatusLabel {
+  backlog = "Backlog",
+  todo = "To Do",
+  inprogress = "In Progress",
+  completed = "Completed",
+}
+
 /**
  * Common breakpoints for responsive design
  */
