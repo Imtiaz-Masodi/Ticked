@@ -10,6 +10,7 @@ import { TasksPageSkeleton } from "../../components/Skeleton";
 import { TaskStatus } from "../../utils/enums";
 import { getSwipeBackgroundContent, getTitleByStatus } from "./TasksList.helper";
 import { useApiToast } from "../../utils/toastUtils";
+import { useToast } from "../../hooks";
 
 type TasksListProps = {
   status?: TaskStatus | TaskStatus[];
@@ -22,6 +23,7 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
   const { data, isLoading } = useGetTasksQuery({ status });
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
+  const toast = useToast();
   const tasks = data?.payload?.tasks || [];
 
   const revertTaskStatus = async (taskId: string, previousStatus: TaskStatus) => {
@@ -45,7 +47,8 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
       apiSuccess("Updated the task status", {
         action: previousStatus ? {
           label: "Undo",
-          onClick: async function() {
+          onClick: async function(toastId: string) {
+            toast.hideToast(toastId);
             revertTaskStatus(taskId, previousStatus);
           }
         } : undefined

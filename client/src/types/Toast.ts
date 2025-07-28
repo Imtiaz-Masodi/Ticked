@@ -9,7 +9,7 @@ export interface Toast {
   dismissible?: boolean;
   action?: {
     label: string;
-    onClick: () => void;
+    onClick: (id: string) => void;
   };
 }
 
@@ -20,6 +20,6 @@ export interface ToastOptions {
   dismissible?: boolean;
   action?: {
     label: string;
-    onClick: () => void;
+    onClick: (id: string) => void;
   };
 }

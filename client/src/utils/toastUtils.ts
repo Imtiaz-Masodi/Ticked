@@ -16,7 +16,7 @@ export const useApiToast = () => {
       message: string,
       options?: {
         title?: string;
-        action?: { label: string; onClick: () => void };
+        action?: { label: string; onClick: (id: string) => void };
       }
     ) => {
       toast.success(message, {

@@ -132,7 +132,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
           {toast.action && (
             <div className="mt-2">
               <button
-                onClick={toast.action.onClick}
+                onClick={() => toast.action?.onClick(toast.id)}
                 className="text-sm font-medium underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded"
               >
                 {toast.action.label}
