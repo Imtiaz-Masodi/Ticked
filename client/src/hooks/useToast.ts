@@ -1,16 +1,9 @@
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import {
-  addToast,
-  removeToast,
-  clearAllToasts,
-} from "../store/slices/toastSlice";
+import { useToastContext } from "./useToastContext";
 import { Toast, ToastOptions } from "../types/Toast";
 import { NotificationType } from "../components/Notification";
 
 export const useToast = () => {
-  const dispatch = useDispatch();
-  const toasts = useSelector((state: RootState) => state.toast.toasts);
+  const { toasts, addToast, removeToast, clearAllToasts } = useToastContext();
 
   const showToast = (message: string, options: ToastOptions = {}) => {
     const toast: Toast = {
@@ -24,15 +17,15 @@ export const useToast = () => {
       action: options.action,
     };
 
-    dispatch(addToast(toast));
+    addToast(toast);
   };
 
   const hideToast = (id: string) => {
-    dispatch(removeToast(id));
+    removeToast(id);
   };
 
   const clearToasts = () => {
-    dispatch(clearAllToasts());
+    clearAllToasts();
   };
 
   // Convenience methods

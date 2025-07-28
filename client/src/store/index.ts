@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
-import toastReducer from "./slices/toastSlice";
 import { taskApi } from "./api/taskApi";
 import { categoryApi } from "./api/categoryApi";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    toast: toastReducer,
     [taskApi.reducerPath]: taskApi.reducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
   },

@@ -4,6 +4,7 @@ import CreateTask from "./pages/CreateTask";
 import { RootContainer } from "./sections/RootContainer";
 import NotFound from "./pages/NotFound";
 import { ToastContainer } from "./components/Toast";
+import { ToastProvider } from "./contexts/ToastContext";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -16,79 +17,81 @@ const Settings = lazy(() => import("./pages/Settings"));
 
 function App() {
   return (
-    <BrowserRouter>
-      <ToastContainer />
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <Suspense fallback={<div>Loading...</div>}>
-              <Login />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/register"
-          element={
-            <Suspense fallback={<div>Loading...</div>}>
-              <Register />
-            </Suspense>
-          }
-        />
-
-        <Route element={<RootContainer />}>
-          <Route path="/" index element={<Home />} />
-
+    <ToastProvider>
+      <BrowserRouter>
+        <ToastContainer />
+        <Routes>
           <Route
-            path="/task/new"
+            path="/login"
             element={
               <Suspense fallback={<div>Loading...</div>}>
-                <CreateTask />
+                <Login />
               </Suspense>
             }
           />
 
           <Route
-            path="/categories"
+            path="/register"
             element={
               <Suspense fallback={<div>Loading...</div>}>
-                <Categories />
+                <Register />
               </Suspense>
             }
           />
 
-          <Route
-            path="/backlogs"
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Backlog />
-              </Suspense>
-            }
-          />
+          <Route element={<RootContainer />}>
+            <Route path="/" index element={<Home />} />
 
-          <Route
-            path="/completed"
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Completed />
-              </Suspense>
-            }
-          />
+            <Route
+              path="/task/new"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <CreateTask />
+                </Suspense>
+              }
+            />
 
-          <Route
-            path="/settings"
-            element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <Settings />
-              </Suspense>
-            }
-          />
-        </Route>
+            <Route
+              path="/categories"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Categories />
+                </Suspense>
+              }
+            />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+            <Route
+              path="/backlogs"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Backlog />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path="/completed"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Completed />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path="/settings"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Settings />
+                </Suspense>
+              }
+            />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 
