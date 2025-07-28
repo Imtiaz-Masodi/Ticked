@@ -58,7 +58,10 @@ export const taskApi = createApi({
         method: "PUT",
         data: { status: taskStatus },
       }),
-      invalidatesTags: (_result, _error, { taskId }) => [{ type: "Task", id: taskId }],
+      invalidatesTags: (_result, _error, { taskId }) => [
+        { type: "Task", id: taskId },
+        { type: "Task", id: "LIST" },
+      ],
     }),
     deleteTask: builder.mutation({
       query: (id) => ({
