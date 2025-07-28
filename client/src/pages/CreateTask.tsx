@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { FormikHelpers, useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
 import { TaskForm, TaskFormValues } from "../sections/TaskForm";
 import { ApiResponseStatus, Priority } from "../utils/enums";
 import { getTomorrowDateString } from "../helpers/dateHelper";
@@ -8,8 +9,11 @@ import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { useCreateTaskMutation } from "../store/api/taskApi";
 import { Task } from "../types/Task";
 import { Notification, NotificationType } from "../components/Notification";
+import { useApiToast } from "../utils/toastUtils";
 
 function CreateTask() {
+  const navigate = useNavigate();
+  const toast = useApiToast();
   const [triggerCreateTask, createTaskResponse] = useCreateTaskMutation();
 
   const handleFormSubmit = async (
@@ -27,6 +31,8 @@ function CreateTask() {
 
       if (response.data?.status === ApiResponseStatus.success) {
         formik.resetForm();
+        toast.apiSuccess(response.data.message || "Task created successfully!");
+        setTimeout(() => navigate("/"), 1500);
       }
     } catch (ex) {
       console.log((ex as Error).message);
@@ -66,13 +72,9 @@ function CreateTask() {
       </div>
 
       <div className="flex flex-col gap-4 max-w-sm mx-auto px-6">
-        {createTaskResponse.data?.status && (
+        {createTaskResponse.data?.status == ApiResponseStatus.failed && (
           <Notification
-            type={
-              createTaskResponse.data?.status === ApiResponseStatus.success
-                ? NotificationType.SUCCESS
-                : NotificationType.ERROR
-            }
+            type={NotificationType.ERROR}
           >
             {createTaskResponse.data?.message}
           </Notification>
