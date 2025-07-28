@@ -118,7 +118,10 @@ export const useSwipeable = ({
             "transform",
             `translateX(${transformX}px)`
           );
-          onSwipeLeft?.();
+          // Delay to allow the transition to complete before calling the callback
+          setTimeout(() => {
+            onSwipeLeft?.();
+          }, 800);
         } else {
           const transformX =
             swipeableContainerRef.current?.offsetWidth || window.innerWidth;
@@ -126,7 +129,10 @@ export const useSwipeable = ({
             "transform",
             `translateX(${transformX}px)`
           );
-          onSwipeRight?.();
+          // Delay to allow the transition to complete before calling the callback
+          setTimeout(() => {
+            onSwipeRight?.();
+          }, 800);
         }
 
         // Setting the height of the parent element to a fixed value
