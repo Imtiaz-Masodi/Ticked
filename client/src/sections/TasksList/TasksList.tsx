@@ -9,6 +9,7 @@ import { NoData } from "../../components/NoData";
 import { TasksPageSkeleton } from "../../components/Skeleton";
 import { TaskStatus } from "../../utils/enums";
 import { getSwipeBackgroundContent, getTitleByStatus } from "./TasksList.helper";
+import { useApiToast } from "../../utils/toastUtils";
 
 type TasksListProps = {
   status?: TaskStatus | TaskStatus[];
@@ -20,11 +21,35 @@ type TasksListProps = {
 function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
   const { data, isLoading } = useGetTasksQuery({ status });
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
+  const { apiSuccess } = useApiToast();
   const tasks = data?.payload?.tasks || [];
 
-  const handleUpdateTaskStatus = async (taskId: string, taskStatus: TaskStatus) => {
+  const revertTaskStatus = async (taskId: string, previousStatus: TaskStatus) => {
     try {
-      await updateTaskStatus({ taskId, taskStatus });
+      await updateTaskStatus({ taskId, taskStatus: previousStatus });
+      apiSuccess("Task status reverted");
+    } catch (error) {
+      console.error("Failed to revert task status:", error);
+    }
+  };
+
+  const handleUpdateTaskStatus = async (taskId: string, newTaskStatus: TaskStatus) => {
+    // Find the current task to get its current status for undo functionality
+    const currentTask = tasks.find(task => task._id === taskId);
+    const previousStatus = currentTask?.status;
+
+    try {
+      await updateTaskStatus({ taskId, taskStatus: newTaskStatus });
+      
+      // Show success toast with undo action
+      apiSuccess("Updated the task status", {
+        action: previousStatus ? {
+          label: "Undo",
+          onClick: async function() {
+            revertTaskStatus(taskId, previousStatus);
+          }
+        } : undefined
+      });
     } catch (error) {
       console.error("Failed to update task status:", error);
     }
