@@ -5,6 +5,8 @@ import { NotificationType } from "../Notification";
 import Button from "../Button/Button";
 import { ButtonType } from "../Button/Button.enum";
 import { Icons } from "../Icon/IconMap";
+import ColorPicker from "../ColorPicker";
+import TooltipPopup from "../TooltipPopup";
 
 interface CreateCategoryCardProps {
   onCancel: () => void;
@@ -13,8 +15,10 @@ interface CreateCategoryCardProps {
 
 function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
+  const colorButtonRef = useRef<HTMLButtonElement>(null);
   const [categoryName, setCategoryName] = useState("");
   const [categoryColor, setCategoryColor] = useState("#3B82F6"); // Default blue color
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [createCategory, { isLoading }] = useCreateCategoryMutation();
   const { showToast } = useToast();
 
@@ -23,19 +27,6 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
       cardRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, []);
-
-  const predefinedColors = [
-    "#3B82F6", // Blue
-    "#EF4444", // Red
-    "#10B981", // Green
-    "#F59E0B", // Yellow
-    "#8B5CF6", // Purple
-    "#EC4899", // Pink
-    "#06B6D4", // Cyan
-    "#84CC16", // Lime
-    "#F97316", // Orange
-    "#6B7280", // Gray
-  ];
 
   const handleSave = async () => {
     if (!categoryName.trim()) {
@@ -78,13 +69,41 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
     }
   };
 
+  const handleColorChange = (color: string) => {
+    setCategoryColor(color);
+    setIsColorPickerOpen(false);
+  };
+
   return (
-    <div ref={cardRef} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div
+      ref={cardRef}
+      className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+    >
       <div className="flex items-center gap-3 mb-6">
-        <div
-          className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-gray-300"
-          style={{ backgroundColor: categoryColor }}
-        />
+        <div className="relative">
+          <button
+            ref={colorButtonRef}
+            className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-gray-300 hover:border-gray-400 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400"
+            style={{ backgroundColor: categoryColor }}
+            onClick={() => setIsColorPickerOpen(true)}
+            disabled={isLoading}
+            aria-label="Choose category color"
+            title="Click to choose color"
+          />
+          <TooltipPopup
+            isOpen={isColorPickerOpen}
+            onClose={() => setIsColorPickerOpen(false)}
+            triggerRef={colorButtonRef}
+            position="bottom"
+          >
+            <ColorPicker
+              selectedColor={categoryColor}
+              onColorChange={handleColorChange}
+              disabled={isLoading}
+              label=""
+            />
+          </TooltipPopup>
+        </div>
         <div className="flex-grow">
           <input
             name="categoryName"
@@ -118,27 +137,6 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
       </div>
 
       <div className="space-y-4">
-        <div className="mx-1">
-          <span className="text-sm font-medium text-zinc-700">
-            Category Color
-          </span>
-          <div className="grid grid-cols-5 gap-2 mt-2">
-            {predefinedColors.map((color) => (
-              <button
-                key={color}
-                className={`w-8 h-8 rounded-full border-2 transition-all ${
-                  categoryColor === color
-                    ? "border-gray-900 scale-110"
-                    : "border-gray-300 hover:border-gray-400"
-                }`}
-                style={{ backgroundColor: color }}
-                onClick={() => setCategoryColor(color)}
-                disabled={isLoading}
-              />
-            ))}
-          </div>
-        </div>
-
         <div className="text-center py-4">
           <p className="text-sm text-zinc-500">
             Enter a name and choose a color for your new category
