@@ -7,6 +7,7 @@ import { ButtonType } from "../Button/Button.enum";
 import { Icons } from "../Icon/IconMap";
 import ColorPicker from "../ColorPicker";
 import TooltipPopup from "../TooltipPopup";
+import { ApiResponseStatus } from "../../utils/enums";
 
 interface CreateCategoryCardProps {
   onCancel: () => void;
@@ -38,15 +39,12 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
     }
 
     try {
-      await createCategory({
-        name: categoryName.trim(),
-        categoryColorCode: categoryColor,
-      }).unwrap();
-      showToast("Category created successfully", {
-        type: NotificationType.SUCCESS,
-        title: "Success",
+      const response = await createCategory({ categoryName: categoryName.trim(), categoryColorCode: categoryColor }).unwrap();
+      showToast(response.message, {
+        type: response.status === ApiResponseStatus.success ? NotificationType.SUCCESS : NotificationType.ERROR,
+        title: response.status === ApiResponseStatus.success ? "Success" : "Error",
       });
-      onSuccess();
+      if (response.status === ApiResponseStatus.success) onSuccess();
     } catch (error: unknown) {
       const errorMessage =
         error && typeof error === "object" && "data" in error
