@@ -53,45 +53,45 @@ function TooltipPopup({
   const getPositionClasses = () => {
     switch (position) {
       case "top":
-        return "bottom-full mb-2";
+        return "bottom-full mb-4 -left-4";
       case "bottom":
-        return "top-full mt-2";
+        return "top-full mt-4 -left-4";
       case "left":
-        return "right-full mr-2";
+        return "right-full mr-4 -top-4";
       case "right":
-        return "left-full ml-2";
+        return "left-full ml-4 -top-4";
       default:
-        return "top-full mt-2";
+        return "top-full mt-4 -left-4";
     }
   };
 
   const getArrowClasses = () => {
     switch (position) {
       case "top":
-        return "top-full left-1/2 transform -translate-x-1/2 -translate-y-[1px] border-l-[9px] border-r-[9px] border-t-[9px] border-l-transparent border-r-transparent border-t-white";
+        return "top-full left-4 transform -translate-y-[1px] border-l-[9px] border-r-[9px] border-t-[9px] border-l-transparent border-r-transparent border-t-white";
       case "bottom":
-        return "bottom-full left-1/2 transform -translate-x-1/2 translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
+        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
       case "left":
-        return "left-full top-1/2 transform -translate-y-1/2 -translate-x-[1px] border-t-[9px] border-b-[9px] border-l-[9px] border-t-transparent border-b-transparent border-l-white";
+        return "left-full top-4 transform -translate-x-[1px] border-t-[9px] border-b-[9px] border-l-[9px] border-t-transparent border-b-transparent border-l-white";
       case "right":
-        return "right-full top-1/2 transform -translate-y-1/2 translate-x-[1px] border-t-[9px] border-b-[9px] border-r-[9px] border-t-transparent border-b-transparent border-r-white";
+        return "right-full top-4 transform translate-x-[1px] border-t-[9px] border-b-[9px] border-r-[9px] border-t-transparent border-b-transparent border-r-white";
       default:
-        return "bottom-full left-1/2 transform -translate-x-1/2 translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
+        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
     }
   };
 
   const getArrowBorderClasses = () => {
     switch (position) {
       case "top":
-        return "top-full left-1/2 transform -translate-x-1/2 border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-gray-200";
+        return "top-full left-4 transform border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-gray-200";
       case "bottom":
-        return "bottom-full left-1/2 transform -translate-x-1/2 border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
+        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
       case "left":
-        return "left-full top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-l-[10px] border-t-transparent border-b-transparent border-l-gray-200";
+        return "left-full top-4 transform border-t-[10px] border-b-[10px] border-l-[10px] border-t-transparent border-b-transparent border-l-gray-200";
       case "right":
-        return "right-full top-1/2 transform -translate-y-1/2 border-t-[10px] border-b-[10px] border-r-[10px] border-t-transparent border-b-transparent border-r-gray-200";
+        return "right-full top-4 transform border-t-[10px] border-b-[10px] border-r-[10px] border-t-transparent border-b-transparent border-r-gray-200";
       default:
-        return "bottom-full left-1/2 transform -translate-x-1/2 border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
+        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
     }
   };
 
