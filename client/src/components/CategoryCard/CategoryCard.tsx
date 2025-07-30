@@ -1,13 +1,16 @@
 import { useGetTasksByCategoryQuery } from "../../store/api/taskApi";
+import { useDeleteCategoryMutation } from "../../store/api/categoryApi";
 import { Category } from "../../types/Category";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { TaskStatus } from "../../utils/enums";
-import Button from "../Button/Button";
-import { ButtonType } from "../Button/Button.enum";
 import { Icons } from "../Icon/IconMap";
-import Badge from "../Badge/Badge";
-import { Tooltip } from "../Tooltip";
 import { SkeletonBox, SkeletonGrid } from "../Skeleton";
+import { Menu } from "../Menu";
+import { Icon } from "../Icon";
+import { getCategoryMenuItems } from "../../utils/menuConfig";
+import { useToastContext } from "../../hooks/useToastContext";
+import { NotificationType } from "../Notification";
+import { Tooltip } from "../Tooltip";
 
 interface CategoryCardProps {
   category: Category;
@@ -21,6 +24,13 @@ interface TaskStats {
 }
 
 function CategoryCard({ category }: CategoryCardProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuTriggerRef = useRef<HTMLDivElement>(null);
+
+  const { addToast } = useToastContext();
+  const [deleteCategory, { isLoading: isDeleting }] =
+    useDeleteCategoryMutation();
+
   const { data: tasksByCategory, isLoading } = useGetTasksByCategoryQuery({
     categoryId: category._id,
   });
@@ -59,6 +69,34 @@ function CategoryCard({ category }: CategoryCardProps) {
     taskStats.completed +
     taskStats.backlog;
 
+  const menuItems = getCategoryMenuItems(category);
+
+  const handleMenuItemClick = async (menuId: string) => {
+    // Handle menu item actions here, e.g., edit or delete category
+    if (menuId === "edit-category") {
+      // Logic for editing category
+    } else if (menuId === "delete-category") {
+      try {
+        await deleteCategory(category._id);
+        addToast({
+          id: Date.now().toString(),
+          message: `Category "${category.name}" deleted successfully`,
+          type: NotificationType.SUCCESS,
+          duration: 3000,
+        });
+      } catch (error) {
+        console.error("Failed to delete category:", error);
+        addToast({
+          id: Date.now().toString(),
+          message: "Failed to delete category. Please try again.",
+          type: NotificationType.ERROR,
+          duration: 5000,
+        });
+      }
+    }
+    setIsMenuOpen(false); // Close menu after action
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 mb-6">
@@ -77,22 +115,25 @@ function CategoryCard({ category }: CategoryCardProps) {
           )}
         </div>
         {category.preDefined ? (
-          <Badge variant="primary" size="sm">
-            System
-          </Badge>
-        ) : (
-          <Tooltip content="Edit category" placement="top">
-            <Button
-              type={ButtonType.link}
-              startIcon={Icons.settings}
-              iconOnly={true}
-              className="-mr-2"
-              onClick={() => {
-                // Handle edit category functionality here
-                console.log("Edit category:", category.name);
-              }}
-            />
+          <Tooltip content="System Defined Category">
+            <Icon name={Icons.settings} className="text-zinc-400" />
           </Tooltip>
+        ) : (
+          <div ref={menuTriggerRef} className="relative">
+            <Icon
+              name={Icons.menuDots}
+              onClick={() => !isDeleting && setIsMenuOpen(true)}
+              className={isDeleting ? "opacity-50 cursor-not-allowed" : ""}
+            />
+            <Menu
+              isOpen={isMenuOpen && !isDeleting}
+              onClose={() => setIsMenuOpen(false)}
+              onMenuItemClick={handleMenuItemClick}
+              items={menuItems}
+              triggerRef={menuTriggerRef}
+              position="bottom"
+            />
+          </div>
         )}
       </div>
 
