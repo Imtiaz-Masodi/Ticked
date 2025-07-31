@@ -16,6 +16,7 @@ const categorySchema = new mongoose.Schema({
     },
   },
   createdOn: { type: Date, default: Date.now },
+  updatedOn: { type: Date, default: Date.now },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", require: true },
 });
 

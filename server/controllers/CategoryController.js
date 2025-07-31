@@ -56,6 +56,7 @@ async function createCategory(req, res) {
       name: categoryName.trim(),
       categoryColorCode: categoryColorCode || generateRandomColorHexCode(),
       createdBy: user.id,
+      updatedOn: null,
     });
     await category.save();
     res.status(201).send(new ApiResponse(true, constants.CATEGORY_CREATED, { category }));
