@@ -5,9 +5,8 @@ import { NotificationType } from "../Notification";
 import Button from "../Button/Button";
 import { ButtonType } from "../Button/Button.enum";
 import { Icons } from "../Icon/IconMap";
-import ColorPicker from "../ColorPicker";
-import Popup from "../Popup";
 import { ApiResponseStatus } from "../../utils/enums";
+import { ColorPickerPopup } from "../ColorPickerPopup";
 
 interface CreateCategoryCardProps {
   onCancel: () => void;
@@ -88,19 +87,16 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
             aria-label="Choose category color"
             title="Click to choose color"
           />
-          <Popup
+          <ColorPickerPopup
             isOpen={isColorPickerOpen}
             onClose={() => setIsColorPickerOpen(false)}
-            triggerRef={colorButtonRef}
             position="bottom"
-          >
-            <ColorPicker
-              selectedColor={categoryColor}
-              onColorChange={handleColorChange}
-              disabled={isLoading}
-              label=""
-            />
-          </Popup>
+            selectedColor={categoryColor}
+            onColorChange={handleColorChange}
+            disabled={isLoading}
+            triggerRef={colorButtonRef}
+            label=""
+          />
         </div>
         <div className="flex-grow">
           <input
