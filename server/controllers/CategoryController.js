@@ -73,7 +73,7 @@ async function updateCategory(req, res) {
 
     const category = await Category.findOneAndUpdate(
       { _id: categoryId, createdBy: user.id },
-      { name: categoryName, categoryColorCode },
+      { name: categoryName, categoryColorCode, updatedOn: new Date() },
       { new: true, runValidators: true }
     );
 
