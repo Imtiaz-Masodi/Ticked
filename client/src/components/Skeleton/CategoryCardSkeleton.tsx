@@ -11,7 +11,7 @@ function CategoryCardSkeleton() {
           rounded="full"
           className="flex-shrink-0"
         />
-          <SkeletonBox width="" height="h-5" className="flex-grow mr-8" />
+        <SkeletonBox width="" height="h-5" className="flex-grow mr-8" />
         <SkeletonBox width="w-12" height="h-6" rounded="full" />
       </div>
 
