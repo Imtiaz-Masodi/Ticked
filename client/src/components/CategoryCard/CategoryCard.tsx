@@ -2,9 +2,8 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { useGetTasksByCategoryQuery } from "../../store/api/taskApi";
 import { useDeleteCategoryMutation, useUpdateCategoryMutation } from "../../store/api/categoryApi";
 import { Category } from "../../types/Category";
-import { ApiResponseStatus, TaskStatus } from "../../utils/enums";
+import { ApiResponseStatus } from "../../utils/enums";
 import { Icons } from "../Icon/IconMap";
-import { SkeletonBox, SkeletonGrid } from "../Skeleton";
 import { Menu } from "../Menu";
 import { Icon } from "../Icon";
 import { getCategoryMenuItems } from "../../utils/menuConfig";
@@ -16,16 +15,10 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { ButtonType } from "../Button/Button.enum";
 import { ColorPickerPopup } from "../ColorPickerPopup";
+import CategoryTaskStats from "./CategoryTaskStats";
 
 interface CategoryCardProps {
   category: Category;
-}
-
-interface TaskStats {
-  todo: number;
-  inprogress: number;
-  completed: number;
-  backlog: number;
 }
 
 function CategoryCard({ category }: CategoryCardProps) {
@@ -57,40 +50,6 @@ function CategoryCard({ category }: CategoryCardProps) {
     }
   }, [category.categoryColorCode, category.name, isEditing]);
 
-  const taskStats: TaskStats = useMemo(() => {
-    const tasksData = {
-      todo: 0,
-      inprogress: 0,
-      completed: 0,
-      backlog: 0,
-    };
-    tasksByCategory?.payload?.tasks.forEach((task) => {
-      switch (task.status) {
-        case TaskStatus.todo:
-          tasksData.todo += 1;
-          break;
-        case TaskStatus.inprogress:
-          tasksData.inprogress += 1;
-          break;
-        case TaskStatus.completed:
-          tasksData.completed += 1;
-          break;
-        case TaskStatus.backlog:
-          tasksData.backlog += 1;
-          break;
-        default:
-          break;
-      }
-    });
-    return tasksData;
-  }, [tasksByCategory]);
-
-  const totalTasks =
-    taskStats.todo +
-    taskStats.inprogress +
-    taskStats.completed +
-    taskStats.backlog;
-
   const menuItems = getCategoryMenuItems(category);
 
   const handleMenuItemClick = async (menuId: string) => {
@@ -98,6 +57,7 @@ function CategoryCard({ category }: CategoryCardProps) {
     if (menuId === "edit-category") {
       setIsEditing(true);
     } else if (menuId === "delete-category") {
+      // ToDo: Show confirmation popup when deleting the category
       try {
         await deleteCategory(category._id);
         addToast({
@@ -116,16 +76,12 @@ function CategoryCard({ category }: CategoryCardProps) {
         });
       }
     }
-    setIsMenuOpen(false); // Close menu after action
+    setIsMenuOpen(false);
   };
 
   const handleSaveEdit = async () => {
     try {
-      const response = await updateCategory({
-        id: category._id,
-        categoryName: editedName.trim(),
-        categoryColorCode: editedColor,
-      }).unwrap();
+      const response = await updateCategory({ id: category._id, categoryName: editedName.trim(), categoryColorCode: editedColor }).unwrap();
       if (response.status === ApiResponseStatus.success) setIsEditing(false);
       addToast({
         id: Date.now().toString(),
@@ -156,7 +112,7 @@ function CategoryCard({ category }: CategoryCardProps) {
   };
 
   const categoryDetailsChanged = useMemo(() => {
-    return editedName !== category.name || editedColor !== category.categoryColorCode;
+    return (editedName !== category.name || editedColor !== category.categoryColorCode);
   }, [editedName, editedColor, category.name, category.categoryColorCode]);
 
   return (
@@ -223,100 +179,50 @@ function CategoryCard({ category }: CategoryCardProps) {
           <Tooltip content="System Defined Category" placement={isMobile ? "left" : "bottom"}>
             <Icon name={Icons.settings} className="text-zinc-400" />
           </Tooltip>
-        ) : ( isEditing ? (
-            <div className="flex gap-2">
+        ) : isEditing ? (
+          <div className="flex gap-2">
+            <Button
+              type={ButtonType.outline}
+              startIcon={Icons.close}
+              iconOnly={true}
+              onClick={() => setIsEditing(false)}
+              disabled={isLoading}
+              className="!p-2"
+            />
+            {!isLoading && editedName.trim() && categoryDetailsChanged && (
               <Button
-                type={ButtonType.outline}
-                startIcon={Icons.close}
+                type={ButtonType.solid}
+                startIcon={Icons.check}
                 iconOnly={true}
-                onClick={() => setIsEditing(false)}
-                disabled={isLoading}
+                onClick={handleSaveEdit}
+                disabled={isLoading || !editedName.trim() || !categoryDetailsChanged}
                 className="!p-2"
               />
-              {!isLoading && editedName.trim() && categoryDetailsChanged && (
-                <Button
-                  type={ButtonType.solid}
-                  startIcon={Icons.check}
-                  iconOnly={true}
-                  onClick={handleSaveEdit}
-                  disabled={isLoading || !editedName.trim() || !categoryDetailsChanged}
-                  className="!p-2"
-                />
-              )}
-            </div>
-          ) : (
-            <div ref={menuTriggerRef} className="relative">
-              <Icon
-                name={Icons.menuDots}
-                onClick={() => !isDeleting && !isUpdating && setIsMenuOpen(true)}
-                className={ isDeleting ? "opacity-50 cursor-not-allowed" : "" }
-              />
-              <Menu
-                isOpen={isMenuOpen && !isDeleting && !isUpdating}
-                onClose={() => setIsMenuOpen(false)}
-                onMenuItemClick={handleMenuItemClick}
-                items={menuItems}
-                triggerRef={menuTriggerRef}
-                position="bottom"
-              />
-            </div>
-          )
-        )}
-      </div>
-
-      <div className="space-y-2">
-        <div className="flex justify-between items-center mx-1">
-          <span className="text-sm font-medium text-zinc-700">Total Tasks</span>
-          {isLoading ? (
-            <SkeletonBox width="w-5" height="h-5" />
-          ) : (
-            <span className="text-md font-semibold text-zinc-900">
-              {totalTasks}
-            </span>
-          )}
-        </div>
-
-        {isLoading ? (
-          <SkeletonGrid items={4} columns={2} itemHeight="h-10" />
-        ) : totalTasks > 0 ? (
-          <div className="grid grid-cols-2 gap-3">
-            <div className="flex justify-between items-center p-2 bg-blue-50 rounded-lg">
-              <span className="text-xs font-medium text-blue-700">To Do</span>
-              <span className="text-sm font-bold text-blue-900">
-                {taskStats.todo}
-              </span>
-            </div>
-            <div className="flex justify-between items-center p-2 bg-yellow-50 rounded-lg">
-              <span className="text-xs font-medium text-yellow-700">
-                In Progress
-              </span>
-              <span className="text-sm font-bold text-yellow-900">
-                {taskStats.inprogress}
-              </span>
-            </div>
-            <div className="flex justify-between items-center p-2 bg-green-50 rounded-lg">
-              <span className="text-xs font-medium text-green-700">
-                Completed
-              </span>
-              <span className="text-sm font-bold text-green-900">
-                {taskStats.completed}
-              </span>
-            </div>
-            <div className="flex justify-between items-center p-2 bg-red-50 rounded-lg">
-              <span className="text-xs font-medium text-red-700">Backlog</span>
-              <span className="text-sm font-bold text-red-900">
-                {taskStats.backlog}
-              </span>
-            </div>
+            )}
           </div>
         ) : (
-          <div className="text-center py-4">
-            <p className="text-sm text-zinc-500 mt-4">
-              No tasks in this category yet
-            </p>
+          <div ref={menuTriggerRef} className="relative">
+            <Icon
+              name={Icons.menuDots}
+              onClick={() => !isDeleting && !isUpdating && setIsMenuOpen(true)}
+              className={isDeleting ? "opacity-50 cursor-not-allowed" : ""}
+            />
+            <Menu
+              isOpen={isMenuOpen && !isDeleting && !isUpdating}
+              onClose={() => setIsMenuOpen(false)}
+              onMenuItemClick={handleMenuItemClick}
+              items={menuItems}
+              triggerRef={menuTriggerRef}
+              position="bottom"
+            />
           </div>
         )}
       </div>
+
+      <CategoryTaskStats
+        tasksByCategory={tasksByCategory}
+        isLoading={isLoading}
+      />
     </div>
   );
 }
