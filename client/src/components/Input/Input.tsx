@@ -21,6 +21,7 @@ const Input = ({
   labelProps = {},
   onChange,
   onKeyDown,
+  ...rest
 }: InputProps) => {
   const [displayPassword, setDisplayPassword] = useState(false);
   const handleTogglePasswordVisibility = () => {
@@ -38,9 +39,11 @@ const Input = ({
 
   return (
     <div className="flex-grow">
-      <label className={`block mb-1 ml-1 text-xs font-semibold text-zinc-600`} {...labelProps}>
-        {label}
-      </label>
+      {label && (
+        <label className={`block mb-1 ml-1 text-xs font-semibold text-zinc-600`} {...labelProps}>
+          {label}
+        </label>
+      )}
       <div
         className={`
           flex items-center border border-gray-300 rounded-md px-3 py-1.5 w-full
@@ -59,6 +62,7 @@ const Input = ({
           disabled={disabled}
           onChange={handleOnChange}
           onKeyDown={onKeyDown}
+          {...rest}
         />
         {type === InputTypes.password && (
           <div
