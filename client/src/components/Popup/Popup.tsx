@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-interface TooltipPopupProps {
+interface PopupProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface TooltipPopupProps {
   showArrow?: boolean;
 }
 
-function TooltipPopup({
+function Popup({
   isOpen,
   onClose,
   children,
@@ -18,7 +18,7 @@ function TooltipPopup({
   className = "",
   position = "bottom",
   showArrow = true,
-}: TooltipPopupProps) {
+}: PopupProps) {
   const tooltipRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -119,4 +119,4 @@ function TooltipPopup({
   );
 }
 
-export default TooltipPopup;
+export default Popup;
