@@ -103,7 +103,7 @@ function Popup({
       className={`absolute z-50 ${getPositionClasses()} ${className}`}
     >
       <div className="relative">
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-4 min-w-max">
+        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-max">
           {children}
         </div>
         {showArrow && (
