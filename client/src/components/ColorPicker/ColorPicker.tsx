@@ -37,7 +37,7 @@ function ColorPicker({
         {DEFAULT_COLORS.map((color) => (
           <button
             key={color}
-            className={`w-6 h-6 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 ${
+            className={`w-6 h-6 rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 inner-shadow-glossy ${
               selectedColor === color
                 ? "ring-2 ring-gray-400 ring-offset-1"
                 : "hover:scale-105"
