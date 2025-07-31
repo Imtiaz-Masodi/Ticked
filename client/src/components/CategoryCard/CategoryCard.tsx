@@ -11,6 +11,7 @@ import { getCategoryMenuItems } from "../../utils/menuConfig";
 import { useToastContext } from "../../hooks/useToastContext";
 import { NotificationType } from "../Notification";
 import { Tooltip } from "../Tooltip";
+import { useMobileDetect } from "../../hooks";
 
 interface CategoryCardProps {
   category: Category;
@@ -26,6 +27,7 @@ interface TaskStats {
 function CategoryCard({ category }: CategoryCardProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuTriggerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMobileDetect();
 
   const { addToast } = useToastContext();
   const [deleteCategory, { isLoading: isDeleting }] =
@@ -115,7 +117,7 @@ function CategoryCard({ category }: CategoryCardProps) {
           )}
         </div>
         {category.preDefined ? (
-          <Tooltip content="System Defined Category">
+          <Tooltip content="System Defined Category" placement={isMobile ? "left" : "bottom"}>
             <Icon name={Icons.settings} className="text-zinc-400" />
           </Tooltip>
         ) : (
