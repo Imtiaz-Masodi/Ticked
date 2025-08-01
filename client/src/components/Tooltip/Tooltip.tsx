@@ -1,25 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
-export type TooltipVariant = "dark" | "light";
 export type TooltipSize = "sm" | "md";
 
 interface TooltipProps {
   children: React.ReactNode;
   content: React.ReactNode;
   placement?: TooltipPlacement;
-  variant?: TooltipVariant;
   size?: TooltipSize;
   disabled?: boolean;
   delay?: number;
   className?: string;
 }
-
-const variantStyles = {
-  dark: "bg-gray-900/90 text-white border-gray-700/50 backdrop-blur-sm",
-  light:
-    "bg-white/90 text-gray-900 border-gray-200/50 shadow-lg backdrop-blur-sm",
-};
 
 const sizeStyles = {
   sm: "px-2 py-1 text-xs",
@@ -34,40 +26,43 @@ const placementStyles = {
 };
 
 const arrowStyles = {
-  top: "top-full left-1/2 -translate-x-1/2 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent",
-  bottom:
-    "bottom-full left-1/2 -translate-x-1/2 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent",
-  left: "left-full top-1/2 -translate-y-1/2 border-t-8 border-b-8 border-l-8 border-t-transparent border-b-transparent",
-  right:
-    "right-full top-1/2 -translate-y-1/2 border-t-8 border-b-8 border-r-8 border-t-transparent border-b-transparent",
+  top: "top-full left-1/2 -translate-x-1/2 -mt-px border-l-[7px] border-r-[7px] border-t-[7px] border-l-transparent border-r-transparent",
+  bottom: "bottom-full left-1/2 -translate-x-1/2 mt-px border-l-[7px] border-r-[7px] border-b-[7px] border-l-transparent border-r-transparent",
+  left: "left-full top-1/2 -translate-y-1/2 -ml-px border-t-[7px] border-b-[7px] border-l-[7px] border-t-transparent border-b-transparent",
+  right: "right-full top-1/2 -translate-y-1/2 ml-px border-t-[7px] border-b-[7px] border-r-[7px] border-t-transparent border-b-transparent",
 };
 
-const getArrowColor = (
-  variant: TooltipVariant,
-  placement: TooltipPlacement
-) => {
+const arrowBorderStyles = {
+  top: "top-full left-1/2 -translate-x-1/2 border-l-[9px] border-r-[9px] border-t-[9px] border-l-transparent border-r-transparent",
+  bottom: "bottom-full left-1/2 -translate-x-1/2 border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent",
+  left: "left-full top-1/2 -translate-y-1/2 border-t-[9px] border-b-[9px] border-l-[9px] border-t-transparent border-b-transparent",
+  right: "right-full top-1/2 -translate-y-1/2 border-t-[9px] border-b-[9px] border-r-[9px] border-t-transparent border-b-transparent",
+};
+
+const getArrowColor = (placement: TooltipPlacement) => {
   const colorMap = {
-    dark: {
-      top: "border-t-gray-900/90",
-      bottom: "border-b-gray-900/90",
-      left: "border-l-gray-900/90",
-      right: "border-r-gray-900/90",
-    },
-    light: {
-      top: "border-t-white/90",
-      bottom: "border-b-white/90",
-      left: "border-l-white/90",
-      right: "border-r-white/90",
-    },
+    top: "border-t-white/90 dark:border-t-gray-900/90",
+    bottom: "border-b-white/90 dark:border-b-gray-900/90",
+    left: "border-l-white/90 dark:border-l-gray-900/90",
+    right: "border-r-white/90 dark:border-r-gray-900/90",
   };
-  return colorMap[variant][placement];
+  return colorMap[placement];
+};
+
+const getArrowBorderColor = (placement: TooltipPlacement) => {
+  const colorMap = {
+    top: "border-t-gray-200/50 dark:border-t-gray-700/50",
+    bottom: "border-b-gray-200/50 dark:border-b-gray-700/50",
+    left: "border-l-gray-200/50 dark:border-l-gray-700/50",
+    right: "border-r-gray-200/50 dark:border-r-gray-700/50",
+  };
+  return colorMap[placement];
 };
 
 function Tooltip({
   children,
   content,
   placement = "top",
-  variant = "dark",
   size = "md",
   disabled = false,
   delay = 200,
@@ -125,8 +120,8 @@ function Tooltip({
           className={`
             absolute z-50 whitespace-nowrap rounded-md border
             transition-opacity duration-200 pointer-events-none
+            "bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-200 border-gray-200/50 dark:border-gray-700/50 shadow-lg backdrop-blur-sm"
             ${placementStyles[placement]}
-            ${variantStyles[variant]}
             ${sizeStyles[size]}
             ${showTooltip ? "opacity-100" : "opacity-0"}
           `}
@@ -134,14 +129,11 @@ function Tooltip({
         >
           {content}
 
+          {/* Arrow Border */}
+          <div className={` absolute ${arrowBorderStyles[placement]} ${getArrowBorderColor(placement)}`} />
+
           {/* Arrow */}
-          <div
-            className={`
-              absolute
-              ${arrowStyles[placement]}
-              ${getArrowColor(variant, placement)}
-            `}
-          />
+          <div className={`absolute ${arrowStyles[placement]} ${getArrowColor(placement)}`} />
         </div>
       )}
     </div>
