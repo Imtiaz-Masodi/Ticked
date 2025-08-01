@@ -10,6 +10,7 @@ import { AppLogo } from "../components/AppLogo";
 import { LoginForm, validateForm, LoginFormValues } from "../sections/LoginForm";
 import { useNavigate } from "react-router-dom";
 import { authHelper } from "../helpers/authHelper";
+import { DarkModeToggle } from "../components/DarkModeToggle";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,28 +48,35 @@ const Login = () => {
   });
 
   return (
-    <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
-      <div className="my-4">
-        <AppLogo size={Size.lg} className="mb-8" />
-        <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70">Log in to your account</div>
-        <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light">Welcome back! Please enter your details</div>
+    <div className="min-h-screen bg-white dark:bg-gray-900 relative pt-16">
+      <div className="p-8 max-w-sm flex flex-col gap-2 mx-auto">
+        <div className="my-4">
+          <AppLogo size={Size.lg} className="mb-8" />
+          <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70">Log in to your account</div>
+          <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light">Welcome back! Please enter your details</div>
+        </div>
+
+        {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
+
+        <LoginForm {...formik} />
+
+        <div className="flex justify-center items-center text-sm">
+          <span className="text-zinc-700 dark:text-gray-300">Don't have an account?</span>
+          <Button
+            size={Size.sm}
+            type={ButtonType.link}
+            onClick={() => navigate("/register")}
+            className="ps-1 pe-1"
+            disabled={formik.isSubmitting}
+          >
+            Sign up
+          </Button>
+        </div>
       </div>
-
-      {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
-
-      <LoginForm {...formik} />
-
-      <div className="flex justify-center items-center text-sm">
-        <span className="text-zinc-700 dark:text-gray-300">Don't have an account?</span>
-        <Button
-          size={Size.sm}
-          type={ButtonType.link}
-          onClick={() => navigate("/register")}
-          className="ps-1 pe-1"
-          disabled={formik.isSubmitting}
-        >
-          Sign up
-        </Button>
+      
+      {/* Fixed dark mode toggle at bottom right */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <DarkModeToggle withBackground={true} />
       </div>
     </div>
   );
