@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { FormikHelpers, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { TaskForm, TaskFormValues } from "../sections/TaskForm";
@@ -52,21 +51,6 @@ function CreateTask() {
     onSubmit: handleFormSubmit,
     validate: validateTaskForm,
   });
-
-  useEffect(() => {
-    const rootContainer = document.getElementById("root-container");
-    if (rootContainer) {
-      rootContainer.style.backgroundColor = "";
-      rootContainer.classList.add("bg-white", "dark:bg-gray-900");
-    }
-    return () => {
-      const container = document.getElementById("root-container");
-      if (container) {
-        container.removeAttribute("style");
-        container.classList.remove("bg-white", "dark:bg-gray-900");
-      }
-    };
-  }, []);
 
   return (
     <div className="pt-6 px-4">
