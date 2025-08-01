@@ -56,7 +56,7 @@ const Input = ({
         <input
           name={name}
           value={value}
-          className={`w-full bg-transparent text-zinc-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed ${className}`}
+          className={`w-full bg-transparent text-zinc-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed dark:[color-scheme:dark] [color-scheme:light] ${className}`}
           type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
           placeholder={placeholder}
           disabled={disabled}

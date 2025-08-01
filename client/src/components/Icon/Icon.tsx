@@ -16,7 +16,7 @@ const Icon = ({ name, className = "", disabled = false, onClick }: IconProps) =>
 
   return (
     <div
-      className={`${disabled && "text-zinc-400"} ${Boolean(onClick) && "cursor-pointer"} ${className}`}
+      className={`${disabled && "text-zinc-400 dark:text-gray-500"} ${Boolean(onClick) && "cursor-pointer"} ${className}`}
       onClick={handleOnClick}
     >
       <IconComponent />

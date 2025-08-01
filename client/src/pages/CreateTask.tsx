@@ -55,18 +55,26 @@ function CreateTask() {
 
   useEffect(() => {
     const rootContainer = document.getElementById("root-container");
-    if (rootContainer) rootContainer.style.backgroundColor = "white";
-    return () =>
-      document.getElementById("root-container")?.removeAttribute("style");
+    if (rootContainer) {
+      rootContainer.style.backgroundColor = "";
+      rootContainer.classList.add("bg-white", "dark:bg-gray-900");
+    }
+    return () => {
+      const container = document.getElementById("root-container");
+      if (container) {
+        container.removeAttribute("style");
+        container.classList.remove("bg-white", "dark:bg-gray-900");
+      }
+    };
   }, []);
 
   return (
     <div className="pt-6 px-4">
       <div className="my-8">
-        <div className="text-center text-2xl sm:text-3xl text-black/70">
+        <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/80">
           Create Task
         </div>
-        <div className="text-center text-sm text-zinc-400 font-light">
+        <div className="text-center text-sm text-zinc-400 dark:text-gray-400 font-light">
           Start organizing your tasks effortlessly
         </div>
       </div>
