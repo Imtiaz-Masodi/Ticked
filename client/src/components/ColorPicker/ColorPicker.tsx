@@ -55,7 +55,7 @@ function ColorPicker({
   return (
     <div className={`p-4 ${className}`}>
       {label && (
-        <span className="text-sm font-medium text-zinc-700 block mb-2">
+        <span className="text-sm font-medium text-zinc-700 dark:text-gray-200 block mb-2">
           {label}
         </span>
       )}
@@ -63,9 +63,9 @@ function ColorPicker({
         {DEFAULT_COLORS.map((color) => (
           <button
             key={color}
-            className={`w-6 h-6 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 inner-shadow-glossy ${
+            className={`w-6 h-6 rounded-md transition-all focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-800 inner-shadow-glossy ${
               selectedColor === color
-                ? "ring-2 ring-gray-400 ring-offset-1"
+                ? "ring-2 ring-gray-400 dark:ring-gray-500 ring-offset-1 dark:ring-offset-gray-800"
                 : "hover:scale-105"
             } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
             style={{ backgroundColor: color }}

@@ -27,17 +27,19 @@ const typeStyles = Object.freeze({
   [ButtonType.solid]: `
     bg-primary hover:bg-primary-dark text-slate-100
     shadow-slate-500 hover:shadow-lg active:bg-primary
-    disabled:bg-gray-400 disabled:text-gray-100
+    disabled:bg-gray-400 disabled:text-gray-100 dark:disabled:bg-gray-600 dark:disabled:text-gray-400
   `,
   [ButtonType.outline]: `
     bg-transparent border border-primary text-primary
     shadow-slate-500 hover:shadow-lg hover:bg-primary
     hover:text-slate-100 active:bg-primary-dark active:border-primary-dark
     disabled:hover:bg-transparent disabled:text-gray-400 disabled:border-gray-300
+    dark:disabled:text-gray-500 dark:disabled:border-gray-600
   `,
   [ButtonType.link]: `
     text-primary underline underline-offset-2 w-min px-0 py-0
     hover:text-primary-light hover:no-underline disabled:text-gray-400 disabled:hover:underline
+    dark:disabled:text-gray-500
   `,
 });
 

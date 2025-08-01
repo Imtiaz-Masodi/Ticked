@@ -31,9 +31,10 @@ const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onCh
         id={name}
         className={`
             appearance-none peer size-4 
-            border border-gray-300 rounded-sm bg-transparent shrink-0 
+            border border-gray-300 dark:border-gray-600 rounded-sm bg-transparent dark:bg-gray-700 shrink-0 
             checked:bg-primary checked:border-none 
             disabled:border-gray-300 disabled:checked:bg-gray-300 disabled:cursor-not-allowed
+            dark:disabled:border-gray-600 dark:disabled:checked:bg-gray-600
             ${checkboxSize && sizeStyles[checkboxSize]}
         `}
         checked={checked}
@@ -51,8 +52,8 @@ const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onCh
       <label
         htmlFor={name}
         className={`
-            cursor-pointer peer-disabled:text-gray-400 peer-disabled:cursor-not-allowed whitespace-nowrap
-            text-zinc-700 ${checkboxSize && sizeStyles[checkboxSize]} size-auto
+            cursor-pointer peer-disabled:text-gray-400 dark:peer-disabled:text-gray-500 peer-disabled:cursor-not-allowed whitespace-nowrap
+            text-zinc-700 dark:text-gray-200 ${checkboxSize && sizeStyles[checkboxSize]} size-auto
           `}
       >
         {label}

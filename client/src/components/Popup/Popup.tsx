@@ -68,30 +68,30 @@ function Popup({
   const getArrowClasses = () => {
     switch (position) {
       case "top":
-        return "top-full left-4 transform -translate-y-[1px] border-l-[9px] border-r-[9px] border-t-[9px] border-l-transparent border-r-transparent border-t-white";
+        return "top-full left-4 transform -translate-y-[1px] border-l-[9px] border-r-[9px] border-t-[9px] border-l-transparent border-r-transparent border-t-white dark:border-t-gray-800";
       case "bottom":
-        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
+        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white dark:border-b-gray-800";
       case "left":
-        return "left-full top-4 transform -translate-x-[1px] border-t-[9px] border-b-[9px] border-l-[9px] border-t-transparent border-b-transparent border-l-white";
+        return "left-full top-4 transform -translate-x-[1px] border-t-[9px] border-b-[9px] border-l-[9px] border-t-transparent border-b-transparent border-l-white dark:border-l-gray-800";
       case "right":
-        return "right-full top-4 transform translate-x-[1px] border-t-[9px] border-b-[9px] border-r-[9px] border-t-transparent border-b-transparent border-r-white";
+        return "right-full top-4 transform translate-x-[1px] border-t-[9px] border-b-[9px] border-r-[9px] border-t-transparent border-b-transparent border-r-white dark:border-r-gray-800";
       default:
-        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white";
+        return "bottom-full left-4 transform translate-y-[1px] border-l-[9px] border-r-[9px] border-b-[9px] border-l-transparent border-r-transparent border-b-white dark:border-b-gray-800";
     }
   };
 
   const getArrowBorderClasses = () => {
     switch (position) {
       case "top":
-        return "top-full left-4 transform border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-gray-200";
+        return "top-full left-4 transform border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-gray-200 dark:border-t-gray-600";
       case "bottom":
-        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
+        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200 dark:border-b-gray-600";
       case "left":
-        return "left-full top-4 transform border-t-[10px] border-b-[10px] border-l-[10px] border-t-transparent border-b-transparent border-l-gray-200";
+        return "left-full top-4 transform border-t-[10px] border-b-[10px] border-l-[10px] border-t-transparent border-b-transparent border-l-gray-200 dark:border-l-gray-600";
       case "right":
-        return "right-full top-4 transform border-t-[10px] border-b-[10px] border-r-[10px] border-t-transparent border-b-transparent border-r-gray-200";
+        return "right-full top-4 transform border-t-[10px] border-b-[10px] border-r-[10px] border-t-transparent border-b-transparent border-r-gray-200 dark:border-r-gray-600";
       default:
-        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200";
+        return "bottom-full left-4 transform border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-gray-200 dark:border-b-gray-600";
     }
   };
 
@@ -103,7 +103,7 @@ function Popup({
       className={`absolute z-50 ${getPositionClasses()} ${className}`}
     >
       <div className="relative">
-        <div className="bg-white rounded-lg shadow-lg border border-gray-200 min-w-max">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 min-w-max">
           {children}
         </div>
         {showArrow && (

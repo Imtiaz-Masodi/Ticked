@@ -13,7 +13,7 @@ type DropdownProps<T> = {
   onChange?: (name: string, value: T) => void;
 };
 
-function Dropdown<T>({ name, label, value, options, disabled = false, getLabel, onChange }: DropdownProps<T>) {
+function Dropdown<T>({ name, label, value, options, disabled = false, errorMessage, getLabel, onChange }: DropdownProps<T>) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,26 +33,30 @@ function Dropdown<T>({ name, label, value, options, disabled = false, getLabel, 
 
   return (
     <div className="w-full relative" ref={dropdownRef}>
-      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600">{label}</label>
+      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300">{label}</label>
       <button
-        className="w-full flex items-center justify-between rounded-md border border-zinc-300 px-3 py-2 focus-visible:outline-offset-2 focus-visible:outline-black/40 disabled:bg-gray-200 disabled:cursor-not-allowed"
+        className={`w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white dark:bg-gray-700 focus-visible:outline-offset-2 focus-visible:outline-black/40 dark:focus-visible:outline-white/40 disabled:bg-gray-200 dark:disabled:bg-gray-600 disabled:cursor-not-allowed ${
+          errorMessage 
+            ? "border-red-700 dark:border-red-500" 
+            : "border-zinc-300 dark:border-gray-600"
+        }`}
         onClick={() => {
           if (disabled) return;
           setIsOpen(!isOpen);
         }}
         disabled={disabled}
       >
-        <span className="text-sm text-zinc-700">{value ? getLabel(value) : ""}</span>
+        <span className="text-sm text-zinc-700 dark:text-gray-200">{value ? getLabel(value) : ""}</span>
         <Icon name={Icons.down} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
       {!disabled && isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-white border border-zinc-300 rounded-md shadow-lg">
+        <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 border border-zinc-300 dark:border-gray-600 rounded-md shadow-lg">
           <ul className="max-h-60 overflow-auto m-2">
             {options.map((option: T) => (
               <li
                 key={getLabel(option)}
-                className={`px-3 py-2 text-sm text-zinc-800 hover:bg-zinc-100 cursor-pointer`}
+                className={`px-3 py-2 text-sm text-zinc-800 dark:text-gray-200 hover:bg-zinc-100 dark:hover:bg-gray-600 cursor-pointer`}
                 onClick={() => {
                   onChange?.(name, option);
                   setIsOpen(false);
@@ -64,6 +68,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, getLabel, 
           </ul>
         </div>
       )}
+      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400">{errorMessage}</div>}
     </div>
   );
 }
