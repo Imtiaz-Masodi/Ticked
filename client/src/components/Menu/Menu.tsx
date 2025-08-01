@@ -82,7 +82,7 @@ function Menu({
       ref={menuRef}
       className={`absolute z-50 ${getPositionClasses()} ${className}`}
     >
-      <div className="bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[150px]">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[150px]">
         {items.map((item, index) => (
           <button
             key={index}
@@ -91,8 +91,8 @@ function Menu({
               transition-colors duration-150
               ${
                 item.variant === "danger"
-                  ? "text-red-600 hover:bg-red-50"
-                  : "text-zinc-700 hover:bg-zinc-50"
+                  ? "text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  : "text-zinc-700 dark:text-gray-300 hover:bg-zinc-50 dark:hover:bg-gray-700"
               }
             `}
             onClick={() => {
@@ -104,7 +104,7 @@ function Menu({
               <Icon
                 name={item.icon}
                 className={`text-base ${
-                  item.variant === "danger" ? "text-red-500" : "text-zinc-500"
+                  item.variant === "danger" ? "text-red-500 dark:text-red-400" : "text-zinc-500 dark:text-gray-400"
                 }`}
               />
             )}
