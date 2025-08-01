@@ -20,7 +20,7 @@ function SkeletonBox({
 
   return (
     <div
-      className={`bg-gray-200 animate-pulse ${roundedClass[rounded]} ${width} ${height} ${className}`}
+      className={`bg-gray-200 dark:bg-gray-700 animate-pulse ${roundedClass[rounded]} ${width} ${height} ${className}`}
     />
   );
 }

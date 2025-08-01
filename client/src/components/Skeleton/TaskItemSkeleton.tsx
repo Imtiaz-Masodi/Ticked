@@ -2,7 +2,7 @@ import SkeletonBox from "./SkeletonBox";
 
 function TaskItemSkeleton() {
   return (
-    <div className="w-full px-4 py-2 bg-white shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden">
+    <div className="w-full px-4 py-2 bg-white dark:bg-gray-800 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden">
       <SkeletonBox
         width="w-1"
         height=""
