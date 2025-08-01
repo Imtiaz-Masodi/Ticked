@@ -28,9 +28,7 @@ function Header({ onMenuIconClick }: HeaderProps) {
   const shouldShowIcon = isMobile || showBack;
 
   return (
-    <div
-      className={`h-16 px-4 md:px-8 py-2 fixed top-0 left-0 w-full flex items-center justify-between bg-white border-b border-b-zinc-200 z-10 transition-all`}
-    >
+    <header className={`h-16 px-4 md:px-8 py-2 fixed top-0 left-0 w-full flex items-center justify-between bg-white border-b border-b-zinc-200 z-50 transition-all`}>
       <div className="flex items-center">
         {shouldShowIcon && (
           <Icon
@@ -45,7 +43,7 @@ function Header({ onMenuIconClick }: HeaderProps) {
         <AppLogo className="text-white" size={Size.sm} />
       </div>
       <Icon name={Icons.notification} className="text-2xl" />
-    </div>
+    </header>
   );
 }
 
