@@ -49,8 +49,8 @@ function Register() {
     <div className="mt-16 p-8 max-w-sm flex flex-col gap-2 mx-auto">
       <div className="my-4">
         <AppLogo size={Size.lg} className="mb-8" />
-        <div className="text-center text-2xl sm:text-3xl text-black/70">Don't have an account?</div>
-        <div className="text-center text-sm text-zinc-400 font-light">
+        <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70">Don't have an account?</div>
+        <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light">
           Create your account. It's free and only takes a minute.
         </div>
       </div>
@@ -60,7 +60,7 @@ function Register() {
       <RegistrationForm {...formik} />
 
       <div className="flex justify-center items-center text-sm">
-        <span className="text-zinc-700">Have an account?</span>
+        <span className="text-zinc-700 dark:text-gray-300">Have an account?</span>
         <Button
           size={Size.sm}
           type={ButtonType.link}
