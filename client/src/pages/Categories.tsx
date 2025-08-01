@@ -18,7 +18,7 @@ function Categories() {
   if (error) {
     return (
       <div className="h-[80vh] flex items-center justify-center">
-        <p className="text-red-500 text-center">Error loading categories</p>
+        <p className="text-red-500 dark:text-red-400 text-center">Error loading categories</p>
       </div>
     );
   }
@@ -28,7 +28,7 @@ function Categories() {
   return (
     <>
       <div className="max-w-6xl mx-auto p-4">
-        <h1 className="text-xl font-medium text-zinc-600 self-start mx-2 mb-4">
+        <h1 className="text-xl font-medium text-zinc-600 dark:text-gray-300 self-start mx-2 mb-4">
           Categories
         </h1>
 
@@ -47,7 +47,7 @@ function Categories() {
               className="w-[50%]"
               alt="No categories available"
             />
-            <span className="text-zinc-700 text-center px-4 text-sm md:text-base">
+            <span className="text-zinc-700 dark:text-gray-300 text-center px-4 text-sm md:text-base">
               No categories available. Categories help organize your tasks
               better.
             </span>

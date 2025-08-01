@@ -74,13 +74,13 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
   return (
     <div
       ref={cardRef}
-      className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow"
     >
       <div className="flex items-center gap-3 mb-6">
         <div className="relative">
           <button
             ref={colorButtonRef}
-            className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-gray-300 hover:border-gray-400 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400"
+            className="w-5 h-5 rounded-full flex-shrink-0 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400 dark:focus:ring-gray-500 dark:focus:ring-offset-gray-800"
             style={{ backgroundColor: categoryColor }}
             onClick={() => setIsColorPickerOpen(true)}
             disabled={isLoading}
@@ -105,7 +105,7 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
             placeholder="Enter category name..."
             onChange={(e) => setCategoryName(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="w-full bg-transparent text-xl font-medium text-zinc-700 placeholder-zinc-400 focus:outline-none border-none"
+            className="w-full bg-transparent text-xl font-medium text-zinc-700 dark:text-gray-200 placeholder-zinc-400 dark:placeholder-gray-500 focus:outline-none border-none"
             disabled={isLoading}
             autoFocus
           />
@@ -132,7 +132,7 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
 
       <div className="space-y-4">
         <div className="text-center py-4">
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-zinc-500 dark:text-gray-400">
             Enter a name and choose a color for your new category
           </p>
         </div>

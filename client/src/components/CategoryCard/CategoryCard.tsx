@@ -116,7 +116,7 @@ function CategoryCard({ category }: CategoryCardProps) {
   }, [editedName, editedColor, category.name, category.categoryColorCode]);
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 mb-6">
         <div className="relative">
           <div
@@ -159,16 +159,16 @@ function CategoryCard({ category }: CategoryCardProps) {
             />
           ) : (
             <>
-              <h3 className="text-xl leading-tight text-zinc-700">
+              <h3 className="text-xl leading-tight text-zinc-700 dark:text-gray-200">
                 {category.name}
               </h3>
               {category.updatedOn && (
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-zinc-500 dark:text-gray-400">
                   Updated on {new Date(category.updatedOn).toLocaleDateString()}
                 </p>
               )}
               {category.createdOn && !category.updatedOn && (
-                <p className="text-sm text-zinc-500">
+                <p className="text-sm text-zinc-500 dark:text-gray-400">
                   Created on {new Date(category.createdOn).toLocaleDateString()}
                 </p>
               )}
@@ -177,7 +177,7 @@ function CategoryCard({ category }: CategoryCardProps) {
         </div>
         {category.preDefined ? (
           <Tooltip content="System Defined Category" placement={isMobile ? "left" : "bottom"}>
-            <Icon name={Icons.settings} className="text-zinc-400" />
+            <Icon name={Icons.settings} className="text-zinc-400 dark:text-gray-500" />
           </Tooltip>
         ) : isEditing ? (
           <div className="flex gap-2">

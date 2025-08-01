@@ -55,39 +55,39 @@ function CategoryTaskStats({ tasksByCategory, isLoading }: CategoryTaskStatsProp
       ) : totalTasks > 0 ? (
         <>
           <div className="flex justify-between items-center mx-1">
-            <span className="text-sm font-medium text-zinc-700">
+            <span className="text-sm font-medium text-zinc-700 dark:text-gray-300">
               Total Tasks
             </span>
-            <span className="text-md font-semibold text-zinc-900">
+            <span className="text-md font-semibold text-zinc-900 dark:text-gray-100">
               {totalTasks}
             </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            <div className="flex justify-between items-center p-2 bg-blue-50 rounded-lg">
-              <span className="text-xs font-medium text-blue-700">To Do</span>
-              <span className="text-sm font-bold text-blue-900">
+            <div className="flex justify-between items-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <span className="text-xs font-medium text-blue-700 dark:text-blue-300">To Do</span>
+              <span className="text-sm font-bold text-blue-900 dark:text-blue-200">
                 {taskStats.todo}
               </span>
             </div>
-            <div className="flex justify-between items-center p-2 bg-yellow-50 rounded-lg">
-              <span className="text-xs font-medium text-yellow-700">
+            <div className="flex justify-between items-center p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+              <span className="text-xs font-medium text-yellow-700 dark:text-yellow-300">
                 In Progress
               </span>
-              <span className="text-sm font-bold text-yellow-900">
+              <span className="text-sm font-bold text-yellow-900 dark:text-yellow-200">
                 {taskStats.inprogress}
               </span>
             </div>
-            <div className="flex justify-between items-center p-2 bg-green-50 rounded-lg">
-              <span className="text-xs font-medium text-green-700">
+            <div className="flex justify-between items-center p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <span className="text-xs font-medium text-green-700 dark:text-green-300">
                 Completed
               </span>
-              <span className="text-sm font-bold text-green-900">
+              <span className="text-sm font-bold text-green-900 dark:text-green-200">
                 {taskStats.completed}
               </span>
             </div>
-            <div className="flex justify-between items-center p-2 bg-red-50 rounded-lg">
-              <span className="text-xs font-medium text-red-700">Backlog</span>
-              <span className="text-sm font-bold text-red-900">
+            <div className="flex justify-between items-center p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+              <span className="text-xs font-medium text-red-700 dark:text-red-300">Backlog</span>
+              <span className="text-sm font-bold text-red-900 dark:text-red-200">
                 {taskStats.backlog}
               </span>
             </div>
@@ -95,7 +95,7 @@ function CategoryTaskStats({ tasksByCategory, isLoading }: CategoryTaskStatsProp
         </>
       ) : (
         <div className="text-center py-4">
-          <p className="text-sm text-zinc-500 mt-4">
+          <p className="text-sm text-zinc-500 dark:text-gray-400 mt-4">
             No tasks in this category yet
           </p>
         </div>
