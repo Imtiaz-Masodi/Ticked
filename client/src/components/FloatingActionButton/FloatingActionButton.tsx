@@ -10,7 +10,7 @@ type FloatingActionButtonProps = {
 
 function FloatingActionButton({ icon, onClick }: FloatingActionButtonProps) {
   return (
-    <div className="shadow-md fixed bottom-4 right-4 rounded-full overflow-hidden">
+    <div className="shadow-md fixed bottom-4 right-4 rounded-full overflow-hidden z-40">
       <Button
         className="ps-3 pe-3 pt-3 pb-3 bg-secondary hover:bg-secondary-dark active:bg-secondary"
         size={Size.lg}
