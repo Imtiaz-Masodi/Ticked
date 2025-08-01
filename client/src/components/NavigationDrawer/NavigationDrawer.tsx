@@ -63,8 +63,8 @@ export const NavigationDrawer = ({
       <div
         className={`
           fixed top-16 bottom-0 left-0 z-30
-          w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
-          border-r border-r-zinc-200
+          w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
+          border-r border-r-zinc-200 dark:border-r-gray-700
           ${isOpen || !isMobile ? "translate-x-0" : "-translate-x-full"}
         `}
       >
@@ -82,23 +82,14 @@ export const NavigationDrawer = ({
                     transition-colors duration-200
                     ${
                       isActive
-                        ? "bg-zinc-100 border-r-4 border-r-blue-500"
-                        : "hover:bg-zinc-50"
+                        ? "bg-zinc-100 dark:bg-gray-700 border-r-4 border-r-blue-500"
+                        : "hover:bg-zinc-50 dark:hover:bg-gray-700"
                     }
                   `}
                   onClick={() => handleNavigation(item.path)}
                 >
-                  <Icon
-                    name={item.icon}
-                    className={`text-xl ${
-                      isActive ? "text-blue-500" : "text-zinc-600"
-                    }`}
-                  />
-                  <span
-                    className={`ml-4 text-sm font-medium ${
-                      isActive ? "text-blue-500" : "text-zinc-700"
-                    }`}
-                  >
+                  <Icon name={item.icon} className={`text-xl ${isActive ? "text-blue-500" : "text-zinc-600 dark:text-gray-400"}`}/>
+                  <span className={`ml-4 text-sm font-medium ${isActive ? "text-blue-500" : "text-zinc-700 dark:text-gray-300"}`}>
                     {item.name}
                   </span>
                 </div>
@@ -107,13 +98,13 @@ export const NavigationDrawer = ({
           </div>
 
           {/* Logout button at bottom */}
-          <div className="px-6 py-4 border-t border-t-zinc-200">
+          <div className="px-6 py-4 border-t border-t-zinc-200 dark:border-t-gray-700">
             <div
-              className="flex items-center py-3 cursor-pointer hover:bg-zinc-50 transition-colors duration-200"
+              className="flex items-center py-3 cursor-pointer hover:bg-zinc-50 dark:hover:bg-gray-700 transition-colors duration-200"
               onClick={handleLogout}
             >
-              <Icon name={Icons.logout} className="text-xl text-zinc-600" />
-              <span className="ml-4 text-sm font-medium text-zinc-700">
+              <Icon name={Icons.logout} className="text-xl text-zinc-600 dark:text-gray-400" />
+              <span className="ml-4 text-sm font-medium text-zinc-700 dark:text-gray-300">
                 Logout
               </span>
             </div>
