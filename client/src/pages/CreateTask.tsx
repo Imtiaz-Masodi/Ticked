@@ -53,26 +53,33 @@ function CreateTask() {
   });
 
   return (
-    <div className="pt-6 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 px-4">
       <div className="my-8">
-        <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/80">
+        <div className="text-center text-2xl sm:text-3xl text-slate-800 dark:text-white/80">
           Create Task
         </div>
-        <div className="text-center text-sm text-zinc-400 dark:text-gray-400 font-light">
+        <div className="text-center text-sm text-slate-500 dark:text-gray-400 font-light">
           Start organizing your tasks effortlessly
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 max-w-sm mx-auto px-6">
+      <div className="max-w-md mx-auto">
         {createTaskResponse.data?.status == ApiResponseStatus.failed && (
-          <Notification
-            type={NotificationType.ERROR}
-          >
-            {createTaskResponse.data?.message}
-          </Notification>
+          <div className="mb-4">
+            <Notification
+              type={NotificationType.ERROR}
+            >
+              {createTaskResponse.data?.message}
+            </Notification>
+          </div>
         )}
-        {/* @ts-expect-error Ignore */}
-        <TaskForm {...formik} />
+        
+        <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
+          <div className="flex flex-col gap-4">
+            {/* @ts-expect-error Ignore */}
+            <TaskForm {...formik} />
+          </div>
+        </div>
       </div>
     </div>
   );

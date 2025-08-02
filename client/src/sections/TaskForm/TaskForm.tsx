@@ -94,7 +94,7 @@ function TaskForm(props: TaskFormProps) {
         />
       </div>
 
-      <Button onClick={handleSubmit} isLoading={isSubmitting} className="mt-4">
+      <Button onClick={handleSubmit} isLoading={isSubmitting} className="mt-6 w-full">
         Create Task
       </Button>
     </>
