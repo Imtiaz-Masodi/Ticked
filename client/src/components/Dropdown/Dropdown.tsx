@@ -33,12 +33,16 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
 
   return (
     <div className="w-full relative" ref={dropdownRef}>
-      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300 select-none">{label}</label>
+      <label className="block mb-2 ml-1 text-sm font-medium text-slate-700 dark:text-gray-300 select-none">{label}</label>
       <button
-        className={`w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white dark:bg-gray-700 focus-visible:outline-offset-2 focus-visible:outline-black/40 dark:focus-visible:outline-white/40 disabled:bg-gray-200 dark:disabled:bg-gray-600 disabled:cursor-not-allowed ${
+        className={`w-full flex items-center justify-between rounded-lg border px-3 py-2.5 
+          bg-slate-50/50 dark:bg-gray-700 backdrop-blur-sm transition-all duration-200
+          hover:bg-slate-50 dark:hover:bg-gray-600/80 hover:border-slate-300 dark:hover:border-gray-500
+          focus-visible:outline-offset-2 focus-visible:outline-slate-400 dark:focus-visible:outline-white/40 
+          disabled:bg-slate-100 dark:disabled:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-60 ${
           errorMessage 
-            ? "border-red-700 dark:border-red-500" 
-            : "border-zinc-300 dark:border-gray-600"
+            ? "border-red-500 dark:border-red-500 bg-red-50/30 dark:bg-red-900/10" 
+            : "border-slate-200 dark:border-gray-600"
         }`}
         onClick={() => {
           if (disabled) return;
@@ -46,17 +50,17 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
         }}
         disabled={disabled}
       >
-        <span className="text-sm text-zinc-700 dark:text-gray-200 select-none">{value ? getLabel(value) : ""}</span>
+        <span className="text-sm text-slate-700 dark:text-gray-200 select-none">{value ? getLabel(value) : ""}</span>
         <Icon name={Icons.down} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
       {!disabled && isOpen && (
-        <div className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 border border-zinc-300 dark:border-gray-600 rounded-md shadow-lg">
+        <div className="absolute z-10 mt-1 w-full bg-white/95 dark:bg-gray-700/95 backdrop-blur-sm border border-slate-200 dark:border-gray-600 rounded-lg shadow-xl shadow-slate-200/30 dark:shadow-gray-900/30">
           <ul className="max-h-60 overflow-auto m-2">
             {options.map((option: T) => (
               <li
                 key={getLabel(option)}
-                className={`px-3 py-2 text-sm text-zinc-800 dark:text-gray-200 hover:bg-zinc-100 dark:hover:bg-gray-600 cursor-pointer select-none`}
+                className={`px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-600 cursor-pointer select-none rounded-md transition-colors`}
                 onClick={() => {
                   onChange?.(name, option);
                   setIsOpen(false);
@@ -68,7 +72,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
           </ul>
         </div>
       )}
-      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400 select-none">{errorMessage}</div>}
+      {errorMessage && <div className="mt-1 ml-1 text-sm text-red-600 dark:text-red-400 select-none">{errorMessage}</div>}
     </div>
   );
 }
