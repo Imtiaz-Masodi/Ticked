@@ -67,7 +67,7 @@ const Button = ({
   return (
     <button
       className={`
-        transition-all flex justify-center items-center gap-2 text-nowrap
+        transition-all flex justify-center items-center gap-2 text-nowrap select-none
         disabled:hover:shadow-none disabled:cursor-not-allowed
         ${sizeStyles[size]}
         ${typeStyles[type]}

@@ -52,7 +52,7 @@ const Checkbox = ({ label, name, disabled, checkboxSize = Size.md, checked, onCh
       <label
         htmlFor={name}
         className={`
-            cursor-pointer peer-disabled:text-gray-400 dark:peer-disabled:text-gray-500 peer-disabled:cursor-not-allowed whitespace-nowrap
+            cursor-pointer peer-disabled:text-gray-400 dark:peer-disabled:text-gray-500 peer-disabled:cursor-not-allowed whitespace-nowrap select-none
             text-zinc-700 dark:text-gray-200 ${checkboxSize && sizeStyles[checkboxSize]} size-auto
           `}
       >

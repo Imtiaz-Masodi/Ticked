@@ -159,16 +159,16 @@ function CategoryCard({ category }: CategoryCardProps) {
             />
           ) : (
             <>
-              <h3 className="text-xl leading-tight text-zinc-700 dark:text-gray-200">
+              <h3 className="text-xl leading-tight text-zinc-700 dark:text-gray-200 select-none">
                 {category.name}
               </h3>
               {category.updatedOn && (
-                <p className="text-sm text-zinc-500 dark:text-gray-400">
+                <p className="text-sm text-zinc-500 dark:text-gray-400 select-none">
                   Updated on {new Date(category.updatedOn).toLocaleDateString()}
                 </p>
               )}
               {category.createdOn && !category.updatedOn && (
-                <p className="text-sm text-zinc-500 dark:text-gray-400">
+                <p className="text-sm text-zinc-500 dark:text-gray-400 select-none">
                   Created on {new Date(category.createdOn).toLocaleDateString()}
                 </p>
               )}

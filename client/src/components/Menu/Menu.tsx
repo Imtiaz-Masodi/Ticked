@@ -108,7 +108,7 @@ function Menu({
                 }`}
               />
             )}
-            <span className="whitespace-nowrap">{item.label}</span>
+            <span className="whitespace-nowrap select-none">{item.label}</span>
           </button>
         ))}
       </div>

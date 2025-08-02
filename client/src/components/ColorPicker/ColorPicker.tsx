@@ -55,7 +55,7 @@ function ColorPicker({
   return (
     <div className={`p-4 ${className}`}>
       {label && (
-        <span className="text-sm font-medium text-zinc-700 dark:text-gray-200 block mb-2">
+        <span className="text-sm font-medium text-zinc-700 dark:text-gray-200 block mb-2 select-none">
           {label}
         </span>
       )}

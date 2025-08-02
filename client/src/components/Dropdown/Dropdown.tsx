@@ -33,7 +33,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
 
   return (
     <div className="w-full relative" ref={dropdownRef}>
-      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300">{label}</label>
+      <label className="block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300 select-none">{label}</label>
       <button
         className={`w-full flex items-center justify-between rounded-md border px-3 py-2 bg-white dark:bg-gray-700 focus-visible:outline-offset-2 focus-visible:outline-black/40 dark:focus-visible:outline-white/40 disabled:bg-gray-200 dark:disabled:bg-gray-600 disabled:cursor-not-allowed ${
           errorMessage 
@@ -46,7 +46,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
         }}
         disabled={disabled}
       >
-        <span className="text-sm text-zinc-700 dark:text-gray-200">{value ? getLabel(value) : ""}</span>
+        <span className="text-sm text-zinc-700 dark:text-gray-200 select-none">{value ? getLabel(value) : ""}</span>
         <Icon name={Icons.down} className={`transition-transform ${isOpen ? "rotate-180" : "rotate-0"}`} />
       </button>
 
@@ -56,7 +56,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
             {options.map((option: T) => (
               <li
                 key={getLabel(option)}
-                className={`px-3 py-2 text-sm text-zinc-800 dark:text-gray-200 hover:bg-zinc-100 dark:hover:bg-gray-600 cursor-pointer`}
+                className={`px-3 py-2 text-sm text-zinc-800 dark:text-gray-200 hover:bg-zinc-100 dark:hover:bg-gray-600 cursor-pointer select-none`}
                 onClick={() => {
                   onChange?.(name, option);
                   setIsOpen(false);
@@ -68,7 +68,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
           </ul>
         </div>
       )}
-      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400">{errorMessage}</div>}
+      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400 select-none">{errorMessage}</div>}
     </div>
   );
 }

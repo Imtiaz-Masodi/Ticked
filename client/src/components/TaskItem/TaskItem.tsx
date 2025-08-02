@@ -18,17 +18,17 @@ function TaskItem({ task }: TaskItemProps) {
     <div className="task-item-container group w-full px-4 py-1.5 bg-white dark:bg-gray-800 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden hover:cursor-pointer">
       <div className="w-1 flex -ms-4 -my-1.5 flex-shrink-0" style={{ backgroundColor: priorityColorMap[task.priority] }} />
       <div className="flex flex-col justify-center flex-grow gap-1">
-        <h2 className="text-xl text-zinc-700 dark:text-gray-200 leading-tight">{task.title}</h2>
+        <h2 className="text-xl text-zinc-700 dark:text-gray-200 leading-tight select-none">{task.title}</h2>
 
         <div className="flex items-center gap-2">
           {category ? (
-            <p style={{ color: category.categoryColorCode }} className="text-xs">
+            <p style={{ color: category.categoryColorCode }} className="text-xs select-none">
               {category.name}
             </p>
           ) : (
             <SkeletonBox width="w-10" height="h-3" />
           )}
-          <p className="text-xs text-zinc-700 dark:text-gray-300">{getUserFriendlyDate(task.dueDate)}</p>
+          <p className="text-xs text-zinc-700 dark:text-gray-300 select-none">{getUserFriendlyDate(task.dueDate)}</p>
         </div>
       </div>
       <div className="flex items-center">

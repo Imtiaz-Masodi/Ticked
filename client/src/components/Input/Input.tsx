@@ -40,7 +40,7 @@ const Input = ({
   return (
     <div className="flex-grow">
       {label && (
-        <label className={`block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300`} {...labelProps}>
+        <label className={`block mb-1 ml-1 text-xs font-semibold text-zinc-600 dark:text-gray-300 select-none`} {...labelProps}>
           {label}
         </label>
       )}
@@ -73,7 +73,7 @@ const Input = ({
           </div>
         )}
       </div>
-      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400">{errorMessage}</div>}
+      {errorMessage && <div className="m-1 text-sm text-red-700 dark:text-red-400 select-none">{errorMessage}</div>}
     </div>
   );
 };

@@ -118,7 +118,7 @@ function Tooltip({
       {isVisible && (
         <div
           className={`
-            absolute z-50 whitespace-nowrap rounded-md border
+            absolute z-50 whitespace-nowrap rounded-md border select-none
             transition-opacity duration-200 pointer-events-none
             "bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-200 border-gray-200/50 dark:border-gray-700/50 shadow-lg backdrop-blur-sm"
             ${placementStyles[placement]}

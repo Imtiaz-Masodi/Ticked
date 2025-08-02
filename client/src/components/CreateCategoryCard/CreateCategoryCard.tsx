@@ -132,7 +132,7 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
 
       <div className="space-y-4">
         <div className="text-center py-4">
-          <p className="text-sm text-zinc-500 dark:text-gray-400">
+          <p className="text-sm text-zinc-500 dark:text-gray-400 select-none">
             Enter a name and choose a color for your new category
           </p>
         </div>

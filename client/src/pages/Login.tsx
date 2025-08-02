@@ -52,8 +52,8 @@ const Login = () => {
       <div className="p-8 max-w-sm flex flex-col gap-2 mx-auto">
         <div className="my-4">
           <AppLogo size={Size.lg} className="mb-8" />
-          <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70">Log in to your account</div>
-          <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light">Welcome back! Please enter your details</div>
+          <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70 select-none">Log in to your account</div>
+          <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light select-none">Welcome back! Please enter your details</div>
         </div>
 
         {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
@@ -61,7 +61,7 @@ const Login = () => {
         <LoginForm {...formik} />
 
         <div className="flex justify-center items-center text-sm">
-          <span className="text-zinc-700 dark:text-gray-300">Don't have an account?</span>
+          <span className="text-zinc-700 dark:text-gray-300 select-none">Don't have an account?</span>
           <Button
             size={Size.sm}
             type={ButtonType.link}

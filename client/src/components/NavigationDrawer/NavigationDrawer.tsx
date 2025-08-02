@@ -89,7 +89,7 @@ export const NavigationDrawer = ({
                   onClick={() => handleNavigation(item.path)}
                 >
                   <Icon name={item.icon} className={`text-xl ${isActive ? "text-blue-500" : "text-zinc-600 dark:text-gray-400"}`}/>
-                  <span className={`ml-4 text-sm font-medium ${isActive ? "text-blue-500" : "text-zinc-700 dark:text-gray-300"}`}>
+                  <span className={`ml-4 text-sm font-medium select-none ${isActive ? "text-blue-500" : "text-zinc-700 dark:text-gray-300"}`}>
                     {item.name}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export const NavigationDrawer = ({
               onClick={handleLogout}
             >
               <Icon name={Icons.logout} className="text-xl text-zinc-600 dark:text-gray-400" />
-              <span className="ml-4 text-sm font-medium text-zinc-700 dark:text-gray-300">
+              <span className="ml-4 text-sm font-medium text-zinc-700 dark:text-gray-300 select-none">
                 Logout
               </span>
             </div>

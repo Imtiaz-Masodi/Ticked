@@ -124,16 +124,16 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
         {/* Content */}
         <div className="ml-3 flex-1">
           {toast.title && (
-            <h4 className="font-medium text-sm mb-1">{toast.title}</h4>
+            <h4 className="font-medium text-sm mb-1 select-none">{toast.title}</h4>
           )}
-          <p className="text-sm">{toast.message}</p>
+          <p className="text-sm select-none">{toast.message}</p>
 
           {/* Action button */}
           {toast.action && (
             <div className="mt-2">
               <button
                 onClick={() => toast.action?.onClick(toast.id)}
-                className="text-sm font-medium underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded"
+                className="text-sm font-medium underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded select-none"
               >
                 {toast.action.label}
               </button>

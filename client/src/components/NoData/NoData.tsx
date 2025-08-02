@@ -9,7 +9,7 @@ function NoData() {
         className="w-[50%]"
         alt="No data available"
       />
-      <span className="text-zinc-700 dark:text-gray-300 text-center px-4 text-sm md:text-base">
+      <span className="text-zinc-700 dark:text-gray-300 text-center px-4 text-sm md:text-base select-none">
         No tasks available. Start by adding a
         <Link to="/task/new" className="text-sky-500 dark:text-sky-400">
           {" "}
