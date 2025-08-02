@@ -10,7 +10,7 @@ async function fetchTasksForUser(req, res) {
     const { user, queryParams } = req.stash;
     const searchQuery = { ...queryParams, userId: user.id };
     const tasks = await Task.find(searchQuery).select(
-      "title status createdOn priority dueDate categoryId userId deleted"
+      "title description status createdOn priority dueDate categoryId userId deleted"
     );
     res.send(new ApiResponse(true, "", { tasks }));
   } catch (ex) {
