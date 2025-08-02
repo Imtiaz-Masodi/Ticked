@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Button } from "../../components/Button";
 import { Dropdown } from "../../components/Dropdown";
 import { Input, InputTypes } from "../../components/Input";
+import { TextArea } from "../../components/TextArea";
 import { useGetCategoriesQuery } from "../../store/api/categoryApi";
 import { Category } from "../../types/Category";
 import { PriorityType } from "../../types/PriorityType";
@@ -16,6 +17,14 @@ function TaskForm(props: TaskFormProps) {
   const handleDropdownChange = <T,>(name: string, value: T) => {
     formik.setFieldValue(name, value);
     formik.setFieldTouched(name, true);
+  };
+
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    formik.setFieldValue(e.target.name, e.target.value);
+  };
+
+  const handleTextAreaBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
+    formik.setFieldTouched(e.target.name, true);
   };
 
   useEffect(() => {
@@ -37,13 +46,13 @@ function TaskForm(props: TaskFormProps) {
         errorMessage={touched.title ? errors.title : undefined}
         disabled={isSubmitting}
       />
-      <Input
+      <TextArea
         name="description"
         label="Description"
         value={values?.description}
-        type={InputTypes.text}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        rows={5}
+        onChange={handleTextAreaChange}
+        onBlur={handleTextAreaBlur}
         errorMessage={touched.description ? errors.description : undefined}
         disabled={isSubmitting}
       />
