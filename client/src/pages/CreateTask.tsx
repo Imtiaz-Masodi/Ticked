@@ -53,7 +53,7 @@ function CreateTask() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 px-4">
+    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 px-4">
       <div className="my-8">
         <div className="text-center text-2xl sm:text-3xl text-slate-800 dark:text-white/80">
           Create Task
