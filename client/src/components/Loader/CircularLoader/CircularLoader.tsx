@@ -19,7 +19,7 @@ const CircularLoader = ({ size = Size.md, className = "" }: CircularLoaderProps)
         aspect-square 
         rounded-full 
         border-t-[currentColor] 
-        m-auto 
+        mx-auto 
         animate-spin
         ${className}
       `
