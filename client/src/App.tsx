@@ -15,6 +15,7 @@ const Categories = lazy(() => import("./pages/Categories"));
 const Backlog = lazy(() => import("./pages/Backlog"));
 const Completed = lazy(() => import("./pages/Completed"));
 const Settings = lazy(() => import("./pages/Settings"));
+const TaskViewer = lazy(() => import("./pages/TaskViewer"));
 
 function App() {
   return (
@@ -49,6 +50,15 @@ function App() {
                 element={
                   <Suspense fallback={<div>Loading...</div>}>
                     <CreateTask />
+                  </Suspense>
+                }
+              />
+
+              <Route
+                path="/task/:taskId"
+                element={
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <TaskViewer />
                   </Suspense>
                 }
               />

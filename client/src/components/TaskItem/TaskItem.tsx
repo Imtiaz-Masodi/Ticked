@@ -5,17 +5,26 @@ import { priorityColorMap } from "../../utils/options";
 import { SkeletonBox } from "../Skeleton";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
+import { useNavigate } from "react-router-dom";
 
 type TaskItemProps = React.PropsWithChildren<{
   task: Task;
 }>;
 
 function TaskItem({ task }: TaskItemProps) {
+  const navigate = useNavigate();
   const { data } = useGetCategoriesQuery();
   const category = data?.payload?.categories.find((category) => category._id === task.categoryId) || null;
 
+  const handleTaskClick = () => {
+    navigate(`/task/${task._id}`);
+  };
+
   return (
-    <div className="task-item-container group w-full px-4 py-1.5 bg-white dark:bg-gray-800 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden hover:cursor-pointer">
+    <div 
+      className="task-item-container group w-full px-4 py-1.5 bg-white dark:bg-gray-800 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden hover:cursor-pointer"
+      onClick={handleTaskClick}
+    >
       <div className="w-1 flex -ms-4 -my-1.5 flex-shrink-0" style={{ backgroundColor: priorityColorMap[task.priority] }} />
       <div className="flex flex-col justify-center flex-grow gap-1">
         <h2 className="text-xl text-zinc-700 dark:text-gray-200 leading-tight select-none">{task.title}</h2>
