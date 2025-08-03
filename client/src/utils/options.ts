@@ -21,14 +21,14 @@ export const priorityColorMap: Record<Priority, string> = Object.freeze({
 });
 
 export const statusColorMap: Record<TaskStatus, string> = Object.freeze({
-  [TaskStatus.backlog]: "#EF4444", // Red
+  [TaskStatus.backlog]: "#6B7280", // Gray
   [TaskStatus.todo]: "#3B82F6", // Blue
   [TaskStatus.inprogress]: "#F59E0B", // Yellow/Orange
   [TaskStatus.completed]: "#10B981", // Green
 });
 
 export const statusBadgeClasses: Record<TaskStatus, string> = Object.freeze({
-  [TaskStatus.backlog]: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+  [TaskStatus.backlog]: "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
   [TaskStatus.todo]: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   [TaskStatus.inprogress]: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
   [TaskStatus.completed]: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",

@@ -13,6 +13,7 @@ import {
   Priority,
   TaskStatus,
   TaskStatusLabel,
+  Size,
 } from "../utils/enums";
 import {
   priorityColorMap,
@@ -24,7 +25,7 @@ import { getUserFriendlyDateTime } from "../helpers/dateHelper";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { TaskFormValues } from "../sections/TaskForm";
 import { Button } from "../components/Button";
-import { ButtonType } from "../components/Button/Button.enum";
+import { ButtonType, ButtonVariant } from "../components/Button/Button.enum";
 import { Input } from "../components/Input";
 import { TextArea } from "../components/TextArea";
 import { Dropdown } from "../components/Dropdown";
@@ -60,6 +61,22 @@ function TaskViewer() {
 
   // Category options
   const categoryOptions = categories;
+
+  // Status variant mapping
+  const getStatusVariant = (status: TaskStatus): ButtonVariant => {
+    switch (status) {
+      case TaskStatus.backlog:
+        return ButtonVariant.secondary;
+      case TaskStatus.todo:
+        return ButtonVariant.info;
+      case TaskStatus.inprogress:
+        return ButtonVariant.warning;
+      case TaskStatus.completed:
+        return ButtonVariant.success;
+      default:
+        return ButtonVariant.secondary;
+    }
+  };
 
   // Memoized initial form values based on task data
   const initialFormValues = useMemo(() => {
@@ -415,6 +432,8 @@ function TaskViewer() {
                       ? ButtonType.solid
                       : ButtonType.outline
                   }
+                  variant={getStatusVariant(value)}
+                  size={Size.sm}
                   onClick={() => handleTaskStatusUpdate(value)}
                   disabled={task.status === value}
                   className="text-sm"
