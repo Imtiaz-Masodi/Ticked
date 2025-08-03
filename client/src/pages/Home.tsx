@@ -48,7 +48,7 @@ function Home() {
         {isLargeScreen && isViewingTask && (
           <div className="flex-1">
             <Suspense fallback={<div>Loading task...</div>}>
-              <TaskViewer isInline={true} />
+              <TaskViewer isInline={true} key={taskId} />
             </Suspense>
           </div>
         )}
