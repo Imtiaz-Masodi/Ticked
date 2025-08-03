@@ -67,7 +67,7 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-2 gap-2 mt-3">
+    <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-4 gap-2 mt-3">
       <p className="text-sm font-bold text-zinc-600 dark:text-gray-300 self-start mx-2">
         {title || getTitleByStatus(status)}
       </p>

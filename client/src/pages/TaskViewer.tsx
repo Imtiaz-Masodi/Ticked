@@ -36,7 +36,11 @@ import { useApiToast } from "../utils/toastUtils";
 import Badge from "../components/Badge";
 import { Notification, NotificationType } from "../components/Notification";
 
-function TaskViewer() {
+type TaskViewerProps = {
+  isInline?: boolean;
+};
+
+function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false);
@@ -175,7 +179,7 @@ function TaskViewer() {
 
   if (isLoadingTask) {
     return (
-      <div className="min-h-screen pt-6 flex items-center justify-center">
+      <div className={`${isInline ? 'min-h-0 pt-2' : 'min-h-screen pt-6'} flex items-center justify-center`}>
         <CircularLoader />
       </div>
     );
@@ -184,7 +188,7 @@ function TaskViewer() {
   if (taskError || !task) {
     // ToDo: Update the UI of this component
     return (
-      <div className="min-h-screen pt-6 px-4">
+      <div className={`${isInline ? 'min-h-0 pt-2' : 'min-h-screen pt-6'} px-4`}>
         <div className="my-8">
           <Notification type={NotificationType.ERROR}>
             Task not found or failed to load
@@ -200,13 +204,23 @@ function TaskViewer() {
   }
 
   return (
-    <div className="min-h-screen pt-4 px-4">
-      <div className="max-w-2xl mx-auto">
+    <div className={`${isInline ? 'min-h-0 pt-2 mt-8' : 'min-h-screen pt-4'} px-4`}>
+      <div className="max-w-3xl mx-auto">
         {/* Task Content */}
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
           {/* Priority Indicator and Edit Button */}
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
+              {/* Back button for inline mode */}
+              {isInline && (
+                <button
+                  onClick={() => navigate('/')}
+                  className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
+                  title="Go back to tasks"
+                >
+                  <Icon name={Icons.arrowBack} className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                </button>
+              )}
               <div
                 className="w-4 h-4 rounded-full"
                 style={{

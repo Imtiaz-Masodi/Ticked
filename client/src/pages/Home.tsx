@@ -1,28 +1,66 @@
 import { authHelper } from "../helpers/authHelper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
-import { TaskStatus } from "../utils/enums";
+import { TaskStatus, Breakpoints } from "../utils/enums";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import TaskViewer from "./TaskViewer";
+import { Suspense } from "react";
 
 function Home() {
   const navigate = useNavigate();
+  const { taskId } = useParams<{ taskId?: string }>();
+  const location = useLocation();
   const isUserLoggedIn = authHelper.isUserLoggedIn();
+
+  // Check if we're on a larger screen (tablet and above)
+  const isLargeScreen = useMediaQuery(`(min-width: ${Breakpoints.TABLET}px)`);
+
+  // Check if we're currently viewing a task (URL includes /task/:taskId)
+  const isViewingTask = location.pathname.startsWith("/task/") && taskId;
 
   if (!isUserLoggedIn) return null;
 
+  // On mobile, if viewing a task, show only the TaskViewer
+  if (!isLargeScreen && isViewingTask) {
+    return (
+      <Suspense fallback={<div>Loading task...</div>}>
+        <TaskViewer />
+      </Suspense>
+    );
+  }
+
   return (
     <div className="mx-2 mt-2">
-      <TasksList
-        title="Active Tasks"
-        status={[TaskStatus.todo, TaskStatus.inprogress]}
-        leftAction={TaskStatus.completed}
-        rightAction={TaskStatus.backlog}
-      />
-      <FloatingActionButton
-        icon={Icons.add}
-        onClick={() => navigate("/task/new")}
-      />
+      <div className={`${isLargeScreen && isViewingTask ? "flex gap-0 max-w-screen-2xl mx-auto" : ""}`}>
+        {/* Tasks List - takes half width on large screens when viewing a task */}
+        <div className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"}`}>
+          <TasksList
+            title="Active Tasks"
+            status={[TaskStatus.todo, TaskStatus.inprogress]}
+            leftAction={TaskStatus.completed}
+            rightAction={TaskStatus.backlog}
+          />
+        </div>
+
+        {/* Task Viewer - only shown on large screens */}
+        {isLargeScreen && isViewingTask && (
+          <div className="flex-1">
+            <Suspense fallback={<div>Loading task...</div>}>
+              <TaskViewer isInline={true} />
+            </Suspense>
+          </div>
+        )}
+      </div>
+
+      {/* Floating Action Button - positioned relative to the tasks list */}
+      {(!isViewingTask || !isLargeScreen) && (
+        <FloatingActionButton
+          icon={Icons.add}
+          onClick={() => navigate("/task/new")}
+        />
+      )}
     </div>
   );
 }

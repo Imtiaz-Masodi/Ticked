@@ -5,7 +5,7 @@ import { priorityColorMap } from "../../utils/options";
 import { SkeletonBox } from "../Skeleton";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type TaskItemProps = React.PropsWithChildren<{
   task: Task;
@@ -13,8 +13,11 @@ type TaskItemProps = React.PropsWithChildren<{
 
 function TaskItem({ task }: TaskItemProps) {
   const navigate = useNavigate();
+  const { taskId } = useParams<{ taskId?: string }>();
   const { data } = useGetCategoriesQuery();
   const category = data?.payload?.categories.find((category) => category._id === task.categoryId) || null;
+  
+  const isSelected = taskId === task._id;
 
   const handleTaskClick = () => {
     navigate(`/task/${task._id}`);
@@ -22,7 +25,11 @@ function TaskItem({ task }: TaskItemProps) {
 
   return (
     <div 
-      className="task-item-container group w-full px-4 py-1.5 bg-white dark:bg-gray-800 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden hover:cursor-pointer"
+      className={`task-item-container group w-full px-4 py-1.5 shadow-sm flex items-stretch gap-4 rounded-md overflow-hidden hover:cursor-pointer transition-all duration-200 ${
+        isSelected 
+          ? 'bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-700' 
+          : 'bg-white dark:bg-gray-800 border-2 border-transparent hover:border-gray-200 dark:hover:border-gray-600'
+      }`}
       onClick={handleTaskClick}
     >
       <div className="w-1 flex -ms-4 -my-1.5 flex-shrink-0" style={{ backgroundColor: priorityColorMap[task.priority] }} />
