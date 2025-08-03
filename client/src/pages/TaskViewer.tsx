@@ -16,10 +16,10 @@ import { TextArea } from "../components/TextArea";
 import { Dropdown } from "../components/Dropdown";
 import { Icon } from "../components/Icon";
 import { Icons } from "../components/Icon/IconMap";
-import CircularLoader from "../components/Loader/CircularLoader/CircularLoader";
 import { useApiToast } from "../utils/toastUtils";
 import Badge from "../components/Badge";
 import TaskErrorState from "../components/TaskErrorState";
+import { TaskViewerSkeleton } from "../components/Skeleton";
 
 type TaskViewerProps = {
   isInline?: boolean;
@@ -146,11 +146,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   });
 
   if (isLoadingTask) {
-    return (
-      <div className={`h-full flex items-center justify-center`}>
-        <CircularLoader />
-      </div>
-    );
+    return <TaskViewerSkeleton isInline={isInline} />;
   }
 
   if (taskError || !task) {
