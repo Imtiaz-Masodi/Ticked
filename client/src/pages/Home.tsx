@@ -32,7 +32,7 @@ function Home() {
   }
 
   return (
-    <div className="mx-2 mt-2">
+    <div className="mx-0 md:mx-2 mt-2">
       <div className={`${isLargeScreen && isViewingTask ? "flex gap-0 max-w-screen-2xl mx-auto" : ""}`}>
         {/* Tasks List - takes half width on large screens when viewing a task */}
         <div className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"}`}>
@@ -56,10 +56,7 @@ function Home() {
 
       {/* Floating Action Button - positioned relative to the tasks list */}
       {(!isViewingTask || !isLargeScreen) && (
-        <FloatingActionButton
-          icon={Icons.add}
-          onClick={() => navigate("/task/new")}
-        />
+        <FloatingActionButton icon={Icons.add} onClick={() => navigate("/task/new")} />
       )}
     </div>
   );
