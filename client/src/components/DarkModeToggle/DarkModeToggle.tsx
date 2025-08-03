@@ -1,4 +1,6 @@
 import { useDarkMode } from "../../hooks/useDarkMode";
+import { Icon } from "../Icon";
+import { Icons } from "../Icon/IconMap";
 
 interface DarkModeToggleProps {
   className?: string;
@@ -18,8 +20,10 @@ export function DarkModeToggle({ className = "", withBackground = false }: DarkM
       className={`p-3 rounded-full transition-all duration-200 aspect-square ${backgroundClasses} ${className}`}
       aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
-      {/* Simple sun/moon emoji for now - you can replace with proper icons later */}
-      <span className="text-2xl">{isDarkMode ? "☀️" : "🌙"}</span>
+      <Icon 
+        name={isDarkMode ? Icons.lightMode : Icons.darkMode}
+        className="dark:text-yellow-500 text-indigo-500 text-lg"
+      />
     </button>
   );
 }
