@@ -5,8 +5,11 @@ import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
 import { TaskStatus, Breakpoints } from "../utils/enums";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import TaskViewer from "./TaskViewer";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
+import { PageLoading } from "../components/Loader";
+
+// Lazy load TaskViewer component
+const TaskViewer = lazy(() => import("./TaskViewer"));
 
 function Home() {
   const navigate = useNavigate();
@@ -25,7 +28,7 @@ function Home() {
   // On mobile, if viewing a task, show only the TaskViewer
   if (!isLargeScreen && isViewingTask) {
     return (
-      <Suspense fallback={<div>Loading task...</div>}>
+      <Suspense fallback={<PageLoading text="Loading task..." />}>
         <TaskViewer />
       </Suspense>
     );
@@ -47,7 +50,7 @@ function Home() {
         {/* Task Viewer - only shown on large screens */}
         {isLargeScreen && isViewingTask && (
           <div className="flex-1">
-            <Suspense fallback={<div>Loading task...</div>}>
+            <Suspense fallback={<PageLoading text="Loading task..." />}>
               <TaskViewer isInline={true} key={taskId} />
             </Suspense>
           </div>
