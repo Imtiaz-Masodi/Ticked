@@ -2,10 +2,24 @@ import { useState, useEffect, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
-import { useGetTaskByIdQuery, useUpdateTaskMutation, useUpdateTaskStatusMutation } from "../store/api/taskApi";
+import {
+  useGetTaskByIdQuery,
+  useUpdateTaskMutation,
+  useUpdateTaskStatusMutation,
+} from "../store/api/taskApi";
 import { useGetCategoriesQuery } from "../store/api/categoryApi";
-import { ApiResponseStatus, Priority, TaskStatus, TaskStatusLabel } from "../utils/enums";
-import { priorityColorMap, priorityOptions, statusOptions, statusBadgeClasses } from "../utils/options";
+import {
+  ApiResponseStatus,
+  Priority,
+  TaskStatus,
+  TaskStatusLabel,
+} from "../utils/enums";
+import {
+  priorityColorMap,
+  priorityOptions,
+  statusOptions,
+  statusBadgeClasses,
+} from "../utils/options";
 import { getUserFriendlyDate } from "../helpers/dateHelper";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { TaskFormValues } from "../sections/TaskForm";
@@ -28,13 +42,20 @@ function TaskViewer() {
   const toast = useApiToast();
 
   // API hooks
-  const { data: taskData, isLoading: isLoadingTask, error: taskError } = useGetTaskByIdQuery(taskId!);
+  const {
+    data: taskData,
+    isLoading: isLoadingTask,
+    error: taskError,
+  } = useGetTaskByIdQuery(taskId!);
   const { data: categoriesData } = useGetCategoriesQuery();
   const [updateTask] = useUpdateTaskMutation();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
 
   const task = taskData?.payload?.task;
-  const categories = useMemo(() => categoriesData?.payload?.categories || [], [categoriesData]);
+  const categories = useMemo(
+    () => categoriesData?.payload?.categories || [],
+    [categoriesData]
+  );
   const category = categories.find((cat) => cat._id === task?.categoryId);
 
   // Category options
@@ -42,9 +63,12 @@ function TaskViewer() {
 
   const handleTaskStatusUpdate = async (newStatus: TaskStatus) => {
     if (!task) return;
-    
+
     try {
-      const response = await updateTaskStatus({ taskId: task._id, taskStatus: newStatus });
+      const response = await updateTaskStatus({
+        taskId: task._id,
+        taskStatus: newStatus,
+      });
       if (response.data?.status === ApiResponseStatus.success) {
         toast.apiSuccess("Task status updated successfully!");
       }
@@ -54,7 +78,10 @@ function TaskViewer() {
     }
   };
 
-  const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
+  const handleFormSubmit = async (
+    values: TaskFormValues,
+    { setSubmitting }: FormikHelpers<TaskFormValues>
+  ) => {
     if (!task) return;
 
     try {
@@ -62,7 +89,10 @@ function TaskViewer() {
         ...task,
         title: values.title,
         description: values.description || "",
-        dueDate: values.dueDate && values.dueTime ? `${values.dueDate}T${values.dueTime}:00` : task.dueDate,
+        dueDate:
+          values.dueDate && values.dueTime
+            ? `${values.dueDate}T${values.dueTime}:00`
+            : task.dueDate,
         priority: values.priority.value,
         categoryId: values.category!._id,
       };
@@ -96,15 +126,19 @@ function TaskViewer() {
   // Update form values when task data changes
   useEffect(() => {
     if (task) {
-      const selectedCategory = categories.find((cat) => cat._id === task.categoryId);
-      const selectedPriority = priorityOptions.find((opt) => opt.value === task.priority);
-      
+      const selectedCategory = categories.find(
+        (cat) => cat._id === task.categoryId
+      );
+      const selectedPriority = priorityOptions.find(
+        (opt) => opt.value === task.priority
+      );
+
       // Parse due date
       let dueDate = "";
       let dueTime = "";
       if (task.dueDate) {
         const date = new Date(task.dueDate);
-        dueDate = date.toISOString().split('T')[0];
+        dueDate = date.toISOString().split("T")[0];
         dueTime = date.toTimeString().slice(0, 5);
       }
 
@@ -117,9 +151,10 @@ function TaskViewer() {
         dueTime,
       });
     }
-  }, [task, categories, formik]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task, categories]);
 
-    if (isLoadingTask) {
+  if (isLoadingTask) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 flex items-center justify-center">
         <CircularLoader />
@@ -156,7 +191,7 @@ function TaskViewer() {
             <Icon name={Icons.arrowBack} className="text-lg" />
             <span>Back</span>
           </button>
-          
+
           <div className="flex items-center gap-2">
             {!isEditMode && (
               <Button
@@ -196,13 +231,15 @@ function TaskViewer() {
           <div className="flex items-center gap-3 mb-6">
             <div
               className="w-4 h-4 rounded-full"
-              style={{ backgroundColor: priorityColorMap[task.priority as Priority] }}
+              style={{
+                backgroundColor: priorityColorMap[task.priority as Priority],
+              }}
             />
             <Badge className="capitalize">{task.priority} Priority</Badge>
           </div>
 
           {/* Title */}
-          <div className={isEditMode ? "mb-6" : "mb-3"}>
+          <div className={isEditMode ? "mb-6" : "mb-2"}>
             {isEditMode ? (
               <Input
                 label="Title"
@@ -211,7 +248,11 @@ function TaskViewer() {
                 value={formik.values.title}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                errorMessage={formik.touched.title && formik.errors.title ? formik.errors.title : undefined}
+                errorMessage={
+                  formik.touched.title && formik.errors.title
+                    ? formik.errors.title
+                    : undefined
+                }
               />
             ) : (
               <h1 className="text-2xl font-semibold text-slate-800 dark:text-gray-200">
@@ -250,8 +291,14 @@ function TaskViewer() {
                   options={categoryOptions}
                   value={formik.values.category}
                   getLabel={(option) => option?.name || "Select category"}
-                  onChange={(_, selected) => formik.setFieldValue("category", selected)}
-                  errorMessage={formik.touched.category && formik.errors.category ? formik.errors.category : undefined}
+                  onChange={(_, selected) =>
+                    formik.setFieldValue("category", selected)
+                  }
+                  errorMessage={
+                    formik.touched.category && formik.errors.category
+                      ? formik.errors.category
+                      : undefined
+                  }
                 />
               ) : (
                 <>
@@ -263,7 +310,9 @@ function TaskViewer() {
                       <>
                         <div
                           className="w-3 h-3 rounded-full"
-                          style={{ backgroundColor: category.categoryColorCode }}
+                          style={{
+                            backgroundColor: category.categoryColorCode,
+                          }}
                         />
                         <span className="text-slate-600 dark:text-gray-400">
                           {category.name}
@@ -284,7 +333,9 @@ function TaskViewer() {
                   options={priorityOptions}
                   value={formik.values.priority}
                   getLabel={(option) => option?.label || "Select priority"}
-                  onChange={(_, selected) => formik.setFieldValue("priority", selected)}
+                  onChange={(_, selected) =>
+                    formik.setFieldValue("priority", selected)
+                  }
                 />
               ) : (
                 <>
@@ -294,7 +345,10 @@ function TaskViewer() {
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: priorityColorMap[task.priority as Priority] }}
+                      style={{
+                        backgroundColor:
+                          priorityColorMap[task.priority as Priority],
+                      }}
                     />
                     <span className="text-slate-600 dark:text-gray-400 capitalize">
                       {task.priority}
@@ -331,7 +385,9 @@ function TaskViewer() {
                     Due Date
                   </label>
                   <span className="text-slate-600 dark:text-gray-400">
-                    {task.dueDate ? getUserFriendlyDate(task.dueDate) : "No due date set"}
+                    {task.dueDate
+                      ? getUserFriendlyDate(task.dueDate)
+                      : "No due date set"}
                   </span>
                 </>
               )}
@@ -343,7 +399,9 @@ function TaskViewer() {
                 Status
               </label>
               <div className="flex items-center gap-2">
-                <Badge className={statusBadgeClasses[task.status as TaskStatus]}>
+                <Badge
+                  className={statusBadgeClasses[task.status as TaskStatus]}
+                >
                   {TaskStatusLabel[task.status as TaskStatus]}
                 </Badge>
               </div>
@@ -359,7 +417,11 @@ function TaskViewer() {
               {statusOptions.map(({ label, value }) => (
                 <Button
                   key={value}
-                  type={task.status === value ? ButtonType.solid : ButtonType.outline}
+                  type={
+                    task.status === value
+                      ? ButtonType.solid
+                      : ButtonType.outline
+                  }
                   onClick={() => handleTaskStatusUpdate(value)}
                   disabled={task.status === value}
                   className="text-sm"
@@ -374,11 +436,13 @@ function TaskViewer() {
           <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-500 dark:text-gray-400">
               <div>
-                <span className="font-medium">Created:</span> {getUserFriendlyDate(task.createdOn)}
+                <span className="font-medium">Created:</span>{" "}
+                {getUserFriendlyDate(task.createdOn)}
               </div>
               {task.updatedOn && (
                 <div>
-                  <span className="font-medium">Last Updated:</span> {getUserFriendlyDate(task.updatedOn)}
+                  <span className="font-medium">Last Updated:</span>{" "}
+                  {getUserFriendlyDate(task.updatedOn)}
                 </div>
               )}
             </div>
