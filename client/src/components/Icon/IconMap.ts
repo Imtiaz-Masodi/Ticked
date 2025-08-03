@@ -33,11 +33,6 @@ import LightModeComponent from "../../assets/svg/light_mode.svg";
 import DarkModeComponent from "../../assets/svg/dark_mode.svg";
 import DocumentComponent from "../../assets/svg/document.svg";
 
-export async function importIcon(path: string) {
-  const module = await import(path);
-  return module;
-}
-
 export enum Icons {
   hidden = "hidden",
   visible = "visible",
