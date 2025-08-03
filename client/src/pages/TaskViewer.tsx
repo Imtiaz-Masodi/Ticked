@@ -375,10 +375,10 @@ function TaskViewer() {
               )}
             </div>
 
-            {/* Due Date */}
-            <div>
+            {/* Due Date - Spans both columns when in edit mode */}
+            <div className={isEditMode ? "col-span-2" : ""}>
               {isEditMode ? (
-                <div className="space-y-2">
+                <div className="grid grid-cols-2 gap-4">
                   <Input
                     label="Due Date"
                     type="date"
@@ -410,19 +410,21 @@ function TaskViewer() {
               )}
             </div>
 
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                Status
-              </label>
-              <div className="flex items-center gap-2">
-                <Badge
-                  className={statusBadgeClasses[task.status as TaskStatus]}
-                >
-                  {TaskStatusLabel[task.status as TaskStatus]}
-                </Badge>
+            {/* Status - Only show when not in edit mode */}
+            {!isEditMode && (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                  Status
+                </label>
+                <div className="flex items-center gap-2">
+                  <Badge
+                    className={statusBadgeClasses[task.status as TaskStatus]}
+                  >
+                    {TaskStatusLabel[task.status as TaskStatus]}
+                  </Badge>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Status Update Actions */}
