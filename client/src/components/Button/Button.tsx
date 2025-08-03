@@ -19,7 +19,7 @@ type ButtonProps = {
 };
 
 const sizeStyles = Object.freeze({
-  [Size.sm]: "px-2 py-1 rounded-sm text-sm",
+  [Size.sm]: "px-4 py-2 rounded-sm text-sm",
   [Size.md]: "px-8 py-2 rounded-md text-base",
   [Size.lg]: "px-16 py-3 rounded-md text-lg",
 });
