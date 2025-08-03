@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
@@ -61,6 +61,45 @@ function TaskViewer() {
   // Category options
   const categoryOptions = categories;
 
+  // Memoized initial form values based on task data
+  const initialFormValues = useMemo(() => {
+    if (!task) {
+      return {
+        title: "",
+        description: "",
+        priority: { label: "Medium", value: Priority.medium },
+        category: undefined,
+        dueDate: "",
+        dueTime: "",
+      };
+    }
+
+    const selectedCategory = categories.find(
+      (cat) => cat._id === task.categoryId
+    );
+    const selectedPriority = priorityOptions.find(
+      (opt) => opt.value === task.priority
+    );
+
+    // Parse due date
+    let dueDate = "";
+    let dueTime = "";
+    if (task.dueDate) {
+      const date = new Date(task.dueDate);
+      dueDate = date.toISOString().split("T")[0];
+      dueTime = date.toTimeString().slice(0, 5);
+    }
+
+    return {
+      title: task.title,
+      description: task.description || "",
+      priority: selectedPriority || priorityOptions[1],
+      category: selectedCategory || undefined,
+      dueDate,
+      dueTime,
+    };
+  }, [task, categories]);
+
   const handleTaskStatusUpdate = async (newStatus: TaskStatus) => {
     if (!task) return;
 
@@ -111,48 +150,11 @@ function TaskViewer() {
   };
 
   const formik = useFormik<TaskFormValues>({
-    initialValues: {
-      title: "",
-      description: "",
-      priority: { label: "Medium", value: Priority.medium },
-      category: undefined,
-      dueDate: "",
-      dueTime: "",
-    },
+    initialValues: initialFormValues,
+    enableReinitialize: true,
     onSubmit: handleFormSubmit,
     validate: validateTaskForm,
   });
-
-  // Update form values when task data changes
-  useEffect(() => {
-    if (task) {
-      const selectedCategory = categories.find(
-        (cat) => cat._id === task.categoryId
-      );
-      const selectedPriority = priorityOptions.find(
-        (opt) => opt.value === task.priority
-      );
-
-      // Parse due date
-      let dueDate = "";
-      let dueTime = "";
-      if (task.dueDate) {
-        const date = new Date(task.dueDate);
-        dueDate = date.toISOString().split("T")[0];
-        dueTime = date.toTimeString().slice(0, 5);
-      }
-
-      formik.setValues({
-        title: task.title,
-        description: task.description || "",
-        priority: selectedPriority || priorityOptions[1],
-        category: selectedCategory || undefined,
-        dueDate,
-        dueTime,
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [task, categories]);
 
   if (isLoadingTask) {
     return (
