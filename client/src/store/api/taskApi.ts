@@ -22,6 +22,13 @@ export const taskApi = createApi({
             ]
           : [{ type: "Task", id: "LIST" }],
     }),
+    getTaskById: builder.query<ApiResponse<{ task: Task }>, string>({
+      query: (taskId) => ({
+        url: `/task/${taskId}`,
+        method: "GET",
+      }),
+      providesTags: (_result, _error, taskId) => [{ type: "Task", id: taskId }],
+    }),
     getTasksByCategory: builder.query<ApiResponse<{ tasks: Task[] }>, { categoryId: string }>({
       query: ({ categoryId }) => ({
         url: "/task/list",
@@ -78,6 +85,7 @@ export const taskApi = createApi({
 
 export const {
   useGetTasksQuery,
+  useGetTaskByIdQuery,
   useGetTasksByCategoryQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,
