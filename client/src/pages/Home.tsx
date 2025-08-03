@@ -28,7 +28,7 @@ function Home() {
   // On mobile, if viewing a task, show only the TaskViewer
   if (!isLargeScreen && isViewingTask) {
     return (
-      <Suspense fallback={<PageLoading text="Loading task..." />}>
+      <Suspense fallback={<PageLoading text="Loading task details..." />}>
         <TaskViewer />
       </Suspense>
     );
@@ -50,7 +50,7 @@ function Home() {
         {/* Task Viewer - only shown on large screens */}
         {isLargeScreen && isViewingTask && (
           <div className="flex-1">
-            <Suspense fallback={<PageLoading text="Loading task..." />}>
+            <Suspense fallback={<PageLoading text="Loading task details..." />}>
               <TaskViewer isInline={true} key={taskId} />
             </Suspense>
           </div>
