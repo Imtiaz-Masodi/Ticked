@@ -7,6 +7,7 @@ const {
 } = require("../middlewares/validateTaskRequest");
 const {
   fetchTasksForUser,
+  fetchTaskById,
   createTask,
   updateTask,
   updateTaskStatus,
@@ -16,6 +17,7 @@ const router = express.Router();
 
 router.use(authentication);
 router.get("/list", validateTaskQueryParams, fetchTasksForUser);
+router.get("/:taskId", validateTaskId(), fetchTaskById);
 router.post("/create", validateTaskSchema, createTask);
 router.put("/update/:taskId", validateTaskId(), validateTaskSchema, updateTask);
 router.put("/update-status/:taskId", validateTaskId(), updateTaskStatus);

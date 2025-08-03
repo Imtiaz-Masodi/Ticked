@@ -18,6 +18,31 @@ async function fetchTasksForUser(req, res) {
   }
 }
 
+async function fetchTaskById(req, res) {
+  try {
+    const { user } = req.stash;
+    const { taskId } = req.params;
+
+    if (!isValidObjectId(taskId)) {
+      res.status(400).send(new ApiResponse(false, constants.INVALID_TASK_ID));
+      return;
+    }
+
+    const task = await Task.findOne({ _id: taskId, userId: user.id }).select(
+      "title description status createdOn updatedOn priority dueDate categoryId userId deleted"
+    );
+
+    if (!task) {
+      res.status(404).send(new ApiResponse(false, constants.INVALID_TASK_ID));
+      return;
+    }
+
+    res.send(new ApiResponse(true, "", { task }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
 async function createTask(req, res) {
   try {
     let { title, description, dueDate, priority, categoryId } = req.body;
@@ -148,6 +173,7 @@ const updateDeleteStatusTo = (deleteStatus) => async (req, res) => {
 
 module.exports = {
   fetchTasksForUser,
+  fetchTaskById,
   createTask,
   updateTaskStatus,
   updateTask,
