@@ -8,7 +8,7 @@ function Backlog() {
   if (!isUserLoggedIn) return null;
 
   return (
-    <div className="mx-2 mt-2">
+    <div className="mx-0 md:mx-2 mt-2">
       <TasksList
         title="Backlog Tasks"
         status={TaskStatus.backlog}
