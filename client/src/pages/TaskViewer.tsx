@@ -20,7 +20,7 @@ import {
   statusOptions,
   statusBadgeClasses,
 } from "../utils/options";
-import { getUserFriendlyDate } from "../helpers/dateHelper";
+import { getUserFriendlyDateTime } from "../helpers/dateHelper";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { TaskFormValues } from "../sections/TaskForm";
 import { Button } from "../components/Button";
@@ -386,7 +386,7 @@ function TaskViewer() {
                   </label>
                   <span className="text-slate-600 dark:text-gray-400">
                     {task.dueDate
-                      ? getUserFriendlyDate(task.dueDate)
+                      ? getUserFriendlyDateTime(task.dueDate)
                       : "No due date set"}
                   </span>
                 </>
@@ -435,15 +435,14 @@ function TaskViewer() {
           {/* Task Metadata */}
           <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
-              {/* ToDo: Render date and time */}
               <div>
                 <span className="font-medium">Created:</span>{" "}
-                {getUserFriendlyDate(task.createdOn)}
+                {getUserFriendlyDateTime(task.createdOn)}
               </div>
               {task.updatedOn && (
                 <div>
                   <span className="font-medium">Last Updated:</span>{" "}
-                  {getUserFriendlyDate(task.updatedOn)}
+                  {getUserFriendlyDateTime(task.updatedOn)}
                 </div>
               )}
             </div>

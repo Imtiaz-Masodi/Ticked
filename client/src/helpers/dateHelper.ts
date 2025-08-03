@@ -23,3 +23,19 @@ export function getUserFriendlyDate(dateString?: string): string {
   };
   return date.toLocaleDateString("en-IN", options);
 }
+
+export function getUserFriendlyDateTime(dateString?: string): string {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  const formattedDate = getUserFriendlyDate(dateString);
+  const formattedTime = date.toLocaleTimeString("en-IN", timeOptions);
+
+  return `${formattedDate} ${formattedTime}`;
+}
