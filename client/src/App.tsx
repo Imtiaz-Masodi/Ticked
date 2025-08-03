@@ -1,20 +1,21 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import CreateTask from "./pages/CreateTask";
 import { RootContainer } from "./sections/RootContainer";
-import NotFound from "./pages/NotFound";
 import { ToastContainer } from "./components/Toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
+import { PageLoading } from "./components/Loader";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
+const CreateTask = lazy(() => import("./pages/CreateTask"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Backlog = lazy(() => import("./pages/Backlog"));
 const Completed = lazy(() => import("./pages/Completed"));
 const Settings = lazy(() => import("./pages/Settings"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
             <Route
               path="/login"
               element={
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<PageLoading text="Loading Login Page..." />}>
                   <Login />
                 </Suspense>
               }
@@ -35,14 +36,22 @@ function App() {
             <Route
               path="/register"
               element={
-                <Suspense fallback={<div>Loading...</div>}>
+                <Suspense fallback={<PageLoading text="Loading Signup Page..." />}>
                   <Register />
                 </Suspense>
               }
             />
 
             <Route element={<RootContainer />}>
-              <Route path="/" index element={<Home />} />
+              <Route
+                path="/"
+                index
+                element={
+                  <Suspense fallback={<PageLoading text="Loading home page..." />}>
+                    <Home />
+                  </Suspense>
+                }
+              />
 
               {/* Task viewing routes - same Home component for responsive behavior */}
               <Route path="/task/:taskId" element={<Home />} />
@@ -50,7 +59,7 @@ function App() {
               <Route
                 path="/task/new"
                 element={
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<PageLoading text="Loading Tasks..." />}>
                     <CreateTask />
                   </Suspense>
                 }
@@ -59,7 +68,7 @@ function App() {
               <Route
                 path="/categories"
                 element={
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<PageLoading text="Loading Categories..." />}>
                     <Categories />
                   </Suspense>
                 }
@@ -68,7 +77,7 @@ function App() {
               <Route
                 path="/backlogs"
                 element={
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<PageLoading text="Loading Backlogs..." />}>
                     <Backlog />
                   </Suspense>
                 }
@@ -77,7 +86,7 @@ function App() {
               <Route
                 path="/completed"
                 element={
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<PageLoading text="Loading Completed Tasks..." />}>
                     <Completed />
                   </Suspense>
                 }
@@ -86,14 +95,21 @@ function App() {
               <Route
                 path="/settings"
                 element={
-                  <Suspense fallback={<div>Loading...</div>}>
+                  <Suspense fallback={<PageLoading text="Loading Settings..." />}>
                     <Settings />
                   </Suspense>
                 }
               />
             </Route>
 
-            <Route path="*" element={<NotFound />} />
+            <Route
+              path="*"
+              element={
+                <Suspense fallback={<PageLoading text="Loading..." />}>
+                  <NotFound />
+                </Suspense>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </ToastProvider>
