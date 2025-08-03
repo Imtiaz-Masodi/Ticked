@@ -2,25 +2,10 @@ import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
-import {
-  useGetTaskByIdQuery,
-  useUpdateTaskMutation,
-  useUpdateTaskStatusMutation,
-} from "../store/api/taskApi";
+import { useGetTaskByIdQuery, useUpdateTaskMutation, useUpdateTaskStatusMutation } from "../store/api/taskApi";
 import { useGetCategoriesQuery } from "../store/api/categoryApi";
-import {
-  ApiResponseStatus,
-  Priority,
-  TaskStatus,
-  TaskStatusLabel,
-  Size,
-} from "../utils/enums";
-import {
-  priorityColorMap,
-  priorityOptions,
-  statusOptions,
-  statusBadgeClasses,
-} from "../utils/options";
+import { ApiResponseStatus, Priority, TaskStatus, TaskStatusLabel, Size } from "../utils/enums";
+import { priorityColorMap, priorityOptions, statusOptions, statusBadgeClasses } from "../utils/options";
 import { getUserFriendlyDateTime } from "../helpers/dateHelper";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { TaskFormValues } from "../sections/TaskForm";
@@ -47,20 +32,13 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const toast = useApiToast();
 
   // API hooks
-  const {
-    data: taskData,
-    isLoading: isLoadingTask,
-    error: taskError,
-  } = useGetTaskByIdQuery(taskId!);
+  const { data: taskData, isLoading: isLoadingTask, error: taskError } = useGetTaskByIdQuery(taskId!);
   const { data: categoriesData } = useGetCategoriesQuery();
   const [updateTask] = useUpdateTaskMutation();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
 
   const task = taskData?.payload?.task;
-  const categories = useMemo(
-    () => categoriesData?.payload?.categories || [],
-    [categoriesData]
-  );
+  const categories = useMemo(() => categoriesData?.payload?.categories || [], [categoriesData]);
   const category = categories.find((cat) => cat._id === task?.categoryId);
 
   // Category options
@@ -95,12 +73,8 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
       };
     }
 
-    const selectedCategory = categories.find(
-      (cat) => cat._id === task.categoryId
-    );
-    const selectedPriority = priorityOptions.find(
-      (opt) => opt.value === task.priority
-    );
+    const selectedCategory = categories.find((cat) => cat._id === task.categoryId);
+    const selectedPriority = priorityOptions.find((opt) => opt.value === task.priority);
 
     // Parse due date
     let dueDate = "";
@@ -138,10 +112,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
     }
   };
 
-  const handleFormSubmit = async (
-    values: TaskFormValues,
-    { setSubmitting }: FormikHelpers<TaskFormValues>
-  ) => {
+  const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
     if (!task) return;
 
     try {
@@ -149,10 +120,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
         ...task,
         title: values.title,
         description: values.description || "",
-        dueDate:
-          values.dueDate && values.dueTime
-            ? `${values.dueDate}T${values.dueTime}:00`
-            : task.dueDate,
+        dueDate: values.dueDate && values.dueTime ? `${values.dueDate}T${values.dueTime}:00` : task.dueDate,
         priority: values.priority.value,
         categoryId: values.category!._id,
       };
@@ -186,11 +154,11 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   }
 
   if (taskError || !task) {
-    return <TaskErrorState className={isInline ? '' : 'mt-16'} />;
+    return <TaskErrorState className={isInline ? "" : "mt-16"} />;
   }
 
   return (
-    <div className={`${isInline ? 'min-h-0 pt-2 mt-8' : 'min-h-screen pt-4'} px-4`}>
+    <div className={`${isInline ? "min-h-0 pt-2 mt-8" : "min-h-screen pt-4"} px-4`}>
       <div className="max-w-3xl mx-auto">
         {/* Task Content */}
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
@@ -200,7 +168,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               {/* Back button for inline mode */}
               {isInline && (
                 <button
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate("/")}
                   className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
                   title="Go back to tasks"
                 >
@@ -265,16 +233,10 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                 value={formik.values.title}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                errorMessage={
-                  formik.touched.title && formik.errors.title
-                    ? formik.errors.title
-                    : undefined
-                }
+                errorMessage={formik.touched.title && formik.errors.title ? formik.errors.title : undefined}
               />
             ) : (
-              <h1 className="text-2xl font-semibold text-slate-800 dark:text-gray-200">
-                {task.title}
-              </h1>
+              <h1 className="text-2xl font-semibold text-slate-800 dark:text-gray-200">{task.title}</h1>
             )}
           </div>
 
@@ -308,20 +270,12 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                   options={categoryOptions}
                   value={formik.values.category}
                   getLabel={(option) => option?.name || "Select category"}
-                  onChange={(_, selected) =>
-                    formik.setFieldValue("category", selected)
-                  }
-                  errorMessage={
-                    formik.touched.category && formik.errors.category
-                      ? formik.errors.category
-                      : undefined
-                  }
+                  onChange={(_, selected) => formik.setFieldValue("category", selected)}
+                  errorMessage={formik.touched.category && formik.errors.category ? formik.errors.category : undefined}
                 />
               ) : (
                 <>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                    Category
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Category</label>
                   <div className="flex items-center gap-2">
                     {category && (
                       <>
@@ -331,9 +285,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                             backgroundColor: category.categoryColorCode,
                           }}
                         />
-                        <span className="text-slate-600 dark:text-gray-400">
-                          {category.name}
-                        </span>
+                        <span className="text-slate-600 dark:text-gray-400">{category.name}</span>
                       </>
                     )}
                   </div>
@@ -350,26 +302,19 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                   options={priorityOptions}
                   value={formik.values.priority}
                   getLabel={(option) => option?.label || "Select priority"}
-                  onChange={(_, selected) =>
-                    formik.setFieldValue("priority", selected)
-                  }
+                  onChange={(_, selected) => formik.setFieldValue("priority", selected)}
                 />
               ) : (
                 <>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                    Priority
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Priority</label>
                   <div className="flex items-center gap-2">
                     <div
                       className="w-3 h-3 rounded-full"
                       style={{
-                        backgroundColor:
-                          priorityColorMap[task.priority as Priority],
+                        backgroundColor: priorityColorMap[task.priority as Priority],
                       }}
                     />
-                    <span className="text-slate-600 dark:text-gray-400 capitalize">
-                      {task.priority}
-                    </span>
+                    <span className="text-slate-600 dark:text-gray-400 capitalize">{task.priority}</span>
                   </div>
                 </>
               )}
@@ -398,13 +343,9 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                 </div>
               ) : (
                 <>
-                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                    Due Date
-                  </label>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Due Date</label>
                   <span className="text-slate-600 dark:text-gray-400">
-                    {task.dueDate
-                      ? getUserFriendlyDateTime(task.dueDate)
-                      : "No due date set"}
+                    {task.dueDate ? getUserFriendlyDateTime(task.dueDate) : "No due date set"}
                   </span>
                 </>
               )}
@@ -413,13 +354,9 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             {/* Status - Only show when not in edit mode */}
             {!isEditMode && (
               <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                  Status
-                </label>
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Status</label>
                 <div className="flex items-center gap-2">
-                  <Badge
-                    className={statusBadgeClasses[task.status as TaskStatus]}
-                  >
+                  <Badge className={statusBadgeClasses[task.status as TaskStatus]}>
                     {TaskStatusLabel[task.status as TaskStatus]}
                   </Badge>
                 </div>
@@ -436,11 +373,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               {statusOptions.map(({ label, value }) => (
                 <Button
                   key={value}
-                  type={
-                    task.status === value
-                      ? ButtonType.solid
-                      : ButtonType.outline
-                  }
+                  type={task.status === value ? ButtonType.solid : ButtonType.outline}
                   variant={getStatusVariant(value)}
                   size={Size.sm}
                   onClick={() => handleTaskStatusUpdate(value)}
@@ -457,13 +390,11 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
               <div>
-                <span className="font-medium">Created:</span>{" "}
-                {getUserFriendlyDateTime(task.createdOn)}
+                <span className="font-medium">Created:</span> {getUserFriendlyDateTime(task.createdOn)}
               </div>
               {task.updatedOn && (
                 <div>
-                  <span className="font-medium">Last Updated:</span>{" "}
-                  {getUserFriendlyDateTime(task.updatedOn)}
+                  <span className="font-medium">Last Updated:</span> {getUserFriendlyDateTime(task.updatedOn)}
                 </div>
               )}
             </div>
