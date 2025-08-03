@@ -218,32 +218,38 @@ function TaskViewer() {
 
             <div className="flex items-center gap-2">
               {!isEditMode && (
-                <Button
-                  type={ButtonType.outline}
+                <div
                   onClick={() => setIsEditMode(true)}
+                  className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-200 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
                 >
-                  <Icon name={Icons.edit} className="text-sm mr-1" />
-                  Edit
-                </Button>
+                  <Icon name={Icons.edit} className="w-4 h-4 text-sky-600 dark:text-sky-400" />
+                </div>
               )}
               {isEditMode && (
                 <>
-                  <Button
-                    type={ButtonType.outline}
+                  <div
                     onClick={() => {
                       setIsEditMode(false);
                       formik.resetForm();
                     }}
+                    className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
                   >
-                    Cancel
-                  </Button>
-                  <Button
-                    type={ButtonType.solid}
-                    onClick={() => formik.handleSubmit()}
-                    disabled={formik.isSubmitting}
+                    <Icon name={Icons.close} className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                  </div>
+                  <div
+                    onClick={() => !formik.isSubmitting && formik.handleSubmit()}
+                    className={`w-8 h-8 rounded-lg transition-colors cursor-pointer flex items-center justify-center ${
+                      formik.isSubmitting
+                        ? "bg-gray-300 dark:bg-gray-600 border border-gray-400 dark:border-gray-500 cursor-not-allowed"
+                        : "bg-green-100 dark:bg-green-900/50 border border-green-300 dark:border-green-600 hover:bg-green-200 dark:hover:bg-green-900/70"
+                    }`}
                   >
-                    {formik.isSubmitting ? "Saving..." : "Save"}
-                  </Button>
+                    {formik.isSubmitting ? (
+                      <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <Icon name={Icons.check} className="w-4 h-4 text-green-600 dark:text-green-400" />
+                    )}
+                  </div>
                 </>
               )}
             </div>
