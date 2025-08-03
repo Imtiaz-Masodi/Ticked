@@ -281,7 +281,7 @@ function TaskViewer() {
           </div>
 
           {/* Task Details Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="grid grid-cols-2 gap-6 mb-6">
             {/* Category */}
             <div>
               {isEditMode ? (
@@ -434,7 +434,7 @@ function TaskViewer() {
 
           {/* Task Metadata */}
           <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-500 dark:text-gray-400">
+            <div className="grid grid-cols-2 gap-4 text-sm text-slate-500 dark:text-gray-400">
               <div>
                 <span className="font-medium">Created:</span>{" "}
                 {getUserFriendlyDate(task.createdOn)}
