@@ -179,7 +179,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
 
   if (isLoadingTask) {
     return (
-      <div className={`${isInline ? 'min-h-0 pt-2' : 'min-h-screen pt-6'} flex items-center justify-center`}>
+      <div className={`h-full flex items-center justify-center`}>
         <CircularLoader />
       </div>
     );
