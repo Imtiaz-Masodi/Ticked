@@ -180,62 +180,53 @@ function TaskViewer() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 px-4">
+    <div className="min-h-screen pt-4 px-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-600 dark:text-gray-400 hover:text-slate-800 dark:hover:text-gray-200 transition-colors"
-          >
-            <Icon name={Icons.arrowBack} className="text-lg" />
-            <span>Back</span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            {!isEditMode && (
-              <Button
-                type={ButtonType.outline}
-                onClick={() => setIsEditMode(true)}
-              >
-                <Icon name={Icons.edit} className="text-sm mr-1" />
-                Edit
-              </Button>
-            )}
-            {isEditMode && (
-              <>
-                <Button
-                  type={ButtonType.outline}
-                  onClick={() => {
-                    setIsEditMode(false);
-                    formik.resetForm();
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type={ButtonType.solid}
-                  onClick={() => formik.handleSubmit()}
-                  disabled={formik.isSubmitting}
-                >
-                  {formik.isSubmitting ? "Saving..." : "Save"}
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-
         {/* Task Content */}
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
-          {/* Priority Indicator */}
-          <div className="flex items-center gap-3 mb-6">
-            <div
-              className="w-4 h-4 rounded-full"
-              style={{
-                backgroundColor: priorityColorMap[task.priority as Priority],
-              }}
-            />
-            <Badge className="capitalize">{task.priority} Priority</Badge>
+          {/* Priority Indicator and Edit Button */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div
+                className="w-4 h-4 rounded-full"
+                style={{
+                  backgroundColor: priorityColorMap[task.priority as Priority],
+                }}
+              />
+              <Badge className="capitalize">{task.priority} Priority</Badge>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {!isEditMode && (
+                <Button
+                  type={ButtonType.outline}
+                  onClick={() => setIsEditMode(true)}
+                >
+                  <Icon name={Icons.edit} className="text-sm mr-1" />
+                  Edit
+                </Button>
+              )}
+              {isEditMode && (
+                <>
+                  <Button
+                    type={ButtonType.outline}
+                    onClick={() => {
+                      setIsEditMode(false);
+                      formik.resetForm();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type={ButtonType.solid}
+                    onClick={() => formik.handleSubmit()}
+                    disabled={formik.isSubmitting}
+                  >
+                    {formik.isSubmitting ? "Saving..." : "Save"}
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
 
           {/* Title */}
