@@ -175,15 +175,16 @@ function TaskViewer() {
 
   if (isLoadingTask) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 flex items-center justify-center">
+      <div className="min-h-screen pt-6 flex items-center justify-center">
         <CircularLoader />
       </div>
     );
   }
 
   if (taskError || !task) {
+    // ToDo: Update the UI of this component
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 px-4">
+      <div className="min-h-screen pt-6 px-4">
         <div className="my-8">
           <Notification type={NotificationType.ERROR}>
             Task not found or failed to load
