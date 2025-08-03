@@ -29,6 +29,8 @@ import WarningComponent from "../../assets/svg/warning.svg";
 import RightComponent from "../../assets/svg/right.svg";
 import EditComponent from "../../assets/svg/edit.svg";
 import MenuDotsComponent from "../../assets/svg/menu_dots.svg";
+import LightModeComponent from "../../assets/svg/light_mode.svg";
+import DarkModeComponent from "../../assets/svg/dark_mode.svg";
 
 export async function importIcon(path: string) {
   const module = await import(path);
@@ -66,6 +68,8 @@ export enum Icons {
   right = "right",
   edit = "edit",
   menuDots = "menu-dots",
+  lightMode = "light-mode",
+  darkMode = "dark-mode",
 }
 
 type IconMapType = {
@@ -102,4 +106,6 @@ export const IconMap: IconMapType = {
   [Icons.right]: RightComponent,
   [Icons.edit]: EditComponent,
   [Icons.menuDots]: MenuDotsComponent,
+  [Icons.lightMode]: LightModeComponent,
+  [Icons.darkMode]: DarkModeComponent,
 };
