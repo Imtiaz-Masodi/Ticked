@@ -1,10 +1,4 @@
 module.exports = {
-  MONGO_DB_URI: "mongodb://localhost:27017/ticked",
-  MONGO_DB_NAME: "ticked",
-  MONGO_USERNAME: "",
-  MONGO_PASSWORD: "",
-
-  JWT_SECRET: "T@5K_m@N@63M3n1_@Pp",
   JWT_DEFAULT_EXPIRY: "5m",
   JWT_LOGIN_TOKEN_EXPIRY: "5d",
 
