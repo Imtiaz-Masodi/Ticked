@@ -33,8 +33,7 @@ module.exports = {
   TASK_DELETED: "Task deleted!",
   TASK_CREATED: "Task created successfully",
   INVALID_TASK_ID: "Invalid task id",
-  INVALID_STATUS_VALUE:
-    "Invalid status value. It should be todo, inprogress, completed or backlog",
+  INVALID_STATUS_VALUE: "Invalid status value. It should be todo, inprogress, completed or backlog",
   TASK_COMPLETED: "Task marked as completed",
   TASK_RESTORED: "Task restored",
   TASK_MOVED_TO_BACKLOG: "Task moved to backlog",
@@ -46,4 +45,10 @@ module.exports = {
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
 
   COLOR_HEX_CODE_PATTERN: /^#[0-9A-Fa-f]{6}$|^#[0-9A-Fa-f]{3}$/,
+
+  // Email constants
+  EMAIL_REQUIRED_FIELDS_MISSING: "Required email fields (to, subject, html) are missing",
+  EMAIL_SENT_SUCCESSFULLY: "Email sent successfully",
+  EMAIL_SENDING_FAILED: "Failed to send email",
+  DEFAULT_FROM_EMAIL: "noreply@ticked.app",
 };
