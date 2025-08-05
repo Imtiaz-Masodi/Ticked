@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const constants = require("../utils/constants");
 
 function generateToken(payload = {}, expiry = constants.JWT_DEFAULT_EXPIRY) {
-  return jwt.sign(payload, constants.JWT_SECRET, { expiresIn: expiry });
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: expiry });
 }
 
 function generateLoginToken(payload) {
@@ -12,7 +12,7 @@ function generateLoginToken(payload) {
 
 function parseToken(token = "") {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, constants.JWT_SECRET, (error, decodedToken) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
       if (error) {
         reject(error);
         return;
