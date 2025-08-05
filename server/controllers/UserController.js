@@ -3,6 +3,7 @@ const User = require("../models/User");
 const ApiResponse = require("../pojo/ApiResponse");
 const constants = require("../utils/constants");
 const { generateLoginToken } = require("../helpers/jwt");
+const { sendWelcomeEmail } = require("../helpers/emailHelper");
 
 async function createUser(req, res) {
   try {
@@ -21,10 +22,20 @@ async function createUser(req, res) {
     }
 
     await user.save();
+
+    // Send welcome email (don't block the response if email fails)
+    sendWelcomeEmail(user.email, user.name)
+      .then(() => {
+        console.log(`Welcome email sent successfully to ${user.email}.`);
+      })
+      .catch((error) => {
+        console.error("Failed to send welcome email:", error);
+      });
+
     const authToken = generateLoginToken({ id: user.id });
     res
       .status(201)
-      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo(), authToken  }));
+      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo(), authToken }));
   } catch (ex) {
     handleCommonError(res, ex);
   }
