@@ -44,5 +44,5 @@ module.exports = {
   EMAIL_REQUIRED_FIELDS_MISSING: "Required email fields (to, subject, html) are missing",
   EMAIL_SENT_SUCCESSFULLY: "Email sent successfully",
   EMAIL_SENDING_FAILED: "Failed to send email",
-  DEFAULT_FROM_EMAIL: "noreply@ticked.app",
+  DEFAULT_FROM_EMAIL: "ticked@resend.dev",
 };
