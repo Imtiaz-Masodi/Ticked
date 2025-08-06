@@ -11,7 +11,13 @@ const TaskStatus = Object.freeze({
   COMPLETED: "completed",
 });
 
+const OtpPurpose = Object.freeze({
+  REGISTRATION: "registration",
+  PASSWORD_RESET: "password_reset",
+});
+
 module.exports = {
   TaskPriority,
   TaskStatus,
+  OtpPurpose,
 };
