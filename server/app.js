@@ -16,6 +16,7 @@ const app = express();
 app.use(handleCors);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/static", express.static("public"));
 app.use(initializeRequest);
 
 app.use("/account", accountRouter);
