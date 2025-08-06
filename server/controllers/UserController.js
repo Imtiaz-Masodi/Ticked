@@ -3,16 +3,24 @@ const User = require("../models/User");
 const ApiResponse = require("../pojo/ApiResponse");
 const constants = require("../utils/constants");
 const { generateLoginToken } = require("../helpers/jwt");
-const { sendWelcomeEmail } = require("../helpers/emailHelper");
+const { sendEmailVerificationEmail } = require("../helpers/emailHelper");
+const generateOtp = require("../service/otp/generateOtp");
+const verifyOtp = require("../service/otp/verifyOtp");
+const { OtpPurpose } = require("../utils/enums");
 
 async function createUser(req, res) {
   try {
     const { name, email, password } = req.body;
-    const user = new User({ name, email, password });
+    const user = new User({ name, email, password, accountVerified: false, accountDeactivated: false });
 
     const userWithEmailExists = await User.userExistsWithEmail(email);
+    if (userWithEmailExists && !userWithEmailExists.accountVerified) {
+      res.status(400).send(new ApiResponse(false, constants.ACCOUNT_NOT_VERIFIED));
+      return;
+    }
     if (userWithEmailExists) {
       res.status(400).send(new ApiResponse(false, constants.USER_EMAIL_DUPLICATE));
+      return;
     }
 
     const { errors } = (await user.validateSync()) || {};
@@ -23,8 +31,10 @@ async function createUser(req, res) {
 
     await user.save();
 
+    const otp = await generateOtp(user.email, OtpPurpose.REGISTRATION);
+
     // Send welcome email (don't block the response if email fails)
-    sendWelcomeEmail(user.email, user.name)
+    sendEmailVerificationEmail(user.email, user.name, otp)
       .then(() => {
         console.log(`Welcome email sent successfully to ${user.email}.`);
       })
@@ -32,10 +42,7 @@ async function createUser(req, res) {
         console.error("Failed to send welcome email:", error);
       });
 
-    const authToken = generateLoginToken({ id: user.id });
-    res
-      .status(201)
-      .send(new ApiResponse(true, constants.USER_CREATED_SUCCESSFULLY, { user: user.omitSensitiveInfo(), authToken }));
+    res.status(200).send(new ApiResponse(true, "OTP Sent on email for verification"));
   } catch (ex) {
     handleCommonError(res, ex);
   }
@@ -47,6 +54,10 @@ async function validateUserCredentials(req, res) {
     const user = await User.findOne({ email });
     if (!user) {
       res.status(400).send(new ApiResponse(false, constants.INVALID_USER_CREDENTIALS));
+      return;
+    }
+    if (!user.accountVerified) {
+      res.status(400).send(new ApiResponse(false, constants.ACCOUNT_NOT_VERIFIED));
       return;
     }
 
@@ -91,9 +102,43 @@ async function updatePassword(req, res) {
   }
 }
 
+async function verifyEmail(req, res) {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).send(new ApiResponse(false, "Email and OTP are required"));
+    }
+
+    // Verify the OTP
+    await verifyOtp(email, OtpPurpose.REGISTRATION, otp);
+
+    // Update user account verification status
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send(new ApiResponse(false, "User not found"));
+    }
+
+    user.accountVerified = true;
+    await user.save();
+
+    // res.status(200).send(new ApiResponse(true, "Success"));
+    const authToken = generateLoginToken({ id: user.id });
+    res
+      .status(201)
+      .send(new ApiResponse(true, constants.ACCOUNT_VERIFIED, { user: user.omitSensitiveInfo(), authToken }));
+  } catch (ex) {
+    if (ex.message === "Invalid or expired OTP") {
+      return res.status(400).send(new ApiResponse(false, ex.message));
+    }
+    handleCommonError(res, ex);
+  }
+}
+
 module.exports = {
   createUser,
   validateUserCredentials,
   getUserDetails,
   updatePassword,
+  verifyEmail,
 };
