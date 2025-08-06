@@ -4,6 +4,9 @@ const constants = require("../utils/constants");
 // Initialize Resend with API key from environment variables
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// Application logo URL for email templates
+const LOGO_URL = `${process.env.BASE_URL || "https://ticked.onrender.com"}/static/images/logo.png`;
+
 /**
  * Send a basic email
  * @param {Object} emailData - Email configuration object
@@ -73,6 +76,7 @@ async function sendWelcomeEmail(userEmail, userName) {
     </head>
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${LOGO_URL}" alt="Ticked Logo" style="max-width: 120px; height: auto; margin-bottom: 20px;" />
             <h1 style="color: #4f46e5; margin-bottom: 10px;">Welcome to Ticked!</h1>
             <p style="font-size: 18px; color: #6b7280;">Your Task Management Journey Starts Now</p>
         </div>
@@ -149,6 +153,7 @@ async function sendPasswordResetEmail(userEmail, userName, resetToken, resetUrl)
     </head>
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${LOGO_URL}" alt="Ticked Logo" style="max-width: 120px; height: auto; margin-bottom: 20px;" />
             <h1 style="color: #dc2626; margin-bottom: 10px;">Password Reset Request</h1>
         </div>
         
@@ -201,6 +206,91 @@ async function sendPasswordResetEmail(userEmail, userName, resetToken, resetUrl)
 }
 
 /**
+ * Send email verification email
+ * @param {string} userEmail - User's email address
+ * @param {string} userName - User's name
+ * @param {string} verificationOTP - Email verification OTP
+ * @returns {Promise<Object>} Email sending result
+ */
+async function sendEmailVerificationEmail(userEmail, userName, verificationOTP) {
+  const subject = "Verify Your Email Address - Ticked";
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Verify Your Email</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${LOGO_URL}" alt="Ticked Logo" style="max-width: 120px; height: auto; margin-bottom: 20px;" />
+            <h1 style="color: #4f46e5; margin-bottom: 10px;">Verify Your Email Address</h1>
+            <p style="font-size: 18px; color: #6b7280;">Complete your Ticked account setup</p>
+        </div>
+        
+        <div style="background-color: #eff6ff; padding: 20px; border-radius: 8px; border-left: 4px solid #4f46e5; margin-bottom: 20px;">
+            <h2 style="color: #374151; margin-top: 0;">Hello ${userName}!</h2>
+            <p>Thank you for signing up with Ticked! To complete your account setup and start managing your tasks, please verify your email address using the OTP below.</p>
+            <p>This helps us ensure the security of your account and keep you updated with important information.</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0; background-color: #f9fafb; padding: 25px; border-radius: 8px;">
+            <p style="color: #374151; font-size: 16px; margin-bottom: 10px; font-weight: bold;">Your Verification Code:</p>
+            <div style="background-color: #4f46e5; color: white; padding: 15px 25px; border-radius: 6px; display: inline-block; font-size: 24px; font-weight: bold; letter-spacing: 4px; font-family: 'Courier New', monospace;">
+                ${verificationOTP}
+            </div>
+        </div>
+        
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                <strong>Note:</strong> This verification code will expire in 10 minutes for security reasons. 
+                Please enter this code in the verification form to complete your account setup.
+            </p>
+        </div>
+        
+        <div style="background-color: #fef3c7; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+            <p style="margin: 0; font-size: 14px; color: #92400e;">
+                <strong>Didn't sign up for Ticked?</strong> If you received this email by mistake, you can safely ignore it. No account will be created without email verification.
+            </p>
+        </div>
+        
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 14px;">
+            <p>Welcome to the team!<br>The Ticked Team</p>
+        </div>
+    </body>
+    </html>
+  `;
+
+  const text = `
+    Verify Your Email Address - Ticked
+    
+    Hello ${userName}!
+    
+    Thank you for signing up with Ticked! To complete your account setup and start managing your tasks, please verify your email address using the OTP below.
+    
+    Your Verification Code: ${verificationOTP}
+    
+    This helps us ensure the security of your account and keep you updated with important information.
+    
+    Note: This verification code will expire in 10 minutes for security reasons.
+    
+    Didn't sign up for Ticked? If you received this email by mistake, you can safely ignore it. No account will be created without email verification.
+    
+    Welcome to the team!
+    The Ticked Team
+  `;
+
+  return await sendEmail({
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}
+
+/**
  * Send task reminder email
  * @param {string} userEmail - User's email address
  * @param {string} userName - User's name
@@ -236,6 +326,7 @@ async function sendTaskReminderEmail(userEmail, userName, tasks) {
     </head>
     <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${LOGO_URL}" alt="Ticked Logo" style="max-width: 120px; height: auto; margin-bottom: 20px;" />
             <h1 style="color: #f59e0b; margin-bottom: 10px;">Task Reminder</h1>
         </div>
         
@@ -293,6 +384,7 @@ async function sendTaskReminderEmail(userEmail, userName, tasks) {
 module.exports = {
   sendEmail,
   sendWelcomeEmail,
+  sendEmailVerificationEmail,
   sendPasswordResetEmail,
   sendTaskReminderEmail,
 };
