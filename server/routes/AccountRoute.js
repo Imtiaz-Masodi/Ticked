@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post("/signup", validateUserSchema, userController.createUser);
 router.post("/signin", validateUserSchemaForSignIn, userController.validateUserCredentials);
+router.post("/verify", userController.verifyEmail);
 
 // Below are secured routes
 router.use(authentication);
