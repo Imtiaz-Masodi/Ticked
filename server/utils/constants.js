@@ -13,6 +13,8 @@ module.exports = {
   USER_EMAIL_DUPLICATE: "User with specified email already exists",
   USER_CREATED_SUCCESSFULLY: "User created successfully!",
   INVALID_USER_CREDENTIALS: "Invalid email or password",
+  ACCOUNT_VERIFIED: "Account verification success",
+  ACCOUNT_NOT_VERIFIED: "Account not verified.",
   VALID_USER_CREDENTIALS: "Sign Success!",
   WRONG_PASSWORD: "Wrong password",
   PASSWORD_UPDATED: "Password updated successfully!",
