@@ -36,10 +36,10 @@ async function createUser(req, res) {
     // Send welcome email (don't block the response if email fails)
     sendEmailVerificationEmail(user.email, user.name, otp)
       .then(() => {
-        console.log(`Welcome email sent successfully to ${user.email}.`);
+        console.log(`Email verification OTP sent to ${user.email}.`);
       })
       .catch((error) => {
-        console.error("Failed to send welcome email:", error);
+        console.error("Failed to send email verification OTP:", error);
       });
 
     res.status(200).send(new ApiResponse(true, "OTP Sent on email for verification"));
