@@ -36,7 +36,7 @@ function RootContainer() {
   }, [navigate]);
 
   return (
-    <div id="root-container" className="min-h-screen bg-zinc-50 dark:bg-gray-900">
+    <div id="root-container" className="min-h-dvh bg-zinc-50 dark:bg-gray-900">
       <Header onMenuIconClick={handleToggleDrawer} />
       <NavigationDrawer
         isOpen={isDrawerOpen}
