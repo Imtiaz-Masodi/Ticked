@@ -18,8 +18,11 @@ export function VerificationForm(props: VerificationFormProps) {
     resendCountdown = 0,
   } = props;
 
-  const handleOTPChange = (otp: string) => {
+  const handleOTPChange = (otp: string, otpPasted: boolean = false) => {
     setFieldValue("otp", otp);
+    if (otpPasted) {
+      setTimeout(handleSubmit, 250);
+    }
   };
 
   return (

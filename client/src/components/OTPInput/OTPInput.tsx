@@ -3,7 +3,7 @@ import { useRef, useEffect, KeyboardEvent, ChangeEvent } from "react";
 interface OTPInputProps {
   length: number;
   value: string;
-  onChange: (otp: string) => void;
+  onChange: (otp: string, otpPasted?: boolean) => void;
   disabled?: boolean;
   errorMessage?: string;
   className?: string;
@@ -77,7 +77,7 @@ export const OTPInput = ({
       .getData("text/plain")
       .replace(/[^0-9]/g, "")
       .slice(0, length);
-    onChange(pastedData);
+    onChange(pastedData, true);
 
     // Focus the next empty input or the last one
     const nextEmptyIndex = Math.min(pastedData.length, length - 1);
