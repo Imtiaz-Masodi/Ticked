@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FormikHelpers, useFormik } from "formik";
 import { AppLogo } from "../components/AppLogo";
 import { Notification, NotificationType } from "../components/Notification";
-import { Size } from "../utils/enums";
+import { OtpPurpose, Size } from "../utils/enums";
 import { DarkModeToggle } from "../components/DarkModeToggle";
 import { VerificationForm, VerificationFormValues, validateVerificationForm } from "../sections/VerificationForm";
 import { authService } from "../api/authService";
@@ -16,7 +16,12 @@ function VerifyEmail() {
   const [resendCountdown, setResendCountdown] = useState(0);
   const [resendDisabled, setResendDisabled] = useState(false);
 
-  const email = searchParams.get("email") || "";
+  const { email, generateOtp } = useMemo(() => {
+    return {
+      email: searchParams.get("email") || "",
+      generateOtp: searchParams.get("generate") === "1" || false,
+    };
+  }, [searchParams]);
 
   // Redirect if no email is provided
   useEffect(() => {
@@ -65,7 +70,7 @@ function VerifyEmail() {
     }
   };
 
-  const handleResendOTP = async () => {
+  const handleResendOTP = useCallback(async () => {
     setErrorMessage(null);
     setSuccessMessage(null);
     setResendDisabled(true);
@@ -73,11 +78,9 @@ function VerifyEmail() {
 
     try {
       // Call your resend OTP API here
-      const response = await authService.resendOTP({ email });
+      const response = await authService.resendOTP({ email, purpose: OtpPurpose.REGISTRATION });
 
-      if (response.success) {
-        setSuccessMessage("Verification code has been resent to your email.");
-      } else {
+      if (!response.success) {
         setErrorMessage(response.message || "Failed to resend verification code.");
         setResendDisabled(false);
         setResendCountdown(0);
@@ -88,7 +91,17 @@ function VerifyEmail() {
       setResendDisabled(false);
       setResendCountdown(0);
     }
-  };
+  }, [email]);
+
+  useEffect(() => {
+    if (generateOtp) {
+      handleResendOTP();
+      // Remove generate=1 parameter from URL without reloading the page
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("generate");
+      window.history.replaceState({ path: newUrl.href }, "", newUrl.href);
+    }
+  }, [generateOtp, handleResendOTP]);
 
   const formik = useFormik({
     initialValues: { otp: "" },
