@@ -8,14 +8,9 @@ import { ServiceReturnType } from "../types/ServiceReturnType";
 import { ApiResponseStatus } from "../utils/enums";
 import { axiosInstance } from "./apiClient";
 
-async function login(
-  requestPayload: LoginFormValues
-): Promise<ServiceReturnType> {
+async function login(requestPayload: LoginFormValues): Promise<ServiceReturnType> {
   try {
-    const response = await axiosInstance.post<ApiResponse<LoginResponseType>>(
-      "/account/signin",
-      requestPayload
-    );
+    const response = await axiosInstance.post<ApiResponse<LoginResponseType>>("/account/signin", requestPayload);
     const { status, message, payload } = response.data;
     if (status === ApiResponseStatus.success && payload?.authToken) {
       authHelper.saveUserToken(payload.authToken);
@@ -35,9 +30,7 @@ async function register(
   requestPayload: Omit<RegistrationFormValues, "retypePassword">
 ): Promise<ServiceReturnType<RegistrationResponseType>> {
   try {
-    const response = await axiosInstance.post<
-      ApiResponse<RegistrationResponseType>
-    >("/account/signup", requestPayload);
+    const response = await axiosInstance.post<ApiResponse<RegistrationResponseType>>("/account/signup", requestPayload);
     const { status, message, payload } = response.data;
     if (status === ApiResponseStatus.success && payload?.user) {
       authHelper.saveUserToken(payload.authToken);
@@ -53,7 +46,43 @@ async function register(
   }
 }
 
+async function verifyEmail(requestPayload: { email: string; otp: string }): Promise<ServiceReturnType> {
+  try {
+    const response = await axiosInstance.post<ApiResponse<null>>("/account/verify-email", requestPayload);
+    const { status, message } = response.data;
+    if (status === ApiResponseStatus.success) {
+      return { success: true, message };
+    } else {
+      return { success: false, message };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message,
+    };
+  }
+}
+
+async function resendOTP(requestPayload: { email: string }): Promise<ServiceReturnType> {
+  try {
+    const response = await axiosInstance.post<ApiResponse<null>>("/account/resend-otp", requestPayload);
+    const { status, message } = response.data;
+    if (status === ApiResponseStatus.success) {
+      return { success: true, message };
+    } else {
+      return { success: false, message };
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: (error as Error).message,
+    };
+  }
+}
+
 export const authService = {
   login,
   register,
+  verifyEmail,
+  resendOTP,
 };
