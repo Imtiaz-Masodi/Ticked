@@ -1,6 +1,6 @@
 import { User } from "./User";
 
-export type RegistrationResponseType = {
+export type AccountVerificationResponseType = {
   user: User;
   authToken: string;
 };
