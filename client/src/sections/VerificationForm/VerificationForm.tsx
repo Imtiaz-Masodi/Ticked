@@ -16,6 +16,7 @@ export function VerificationForm(props: VerificationFormProps) {
     onResendOTP,
     resendDisabled = false,
     resendCountdown = 0,
+    disableForm = false,
   } = props;
 
   const handleOTPChange = (otp: string, otpPasted: boolean = false) => {
@@ -37,7 +38,7 @@ export function VerificationForm(props: VerificationFormProps) {
           length={6}
           value={values.otp}
           onChange={handleOTPChange}
-          disabled={isSubmitting}
+          disabled={isSubmitting || disableForm}
           errorMessage={touched.otp ? errors.otp : undefined}
           className="mb-4"
         />
@@ -47,7 +48,7 @@ export function VerificationForm(props: VerificationFormProps) {
         type={ButtonType.solid}
         size={Size.lg}
         onClick={handleSubmit}
-        disabled={isSubmitting}
+        disabled={isSubmitting || disableForm}
         className="w-full mb-2"
       >
         {isSubmitting ? "Verifying..." : "Verify Email"}
@@ -62,7 +63,7 @@ export function VerificationForm(props: VerificationFormProps) {
             type={ButtonType.link}
             size={Size.sm}
             onClick={onResendOTP || (() => {})}
-            disabled={resendDisabled || isSubmitting || !onResendOTP}
+            disabled={resendDisabled || isSubmitting || disableForm || !onResendOTP}
             className="ps-1 pe-1"
           >
             Resend Code

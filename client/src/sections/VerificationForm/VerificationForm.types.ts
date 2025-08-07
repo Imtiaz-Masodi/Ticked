@@ -13,4 +13,5 @@ export interface VerificationFormProps {
   onResendOTP?: () => void;
   resendDisabled?: boolean;
   resendCountdown?: number;
+  disableForm?: boolean;
 }
