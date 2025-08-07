@@ -1,9 +1,9 @@
 import { authHelper } from "../helpers/authHelper";
 import { LoginFormValues } from "../sections/LoginForm";
 import { RegistrationFormValues } from "../sections/RegistrationForm";
+import { AccountVerificationResponseType } from "../types/AccountVerificationResponseType";
 import { ApiResponse } from "../types/ApiResponse";
 import { LoginResponseType } from "../types/LoginResponseType";
-import { RegistrationResponseType } from "../types/RegistrationResponseType";
 import { ServiceReturnType } from "../types/ServiceReturnType";
 import { ApiResponseStatus } from "../utils/enums";
 import { axiosInstance } from "./apiClient";
@@ -28,9 +28,9 @@ async function login(requestPayload: LoginFormValues): Promise<ServiceReturnType
 
 async function register(
   requestPayload: Omit<RegistrationFormValues, "retypePassword">
-): Promise<ServiceReturnType<RegistrationResponseType>> {
+): Promise<ServiceReturnType<undefined>> {
   try {
-    const response = await axiosInstance.post<ApiResponse<RegistrationResponseType>>("/account/signup", requestPayload);
+    const response = await axiosInstance.post<ApiResponse<undefined>>("/account/signup", requestPayload);
     const { status, message, payload } = response.data;
     if (status === ApiResponseStatus.success) {
       return { success: true, message, payload };
@@ -48,9 +48,13 @@ async function register(
 async function verifyEmail({ email, otp }: { email: string; otp: string }): Promise<ServiceReturnType> {
   try {
     const requestPayload = { email, otp };
-    const response = await axiosInstance.post<ApiResponse<null>>("/account/verify", requestPayload);
-    const { status, message } = response.data;
+    const response = await axiosInstance.post<ApiResponse<AccountVerificationResponseType>>(
+      "/account/verify",
+      requestPayload
+    );
+    const { status, message, payload } = response.data;
     if (status === ApiResponseStatus.success) {
+      if (payload?.authToken) authHelper.saveUserToken(payload.authToken);
       return { success: true, message };
     } else {
       return { success: false, message };

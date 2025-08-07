@@ -50,9 +50,9 @@ function VerifyEmail() {
       const response = await authService.verifyEmail({ email, otp: values.otp });
 
       if (response.success) {
-        setSuccessMessage("Email verified successfully! Redirecting to login...");
+        setSuccessMessage("Email verified successfully!");
         setTimeout(() => {
-          navigate("/login");
+          navigate("/");
         }, 2000);
       } else {
         setErrorMessage(response.message || "Verification failed. Please try again.");
