@@ -57,7 +57,7 @@ export function VerificationForm(props: VerificationFormProps) {
       <div className="flex justify-center items-center text-sm">
         <span className="text-gray-600 dark:text-gray-400 text-sm">Didn't receive the code?</span>
         {resendCountdown > 0 ? (
-          <p className="text-gray-500 dark:text-gray-500 text-sm">Resend code in {resendCountdown}s</p>
+          <p className="text-gray-500 dark:text-gray-500 text-sm ml-2">Resend code in {resendCountdown}s</p>
         ) : (
           <Button
             type={ButtonType.link}
