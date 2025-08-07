@@ -50,7 +50,7 @@ function VerifyEmail() {
       const response = await authService.verifyEmail({ email, otp: values.otp });
 
       if (response.success) {
-        setSuccessMessage("Email verified successfully!");
+        setSuccessMessage("Email verified successfully! Redirecting to home page...");
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -132,6 +132,7 @@ function VerifyEmail() {
           onResendOTP={handleResendOTP}
           resendDisabled={resendDisabled}
           resendCountdown={resendCountdown}
+          disableForm={!!successMessage}
         />
       </div>
 
