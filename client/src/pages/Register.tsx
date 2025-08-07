@@ -27,8 +27,8 @@ function Register() {
     try {
       const response = await authService.register(values);
       if (response.success) {
-        // ToDo: Save user info to redux store
-        navigate("/");
+        // Redirect to email verification page with the email as a query parameter
+        navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
       } else {
         setErrorMessage(response.message || ERROR_REGISTRATION_FAILED);
       }
@@ -51,7 +51,9 @@ function Register() {
       <div className="p-8 max-w-sm flex flex-col gap-2 mx-auto">
         <div className="my-4">
           <AppLogo size={Size.lg} className="mb-8" />
-          <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70 select-none">Don't have an account?</div>
+          <div className="text-center text-2xl sm:text-3xl text-black/70 dark:text-white/70 select-none">
+            Don't have an account?
+          </div>
           <div className="text-center text-sm text-zinc-400 dark:text-gray-500 font-light select-none">
             Create your account. It's free and only takes a minute.
           </div>
@@ -74,7 +76,7 @@ function Register() {
           </Button>
         </div>
       </div>
-      
+
       {/* Fixed dark mode toggle at bottom right */}
       <div className="fixed bottom-6 right-6 z-50">
         <DarkModeToggle withBackground={true} />

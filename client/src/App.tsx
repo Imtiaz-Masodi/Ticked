@@ -11,6 +11,7 @@ const Home = lazy(() => import("./pages/Home"));
 const CreateTask = lazy(() => import("./pages/CreateTask"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const Categories = lazy(() => import("./pages/Categories"));
 const Backlog = lazy(() => import("./pages/Backlog"));
 const Completed = lazy(() => import("./pages/Completed"));
@@ -38,6 +39,15 @@ function App() {
               element={
                 <Suspense fallback={<PageLoading text="Loading Signup Page..." />}>
                   <Register />
+                </Suspense>
+              }
+            />
+
+            <Route
+              path="/verify-email"
+              element={
+                <Suspense fallback={<PageLoading text="Loading Verification Page..." />}>
+                  <VerifyEmail />
                 </Suspense>
               }
             />
