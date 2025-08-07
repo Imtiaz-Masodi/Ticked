@@ -8,6 +8,7 @@ const PORT = process.env.PORT;
 const accountRouter = require("./routes/AccountRoute");
 const categoryRouter = require("./routes/CategoryRoute");
 const taskRouter = require("./routes/TaskRoute");
+const otpRouter = require("./routes/OtpRoute");
 const { initializeRequest } = require("./middlewares/initializeRequest");
 
 const SERVER_PORT = PORT || 3001;
@@ -22,6 +23,7 @@ app.use(initializeRequest);
 app.use("/account", accountRouter);
 app.use("/category", categoryRouter);
 app.use("/task", taskRouter);
+app.use("/otp", otpRouter);
 
 app.get("/", (req, res) => {
   res.send("Ticked - Task Management App API server is up and running!");

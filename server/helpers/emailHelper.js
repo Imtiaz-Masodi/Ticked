@@ -381,10 +381,96 @@ async function sendTaskReminderEmail(userEmail, userName, tasks) {
   });
 }
 
+/**
+ * Send password reset OTP email
+ * @param {string} userEmail - User's email address
+ * @param {string} userName - User's name
+ * @param {string} resetOTP - Password reset OTP
+ * @returns {Promise<Object>} Email sending result
+ */
+async function sendPasswordResetOTPEmail(userEmail, userName, resetOTP) {
+  const subject = "Reset Your Ticked Password - Verification Code";
+
+  const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Password Reset - Verification Code</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <img src="${LOGO_URL}" alt="Ticked Logo" style="max-width: 120px; height: auto; margin-bottom: 20px;" />
+            <h1 style="color: #dc2626; margin-bottom: 10px;">Password Reset Request</h1>
+            <p style="font-size: 18px; color: #6b7280;">Verify your identity to reset your password</p>
+        </div>
+        
+        <div style="background-color: #fef2f2; padding: 20px; border-radius: 8px; border-left: 4px solid #dc2626; margin-bottom: 20px;">
+            <h2 style="color: #374151; margin-top: 0;">Hello ${userName},</h2>
+            <p>We received a request to reset your password for your Ticked account. Please use the verification code below to proceed with resetting your password.</p>
+            <p>If you didn't make this request, you can safely ignore this email and your password will remain unchanged.</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0; background-color: #f9fafb; padding: 25px; border-radius: 8px;">
+            <p style="color: #374151; font-size: 16px; margin-bottom: 10px; font-weight: bold;">Your Password Reset Code:</p>
+            <div style="background-color: #dc2626; color: white; padding: 15px 25px; border-radius: 6px; display: inline-block; font-size: 24px; font-weight: bold; letter-spacing: 4px; font-family: 'Courier New', monospace;">
+                ${resetOTP}
+            </div>
+        </div>
+        
+        <div style="background-color: #f9fafb; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <p style="margin: 0; font-size: 14px; color: #6b7280;">
+                <strong>Note:</strong> This verification code will expire in 5 minutes for security reasons. 
+                Please enter this code in the password reset form to continue.
+            </p>
+        </div>
+        
+        <div style="background-color: #fef3c7; padding: 15px; border-radius: 6px; margin: 20px 0; border-left: 4px solid #f59e0b;">
+            <p style="margin: 0; font-size: 14px; color: #92400e;">
+                <strong>Security Reminder:</strong> If you didn't request this password reset, please secure your account immediately by changing your password or contacting support.
+            </p>
+        </div>
+        
+        <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; text-align: center; color: #9ca3af; font-size: 14px;">
+            <p>Stay secure!<br>The Ticked Team</p>
+        </div>
+    </body>
+    </html>
+  `;
+
+  const text = `
+    Password Reset Request - Ticked
+    
+    Hello ${userName},
+    
+    We received a request to reset your password for your Ticked account. Please use the verification code below to proceed with resetting your password.
+    
+    Your Password Reset Code: ${resetOTP}
+    
+    If you didn't make this request, you can safely ignore this email and your password will remain unchanged.
+    
+    Note: This verification code will expire in 5 minutes for security reasons.
+    
+    Security Reminder: If you didn't request this password reset, please secure your account immediately by changing your password or contacting support.
+    
+    Stay secure!
+    The Ticked Team
+  `;
+
+  return await sendEmail({
+    to: userEmail,
+    subject,
+    html,
+    text,
+  });
+}
+
 module.exports = {
   sendEmail,
   sendWelcomeEmail,
   sendEmailVerificationEmail,
   sendPasswordResetEmail,
+  sendPasswordResetOTPEmail,
   sendTaskReminderEmail,
 };
