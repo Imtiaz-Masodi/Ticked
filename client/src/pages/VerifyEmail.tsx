@@ -101,7 +101,7 @@ function VerifyEmail() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 relative pt-16">
+    <div className="min-h-dvh bg-white dark:bg-gray-900 relative pt-16">
       <div className="p-8 max-w-sm flex flex-col gap-2 mx-auto">
         <div className="my-0">
           <AppLogo size={Size.lg} className="mb-8" />
