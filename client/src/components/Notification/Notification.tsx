@@ -2,6 +2,7 @@ import { NotificationType } from "./Notification.enum";
 
 type NotificationProps = React.PropsWithChildren<{
   type?: NotificationType;
+  className?: string;
 }>;
 
 const typeStyles = Object.freeze({
@@ -12,13 +13,9 @@ const typeStyles = Object.freeze({
 });
 
 function Notification(props: NotificationProps) {
-  const { type = NotificationType.INFO, children } = props;
+  const { type = NotificationType.INFO, children, className = "" } = props;
 
-  return (
-    <div className={`px-4 py-2 rounded-sm text-sm ${typeStyles[type]}`}>
-      {children}
-    </div>
-  );
+  return <div className={`px-4 py-2 rounded-sm text-sm ${typeStyles[type]} ${className}`}>{children}</div>;
 }
 
 export default Notification;
