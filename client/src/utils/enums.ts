@@ -29,6 +29,11 @@ export enum TaskStatusLabel {
   completed = "Completed",
 }
 
+export enum OtpPurpose {
+  REGISTRATION = "registration",
+  PASSWORD_RESET = "password_reset",
+}
+
 /**
  * Common breakpoints for responsive design
  */
