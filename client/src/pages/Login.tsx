@@ -11,9 +11,11 @@ import { LoginForm, validateForm, LoginFormValues } from "../sections/LoginForm"
 import { useNavigate } from "react-router-dom";
 import { authHelper } from "../helpers/authHelper";
 import { DarkModeToggle } from "../components/DarkModeToggle";
+import { useToast } from "../hooks";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Check if user is already logged in on component mount
@@ -32,6 +34,20 @@ const Login = () => {
         navigate("/");
       } else {
         setErrorMessage(response.message || ERROR_LOGIN_FAILED);
+
+        if (response.message?.toLocaleLowerCase().includes("account not verified")) {
+          showToast("Verify your email to log in", {
+            type: NotificationType.INFO,
+            title: "Email Verification Required",
+            duration: 0,
+            action: {
+              label: "Verify Now",
+              onClick: () => {
+                navigate(`/verify-email?email=${encodeURIComponent(values.email)}&generate=1`);
+              },
+            },
+          });
+        }
       }
     } catch (error) {
       const errorMessage = (error as Error).message;
