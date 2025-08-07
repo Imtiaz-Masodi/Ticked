@@ -46,9 +46,10 @@ async function register(
   }
 }
 
-async function verifyEmail(requestPayload: { email: string; otp: string }): Promise<ServiceReturnType> {
+async function verifyEmail({ email, otp }: { email: string; otp: string }): Promise<ServiceReturnType> {
   try {
-    const response = await axiosInstance.post<ApiResponse<null>>("/account/verify-email", requestPayload);
+    const requestPayload = { email, otp };
+    const response = await axiosInstance.post<ApiResponse<null>>("/account/verify", requestPayload);
     const { status, message } = response.data;
     if (status === ApiResponseStatus.success) {
       return { success: true, message };
