@@ -32,8 +32,7 @@ async function register(
   try {
     const response = await axiosInstance.post<ApiResponse<RegistrationResponseType>>("/account/signup", requestPayload);
     const { status, message, payload } = response.data;
-    if (status === ApiResponseStatus.success && payload?.user) {
-      authHelper.saveUserToken(payload.authToken);
+    if (status === ApiResponseStatus.success) {
       return { success: true, message, payload };
     } else {
       return { success: false, message };
