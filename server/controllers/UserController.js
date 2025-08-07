@@ -122,7 +122,6 @@ async function verifyEmail(req, res) {
     user.accountVerified = true;
     await user.save();
 
-    // res.status(200).send(new ApiResponse(true, "Success"));
     const authToken = generateLoginToken({ id: user.id });
     res
       .status(201)
