@@ -38,8 +38,7 @@ async function sendEmail({ to, subject, html, text, from }) {
     const response = await resend.emails.send(emailOptions);
 
     if (response.error) {
-      console.error("Email sending failed:", response.error, { ...response.error });
-      throw new Error(`Email sending failed: ${response.error.message}`);
+      throw new Error(response.error.error);
     }
 
     return {

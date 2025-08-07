@@ -34,19 +34,23 @@ async function resendOTP(req, res) {
     const otp = await generateOtp(email, purpose);
 
     // Send appropriate email based on purpose
+    let success = false;
+    let error = null;
     try {
       if (purpose === OtpPurpose.REGISTRATION) {
-        await sendEmailVerificationEmail(user.email, user.name, otp);
-        console.log(`Email verification OTP resent to ${user.email}.`);
+        ({ success, error } = await sendEmailVerificationEmail(user.email, user.name, otp));
       } else if (purpose === OtpPurpose.PASSWORD_RESET) {
-        await sendPasswordResetOTPEmail(user.email, user.name, otp);
-        console.log(`Password reset OTP resent to ${user.email}.`);
+        ({ success, error } = await sendPasswordResetOTPEmail(user.email, user.name, otp));
       }
     } catch (emailError) {
-      console.error("Failed to send OTP email:", emailError);
-      return res.status(500).send(new ApiResponse(false, "Failed to send OTP email"));
+      success = false;
+      error = emailError.message || "Failed to send OTP email";
     }
 
+    if (!success) {
+      console.error("Failed to send OTP email:", error);
+      return res.status(500).send(new ApiResponse(false, "Failed to send OTP email"));
+    }
     res.status(200).send(new ApiResponse(true, "OTP resent successfully"));
   } catch (ex) {
     handleCommonError(res, ex);
