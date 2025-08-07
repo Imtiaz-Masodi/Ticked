@@ -5,7 +5,7 @@ import { AccountVerificationResponseType } from "../types/AccountVerificationRes
 import { ApiResponse } from "../types/ApiResponse";
 import { LoginResponseType } from "../types/LoginResponseType";
 import { ServiceReturnType } from "../types/ServiceReturnType";
-import { ApiResponseStatus } from "../utils/enums";
+import { ApiResponseStatus, OtpPurpose } from "../utils/enums";
 import { axiosInstance } from "./apiClient";
 
 async function login(requestPayload: LoginFormValues): Promise<ServiceReturnType> {
@@ -67,9 +67,10 @@ async function verifyEmail({ email, otp }: { email: string; otp: string }): Prom
   }
 }
 
-async function resendOTP(requestPayload: { email: string }): Promise<ServiceReturnType> {
+async function resendOTP({ email, purpose }: { email: string; purpose: OtpPurpose }): Promise<ServiceReturnType> {
+  const requestPayload = { email, purpose };
   try {
-    const response = await axiosInstance.post<ApiResponse<null>>("/account/resend-otp", requestPayload);
+    const response = await axiosInstance.post<ApiResponse<null>>("/otp/resend", requestPayload);
     const { status, message } = response.data;
     if (status === ApiResponseStatus.success) {
       return { success: true, message };
