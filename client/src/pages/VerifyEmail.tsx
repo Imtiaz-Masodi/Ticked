@@ -55,7 +55,7 @@ function VerifyEmail() {
       const response = await authService.verifyEmail({ email, otp: values.otp });
 
       if (response.success) {
-        setSuccessMessage("Email verified successfully! Redirecting to home page...");
+        setSuccessMessage("Email verified successfully! Redirecting in a moment.");
         setTimeout(() => {
           navigate("/");
         }, 2000);
