@@ -3,7 +3,7 @@ const User = require("../models/User");
 const ApiResponse = require("../pojo/ApiResponse");
 const constants = require("../utils/constants");
 const { generateLoginToken } = require("../helpers/jwt");
-const { sendEmailVerificationEmail } = require("../helpers/emailHelper");
+const { sendEmailVerificationEmail, sendWelcomeEmail } = require("../helpers/emailHelper");
 const generateOtp = require("../service/otp/generateOtp");
 const verifyOtp = require("../service/otp/verifyOtp");
 const { OtpPurpose } = require("../utils/enums");
@@ -33,14 +33,10 @@ async function createUser(req, res) {
 
     const otp = await generateOtp(user.email, OtpPurpose.REGISTRATION);
 
-    // Send welcome email (don't block the response if email fails)
-    sendEmailVerificationEmail(user.email, user.name, otp)
-      .then(() => {
-        console.log(`Email verification OTP sent to ${user.email}.`);
-      })
-      .catch((error) => {
-        console.error("Failed to send email verification OTP:", error);
-      });
+    // Send welcome email
+    sendEmailVerificationEmail(user.email, user.name, otp).catch((error) => {
+      console.error("Failed to send email verification OTP:", error);
+    });
 
     res.status(200).send(new ApiResponse(true, "OTP Sent on email for verification"));
   } catch (ex) {
@@ -121,6 +117,10 @@ async function verifyEmail(req, res) {
 
     user.accountVerified = true;
     await user.save();
+
+    sendWelcomeEmail(user.email, user.name).catch((error) => {
+      console.error("Failed to send welcome email:", error);
+    });
 
     const authToken = generateLoginToken({ id: user.id });
     res
