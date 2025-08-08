@@ -35,27 +35,32 @@ const baseTypeStyles = Object.freeze({
 const variantColorStyles = Object.freeze({
   [ButtonVariant.primary]: {
     solid: "bg-primary hover:bg-primary-dark text-slate-100 active:bg-primary",
-    outline: "border-primary text-primary hover:bg-primary hover:text-slate-100 active:bg-primary-dark active:border-primary-dark",
+    outline:
+      "border-primary text-primary hover:bg-primary hover:text-slate-100 active:bg-primary-dark active:border-primary-dark",
     link: "text-primary hover:text-primary-light",
   },
   [ButtonVariant.secondary]: {
     solid: "bg-gray-500 hover:bg-gray-600 text-white active:bg-gray-500",
-    outline: "border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white active:bg-gray-600 active:border-gray-600",
+    outline:
+      "border-gray-500 text-gray-500 hover:bg-gray-500 hover:text-white active:bg-gray-600 active:border-gray-600",
     link: "text-gray-500 hover:text-gray-600",
   },
   [ButtonVariant.success]: {
     solid: "bg-emerald-600 hover:bg-emerald-700 text-white active:bg-emerald-600",
-    outline: "border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white active:bg-emerald-700 active:border-emerald-700",
+    outline:
+      "border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white active:bg-emerald-700 active:border-emerald-700",
     link: "text-emerald-600 hover:text-emerald-700",
   },
   [ButtonVariant.danger]: {
     solid: "bg-rose-600 hover:bg-rose-700 text-white active:bg-rose-600",
-    outline: "border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white active:bg-rose-700 active:border-rose-700",
+    outline:
+      "border-rose-600 text-rose-600 hover:bg-rose-600 hover:text-white active:bg-rose-700 active:border-rose-700",
     link: "text-rose-600 hover:text-rose-700",
   },
   [ButtonVariant.warning]: {
     solid: "bg-yellow-500 hover:bg-yellow-600 text-white active:bg-yellow-500",
-    outline: "border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white active:bg-yellow-600 active:border-yellow-600",
+    outline:
+      "border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-white active:bg-yellow-600 active:border-yellow-600",
     link: "text-yellow-500 hover:text-yellow-600",
   },
   [ButtonVariant.info]: {
@@ -67,8 +72,10 @@ const variantColorStyles = Object.freeze({
 
 // Disabled styles
 const disabledStyles = Object.freeze({
-  [ButtonType.solid]: "disabled:bg-gray-400 disabled:text-gray-100 dark:disabled:bg-gray-600 dark:disabled:text-gray-400",
-  [ButtonType.outline]: "disabled:hover:bg-transparent disabled:text-gray-400 disabled:border-gray-300 dark:disabled:text-gray-500 dark:disabled:border-gray-600",
+  [ButtonType.solid]:
+    "disabled:bg-gray-400 disabled:text-gray-100 dark:disabled:bg-gray-600 dark:disabled:text-gray-400",
+  [ButtonType.outline]:
+    "disabled:hover:bg-transparent disabled:text-gray-400 disabled:border-gray-300 dark:disabled:text-gray-500 dark:disabled:border-gray-600",
   [ButtonType.link]: "disabled:text-gray-400 disabled:hover:underline dark:disabled:text-gray-500",
 });
 
@@ -77,7 +84,7 @@ const getButtonStyles = (variant: ButtonVariant, type: ButtonType): string => {
   const baseStyles = baseTypeStyles[type];
   const variantStyles = variantColorStyles[variant][type];
   const disabledStyle = disabledStyles[type];
-  
+
   return `${baseStyles} ${variantStyles} ${disabledStyle}`;
 };
 
