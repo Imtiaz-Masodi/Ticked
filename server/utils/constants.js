@@ -37,6 +37,17 @@ module.exports = {
   TASK_STATUS_UPDATED: "Task status updated successfully",
   INVALID_TASK_ON_DELETED_ITEM: "Cannot perform this action on deleted item",
 
+  OTP_SENT_FOR_VERIFICATION: "OTP Sent on email for verification",
+  EMAIL_AND_OTP_REQUIRED: "Email and OTP are required",
+  ACCOUNT_NOT_FOUND: "No account found with the provided email",
+  USER_NOT_FOUND: "User not found",
+  PASSWORD_RESET_OTP_SENT: "Password reset OTP sent",
+  OTP_VERIFIED: "OTP verified",
+  EMAIL_REQUIRED: "Email is required",
+  TOKEN_AND_PASSWORD_REQUIRED: "tokenId and newPassword are required",
+  INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
+  INVALID_TOKEN: "Invalid token",
+
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
 

@@ -4,9 +4,11 @@ const ApiResponse = require("../pojo/ApiResponse");
 const constants = require("../utils/constants");
 const { generateLoginToken } = require("../helpers/jwt");
 const { sendEmailVerificationEmail, sendWelcomeEmail } = require("../helpers/emailHelper");
+const { sendPasswordResetOTPEmail } = require("../helpers/emailHelper");
 const generateOtp = require("../service/otp/generateOtp");
 const verifyOtp = require("../service/otp/verifyOtp");
 const { OtpPurpose } = require("../utils/enums");
+const mongoose = require("mongoose");
 
 async function createUser(req, res) {
   try {
@@ -38,7 +40,7 @@ async function createUser(req, res) {
       console.error("Failed to send email verification OTP:", error);
     });
 
-    res.status(200).send(new ApiResponse(true, "OTP Sent on email for verification"));
+    res.status(200).send(new ApiResponse(true, constants.OTP_SENT_FOR_VERIFICATION));
   } catch (ex) {
     handleCommonError(res, ex);
   }
@@ -104,7 +106,7 @@ async function verifyEmail(req, res) {
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return res.status(400).send(new ApiResponse(false, "Email and OTP are required"));
+      return res.status(400).send(new ApiResponse(false, constants.EMAIL_AND_OTP_REQUIRED));
     }
 
     // Verify the OTP
@@ -113,7 +115,7 @@ async function verifyEmail(req, res) {
     // Update user account verification status
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(404).send(new ApiResponse(false, "User not found"));
+      return res.status(404).send(new ApiResponse(false, constants.ACCOUNT_NOT_FOUND));
     }
 
     user.accountVerified = true;
@@ -128,9 +130,97 @@ async function verifyEmail(req, res) {
       .status(201)
       .send(new ApiResponse(true, constants.ACCOUNT_VERIFIED, { user: user.omitSensitiveInfo(), authToken }));
   } catch (ex) {
-    if (ex.message === "Invalid or expired OTP") {
+    if (ex.message === constants.INVALID_OR_EXPIRED_OTP) {
       return res.status(400).send(new ApiResponse(false, ex.message));
     }
+    handleCommonError(res, ex);
+  }
+}
+
+/**
+ * Request password reset: generate and send OTP to email
+ * Body: { email }
+ */
+async function requestPasswordReset(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).send(new ApiResponse(false, constants.EMAIL_REQUIRED));
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send(new ApiResponse(false, constants.ACCOUNT_NOT_FOUND));
+    }
+    const otp = await generateOtp(email, OtpPurpose.PASSWORD_RESET);
+    // Send password reset OTP email (ignore email errors silently to avoid leaking info)
+    sendPasswordResetOTPEmail(user.email, user.name, otp).catch((error) => {
+      console.error("Failed to send password reset OTP:", error);
+    });
+    return res.status(200).send(new ApiResponse(true, constants.PASSWORD_RESET_OTP_SENT));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
+/**
+ * Verify password reset OTP
+ * Body: { email, otp }
+ * Response data: { tokenId: user._id }
+ */
+async function verifyPasswordResetOtp(req, res) {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).send(new ApiResponse(false, constants.EMAIL_AND_OTP_REQUIRED));
+    }
+    try {
+      await verifyOtp(email, OtpPurpose.PASSWORD_RESET, otp);
+    } catch (e) {
+      return res.status(400).send(new ApiResponse(false, e.message || constants.INVALID_OR_EXPIRED_OTP));
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send(new ApiResponse(false, constants.ACCOUNT_NOT_FOUND));
+    }
+    return res.status(200).send(new ApiResponse(true, constants.OTP_VERIFIED, { tokenId: user._id.toString() }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
+/**
+ * Reset password using tokenId (user._id) returned after OTP verification
+ * Body: { tokenId, newPassword }
+ */
+async function resetPasswordWithToken(req, res) {
+  try {
+    const { tokenId, newPassword } = req.body;
+    if (!tokenId || !newPassword) {
+      return res.status(400).send(new ApiResponse(false, constants.TOKEN_AND_PASSWORD_REQUIRED));
+    }
+    // Write code to verify the tokenId is a valid object id
+    if (!mongoose.Types.ObjectId.isValid(tokenId)) {
+      return res.status(400).send(new ApiResponse(false, constants.INVALID_TOKEN));
+    }
+
+    if (newPassword.length < constants.USER_PASSWORD_MIN_LENGTH || newPassword.length > 18) {
+      return res
+        .status(400)
+        .send(
+          new ApiResponse(
+            false,
+            `New Password must be between ${constants.USER_PASSWORD_MIN_LENGTH} and 18 characters long.`
+          )
+        );
+    }
+    const user = await User.findById(tokenId);
+    if (!user) {
+      return res.status(404).send(new ApiResponse(false, constants.USER_NOT_FOUND));
+    }
+    user.password = newPassword;
+    await user.save();
+    return res.status(200).send(new ApiResponse(true, constants.PASSWORD_UPDATED));
+  } catch (ex) {
     handleCommonError(res, ex);
   }
 }
@@ -141,4 +231,7 @@ module.exports = {
   getUserDetails,
   updatePassword,
   verifyEmail,
+  requestPasswordReset,
+  verifyPasswordResetOtp,
+  resetPasswordWithToken,
 };
