@@ -61,7 +61,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
       <div
         className={`
           fixed top-16 bottom-0 left-0 z-30
-          w-72 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
+          w-80 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
           border-r border-r-zinc-200 dark:border-r-gray-700
           ${isOpen || !isMobile ? "translate-x-0" : "-translate-x-full"}
         `}

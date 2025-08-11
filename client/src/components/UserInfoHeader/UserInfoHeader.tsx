@@ -18,7 +18,7 @@ export const UserInfoHeader: React.FC<UserInfoHeaderType> = ({ onEditProfile }) 
   const user = data?.payload?.user;
 
   return (
-    <div className="pl-5 pr-2 pt-5 pb-4 border-b border-b-zinc-200 dark:border-b-gray-700">
+    <div className="px-5 pt-5 pb-4 border-b border-b-zinc-200 dark:border-b-gray-700">
       <div className="flex items-center justify-between gap-3">
         {isLoading ? (
           <div className="w-12 h-12 flex items-center justify-center">
