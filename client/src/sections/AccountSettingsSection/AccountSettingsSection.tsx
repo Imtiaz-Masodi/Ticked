@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { ButtonType, ButtonVariant } from "../../components/Button/Button.enum";
 import { Size } from "../../utils/enums";
@@ -7,12 +6,12 @@ import { Input } from "../../components/Input";
 import { SettingItem } from "../../components/SettingItem";
 import { Icon } from "../../components/Icon";
 import { Icons } from "../../components/Icon/IconMap";
-import { authHelper } from "../../helpers/authHelper";
 import { useApiToast } from "../../utils/toastUtils";
+import { useLogout } from "../../hooks";
 
 const AccountSettingsSection: React.FC = () => {
-  const navigate = useNavigate();
   const toast = useApiToast();
+  const logout = useLogout();
 
   // Password change state
   const [showPasswordChange, setShowPasswordChange] = useState(false);
@@ -38,10 +37,7 @@ const AccountSettingsSection: React.FC = () => {
     setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
   };
 
-  const handleLogout = () => {
-    authHelper.removeUserToken();
-    navigate("/login");
-  };
+  const handleLogout = () => logout();
 
   const handleDeleteAccount = () => {
     if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {

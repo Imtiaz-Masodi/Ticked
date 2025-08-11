@@ -1,8 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
-import { useMobileDetect } from "../../hooks";
-import { authHelper } from "../../helpers/authHelper";
+import { useMobileDetect, useLogout } from "../../hooks";
 import { UserInfoHeader } from "../UserInfoHeader";
 
 export type NavigationItem = {
@@ -33,10 +32,8 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
     }
   };
 
-  const handleLogout = () => {
-    authHelper.removeUserToken();
-    navigate("/login");
-  };
+  const logout = useLogout();
+  const handleLogout = () => logout();
 
   const handleEditProfile = () => {
     // Navigate to settings page (account/profile section). Using hash for future in-page scroll support.
