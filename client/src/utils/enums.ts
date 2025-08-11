@@ -34,6 +34,13 @@ export enum OtpPurpose {
   PASSWORD_RESET = "password_reset",
 }
 
+export enum ForgotPasswordStage {
+  REQUEST = "REQUEST",
+  VERIFY = "VERIFY",
+  RESET = "RESET",
+  DONE = "DONE",
+}
+
 /**
  * Common breakpoints for responsive design
  */
