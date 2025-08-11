@@ -49,7 +49,7 @@ const Input = ({
       )}
       <div
         className={`
-          flex items-center border rounded-lg w-full
+          relative flex items-center border rounded-lg w-full
           focus-within:outline focus-within:outline-2 focus-within:-outline-offset-1
           focus-within:shadow-lg focus-within:shadow-slate-200/30 dark:focus-within:shadow-gray-900/20 text-slate-700 dark:text-gray-200 
           bg-slate-50/50 dark:bg-gray-700 backdrop-blur-sm transition-all duration-200
@@ -65,7 +65,7 @@ const Input = ({
         <input
           name={name}
           value={value}
-          className={`w-full bg-transparent px-3 py-2.5 rounded-lg text-slate-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed dark:[color-scheme:dark] [color-scheme:light] placeholder:text-slate-400 dark:placeholder:text-gray-500 ${className}`}
+          className={`w-full bg-transparent px-3 py-2.5 pr-10 rounded-lg text-slate-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed dark:[color-scheme:dark] [color-scheme:light] placeholder:text-slate-400 dark:placeholder:text-gray-500 ${className}`}
           type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
           placeholder={placeholder}
           disabled={disabled}
@@ -75,7 +75,7 @@ const Input = ({
         />
         {type === InputTypes.password && (
           <div
-            className={`cursor-pointer pr-3 ${disabled && "hover:cursor-not-allowed"}`}
+            className={`absolute end-0 cursor-pointer pr-3 ${disabled && "hover:cursor-not-allowed"}`}
             onClick={handleTogglePasswordVisibility}
           >
             <Icon name={displayPassword ? Icons.hidden : Icons.visible} disabled={disabled} />
