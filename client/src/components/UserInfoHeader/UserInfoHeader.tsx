@@ -27,7 +27,7 @@ export const UserInfoHeader: React.FC<UserInfoHeaderType> = ({ onEditProfile }) 
         ) : (
           <UserAvatar text={user?.name || user?.email} size={48} className="flex-shrink-0" />
         )}
-        <div className="min-w-0">
+        <div className="min-w-0 flex-grow">
           <p className="text-sm font-semibold text-zinc-800 dark:text-gray-100 truncate">
             {user?.name || user?.email || (isLoading ? "Loading..." : "Guest")}
           </p>
