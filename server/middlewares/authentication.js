@@ -26,6 +26,11 @@ async function authentication(req, res, next) {
       res.status(401).send(new ApiResponse(false, constants.INVALID_AUTH_TOKEN));
       return;
     }
+
+    if (user.accountVerified !== true) {
+      res.status(401).send(new ApiResponse(false, constants.ACCOUNT_NOT_VERIFIED));
+      return;
+    }
     req.stash.user = user;
     next();
   } catch (ex) {
