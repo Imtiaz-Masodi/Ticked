@@ -4,17 +4,17 @@ import { Checkbox } from "../../components/Checkbox";
 import { Input, InputTypes } from "../../components/Input";
 import { Size } from "../../utils/enums";
 import { LoginFormProps } from "./LoginForm.types";
+import { useNavigate } from "react-router-dom";
 
 export function LoginForm(props: LoginFormProps) {
-  const {
-    values,
-    errors,
-    touched,
-    isSubmitting,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-  } = props;
+  const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = props;
+  const navigate = useNavigate();
+
+  const handleForgotPassword = () => {
+    const email = encodeURIComponent(values.email);
+    if (email) navigate(`/forgot-password?email=${email}`);
+    else navigate(`/forgot-password`);
+  };
 
   return (
     <>
@@ -55,7 +55,7 @@ export function LoginForm(props: LoginFormProps) {
         <Button
           size={Size.sm}
           type={ButtonType.link}
-          onClick={() => {}}
+          onClick={handleForgotPassword}
           className="ps-0 pe-0"
           disabled={isSubmitting}
         >
