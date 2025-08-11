@@ -52,14 +52,15 @@ async function validateUserCredentials(req, res) {
       res.status(400).send(new ApiResponse(false, constants.INVALID_USER_CREDENTIALS));
       return;
     }
-    if (!user.accountVerified) {
-      res.status(400).send(new ApiResponse(false, constants.ACCOUNT_NOT_VERIFIED));
-      return;
-    }
 
     const isValidPassword = await user.comparePassword(password);
     if (!isValidPassword) {
       res.status(400).send(new ApiResponse(false, constants.INVALID_USER_CREDENTIALS));
+      return;
+    }
+
+    if (!user.accountVerified) {
+      res.status(400).send(new ApiResponse(false, constants.ACCOUNT_NOT_VERIFIED));
       return;
     }
 
