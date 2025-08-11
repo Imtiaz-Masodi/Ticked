@@ -49,15 +49,15 @@ const Input = ({
       )}
       <div
         className={`
-          flex items-center border border-slate-200 dark:border-gray-600 rounded-lg w-full
-          focus-within:outline-2 focus-within:outline focus-within:outline-slate-400 dark:focus-within:outline-white/40 focus-within:-outline-offset-1
+          flex items-center border rounded-lg w-full
+          focus-within:outline focus-within:outline-2 focus-within:-outline-offset-1
           focus-within:shadow-lg focus-within:shadow-slate-200/30 dark:focus-within:shadow-gray-900/20 text-slate-700 dark:text-gray-200 
           bg-slate-50/50 dark:bg-gray-700 backdrop-blur-sm transition-all duration-200
-          hover:bg-slate-50 dark:hover:bg-gray-600/80 hover:border-slate-300 dark:hover:border-gray-500
+          hover:bg-slate-50 dark:hover:bg-gray-600/80
           ${
             errorMessage
               ? "border-red-500 dark:border-red-500 focus-within:outline-red-400 dark:focus-within:outline-red-400 bg-red-50/30 dark:bg-red-900/10"
-              : ""
+              : "border-slate-200 dark:border-gray-600 focus-within:outline-slate-400 dark:focus-within:outline-white/40 hover:border-slate-300 dark:hover:border-gray-500"
           }
           ${disabled && "bg-slate-100 dark:bg-gray-600 opacity-60"}
         `}
