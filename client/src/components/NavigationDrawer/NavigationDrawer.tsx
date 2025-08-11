@@ -38,6 +38,12 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
     navigate("/login");
   };
 
+  const handleEditProfile = () => {
+    // Navigate to settings page (account/profile section). Using hash for future in-page scroll support.
+    navigate("/settings#account");
+    if (isMobile) onClose();
+  };
+
   return (
     <>
       {/* Overlay for mobile with CSS fade effect */}
@@ -62,7 +68,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
       >
         <div className="flex flex-col h-full">
           {/* User Info */}
-          <UserInfoHeader />
+          <UserInfoHeader onEditProfile={handleEditProfile} />
           {/* Navigation Items */}
           <div className="flex-grow py-4">
             {navItems.map((item) => {
