@@ -3,6 +3,7 @@ import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { useMobileDetect } from "../../hooks";
 import { authHelper } from "../../helpers/authHelper";
+import { UserInfoHeader } from "../UserInfoHeader";
 
 export type NavigationItem = {
   name: string;
@@ -17,12 +18,7 @@ type NavigationDrawerProps = {
   activeNavItemPath?: string;
 };
 
-export const NavigationDrawer = ({
-  isOpen,
-  onClose,
-  navItems,
-  activeNavItemPath,
-}: NavigationDrawerProps) => {
+export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath }: NavigationDrawerProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useMobileDetect(); // Using our custom hook
@@ -49,11 +45,7 @@ export const NavigationDrawer = ({
         <div
           className={`
             fixed inset-0 top-[64px] bg-black z-20 transition-opacity duration-300 ease-in-out
-            ${
-              isOpen
-                ? "opacity-50 pointer-events-auto z-10"
-                : "opacity-0 pointer-events-none -z-10"
-            }
+            ${isOpen ? "opacity-50 pointer-events-auto z-10" : "opacity-0 pointer-events-none -z-10"}
           `}
           onClick={onClose}
         />
@@ -63,12 +55,14 @@ export const NavigationDrawer = ({
       <div
         className={`
           fixed top-16 bottom-0 left-0 z-30
-          w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
+          w-72 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
           border-r border-r-zinc-200 dark:border-r-gray-700
           ${isOpen || !isMobile ? "translate-x-0" : "-translate-x-full"}
         `}
       >
         <div className="flex flex-col h-full">
+          {/* User Info */}
+          <UserInfoHeader />
           {/* Navigation Items */}
           <div className="flex-grow py-4">
             {navItems.map((item) => {
@@ -88,8 +82,15 @@ export const NavigationDrawer = ({
                   `}
                   onClick={() => handleNavigation(item.path)}
                 >
-                  <Icon name={item.icon} className={`text-xl ${isActive ? "text-blue-500" : "text-zinc-600 dark:text-gray-400"}`}/>
-                  <span className={`ml-4 text-sm font-medium select-none ${isActive ? "text-blue-500" : "text-zinc-700 dark:text-gray-300"}`}>
+                  <Icon
+                    name={item.icon}
+                    className={`text-xl ${isActive ? "text-blue-500" : "text-zinc-600 dark:text-gray-400"}`}
+                  />
+                  <span
+                    className={`ml-4 text-sm font-medium select-none ${
+                      isActive ? "text-blue-500" : "text-zinc-700 dark:text-gray-300"
+                    }`}
+                  >
                     {item.name}
                   </span>
                 </div>
@@ -104,9 +105,7 @@ export const NavigationDrawer = ({
               onClick={handleLogout}
             >
               <Icon name={Icons.logout} className="text-xl text-zinc-600 dark:text-gray-400" />
-              <span className="ml-4 text-sm font-medium text-zinc-700 dark:text-gray-300 select-none">
-                Logout
-              </span>
+              <span className="ml-4 text-sm font-medium text-zinc-700 dark:text-gray-300 select-none">Logout</span>
             </div>
           </div>
         </div>
