@@ -105,9 +105,9 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
           </div>
 
           {/* Logout button at bottom */}
-          <div className="px-6 py-4 border-t border-t-zinc-200 dark:border-t-gray-700">
+          <div className="border-t border-t-zinc-200 dark:border-t-gray-700">
             <div
-              className="flex items-center py-3 cursor-pointer hover:bg-zinc-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              className="flex items-center p-6 cursor-pointer hover:bg-zinc-50 dark:hover:bg-gray-700 transition-colors duration-200"
               onClick={handleLogout}
             >
               <Icon name={Icons.logout} className="text-xl text-zinc-600 dark:text-gray-400" />
