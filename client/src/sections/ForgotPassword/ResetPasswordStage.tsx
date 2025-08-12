@@ -45,7 +45,7 @@ export const ResetPasswordStage = ({
         disabled={isSubmitting}
         errorMessage={passwordError}
       />
-      <Button onClick={onReset} isLoading={isSubmitting}>
+      <Button onClick={onReset} isLoading={isSubmitting} className="mt-4">
         Reset Password
       </Button>
 

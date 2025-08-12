@@ -32,7 +32,7 @@ export const VerifyResetStage = ({
           <p className="text-gray-900 dark:text-white font-medium">{email}</p>
         </div>
 
-        <OTPInput length={6} value={otp} onChange={(val) => setOtp(val)} disabled={isSubmitting} className="mb-4" />
+        <OTPInput length={6} value={otp} onChange={(val) => setOtp(val)} disabled={isSubmitting} />
       </div>
 
       <Button onClick={onVerify} isLoading={isSubmitting} className="w-full mb-2">

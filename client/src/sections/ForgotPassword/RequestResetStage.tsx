@@ -38,7 +38,7 @@ export const RequestResetStage = ({
         disabled={isSubmitting}
         errorMessage={emailError || undefined}
       />
-      <Button onClick={onSubmit} isLoading={isSubmitting}>
+      <Button onClick={onSubmit} isLoading={isSubmitting} className="mt-2">
         Send Reset Code
       </Button>
 
