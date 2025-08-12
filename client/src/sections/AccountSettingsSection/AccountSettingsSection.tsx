@@ -1,40 +1,85 @@
 import React, { useState } from "react";
 import { Button } from "../../components/Button";
 import { ButtonType, ButtonVariant } from "../../components/Button/Button.enum";
-import { Size } from "../../utils/enums";
+import { ApiResponseStatus, Size } from "../../utils/enums";
 import { Input } from "../../components/Input";
 import { SettingItem } from "../../components/SettingItem";
 import { Icon } from "../../components/Icon";
 import { Icons } from "../../components/Icon/IconMap";
 import { useApiToast } from "../../utils/toastUtils";
 import { useLogout } from "../../hooks";
+import { useUpdatePasswordMutation } from "../../store/api/accountApi";
+import { Notification, NotificationType } from "../../components/Notification";
+import { UpdatePasswordRequestType } from "../../types/UpdatePasswordRequestType";
 
 const AccountSettingsSection: React.FC = () => {
   const toast = useApiToast();
   const logout = useLogout();
+  const [updatePassword, { isLoading: isUpdatingPassword }] = useUpdatePasswordMutation();
 
   // Password change state
   const [showPasswordChange, setShowPasswordChange] = useState(false);
-  const [passwordForm, setPasswordForm] = useState({
+  const [passwordForm, setPasswordForm] = useState<UpdatePasswordRequestType>({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState<Partial<UpdatePasswordRequestType>>({});
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const handlePasswordChange = () => {
-    // TODO: Implement password change API call
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      toast.apiError("New passwords don't match");
+  const validatePasswordForm = () => {
+    const newErrors: typeof errors = {};
+
+    if (!passwordForm.currentPassword) {
+      newErrors.currentPassword = "Current password is required";
+    }
+    if (!passwordForm.newPassword) {
+      newErrors.newPassword = "New password is required";
+    } else if (passwordForm.newPassword.length < 8) {
+      newErrors.newPassword = "Password must be at least 8 characters long";
+    } else if (passwordForm.newPassword.length > 18) {
+      newErrors.newPassword = "Password must be at most 18 characters long";
+    }
+
+    if (!passwordForm.confirmPassword) {
+      newErrors.confirmPassword = "Please confirm your new password";
+    } else if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      newErrors.confirmPassword = "Passwords don't match";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handlePasswordChange = async () => {
+    setErrorMessage("");
+    // Validate the form
+    if (!validatePasswordForm()) {
       return;
     }
-    if (passwordForm.newPassword.length < 8) {
-      toast.apiError("Password must be at least 8 characters long");
-      return;
-    }
 
-    toast.apiSuccess("Password change functionality coming soon!");
-    setShowPasswordChange(false);
-    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    try {
+      const result = await updatePassword(passwordForm);
+
+      if (result.data?.status === ApiResponseStatus.success) {
+        toast.apiSuccess(result.data?.message || "Password updated successfully");
+        setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+        setErrors({});
+
+        setTimeout(() => {
+          setShowPasswordChange(false);
+        }, 1000);
+      } else if (result.data?.status === ApiResponseStatus.failed) {
+        setErrorMessage(result.data?.message || "Failed to update password");
+      } else if ("error" in result || !result.data?.status) {
+        // Handle RTK Query error
+        const errorData = result.error as { data?: { message?: string } };
+        const errorMessage = errorData?.data?.message || "Failed to update password";
+        setErrorMessage(errorMessage);
+      }
+    } catch {
+      setErrorMessage("An unexpected error occurred");
+    }
   };
 
   const handleLogout = () => logout();
@@ -96,6 +141,7 @@ const AccountSettingsSection: React.FC = () => {
               onClick={() => {
                 setShowPasswordChange(false);
                 setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                setErrors({});
               }}
               className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
             >
@@ -103,26 +149,52 @@ const AccountSettingsSection: React.FC = () => {
             </div>
           </div>
 
+          {errorMessage && <Notification type={NotificationType.ERROR}>{errorMessage}</Notification>}
+
           <Input
             label="Current Password"
             type="password"
             value={passwordForm.currentPassword}
-            onChange={(e) => setPasswordForm((prev) => ({ ...prev, currentPassword: e.target.value }))}
+            onChange={(e) => {
+              setPasswordForm((prev) => ({ ...prev, currentPassword: e.target.value }));
+              // Clear error when user starts typing
+              if (errors.currentPassword) {
+                setErrors((prev) => ({ ...prev, currentPassword: undefined }));
+              }
+            }}
             placeholder="Enter current password"
+            errorMessage={errors.currentPassword}
+            disabled={isUpdatingPassword}
           />
           <Input
             label="New Password"
             type="password"
             value={passwordForm.newPassword}
-            onChange={(e) => setPasswordForm((prev) => ({ ...prev, newPassword: e.target.value }))}
+            onChange={(e) => {
+              setPasswordForm((prev) => ({ ...prev, newPassword: e.target.value }));
+              // Clear error when user starts typing
+              if (errors.newPassword) {
+                setErrors((prev) => ({ ...prev, newPassword: undefined }));
+              }
+            }}
             placeholder="Enter new password"
+            errorMessage={errors.newPassword}
+            disabled={isUpdatingPassword}
           />
           <Input
             label="Confirm New Password"
             type="password"
             value={passwordForm.confirmPassword}
-            onChange={(e) => setPasswordForm((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+            onChange={(e) => {
+              setPasswordForm((prev) => ({ ...prev, confirmPassword: e.target.value }));
+              // Clear error when user starts typing
+              if (errors.confirmPassword) {
+                setErrors((prev) => ({ ...prev, confirmPassword: undefined }));
+              }
+            }}
             placeholder="Confirm new password"
+            errorMessage={errors.confirmPassword}
+            disabled={isUpdatingPassword}
           />
           <Button
             type={ButtonType.solid}
@@ -130,6 +202,8 @@ const AccountSettingsSection: React.FC = () => {
             size={Size.md}
             onClick={handlePasswordChange}
             className="w-full !mt-6 py-3"
+            isLoading={isUpdatingPassword}
+            disabled={isUpdatingPassword}
           >
             Update Password
           </Button>
