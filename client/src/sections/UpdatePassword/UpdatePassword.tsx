@@ -3,7 +3,6 @@ import { useUpdatePasswordMutation } from "../../store/api/accountApi";
 import { Button } from "../../components/Button";
 import { ButtonType, ButtonVariant } from "../../components/Button/Button.enum";
 import { Input } from "../../components/Input";
-import { Icon } from "../../components/Icon";
 import { ApiResponseStatus, Size } from "../../utils/enums";
 import { Icons } from "../../components/Icon/IconMap";
 import { UpdatePasswordRequestType } from "../../types/UpdatePasswordRequestType";
@@ -135,19 +134,9 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user, showUpdate
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h4 className="font-medium text-gray-900 dark:text-gray-100">Change Password</h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                  Update your account password for security
-                </p>
-              </div>
-              <div
-                onClick={handlePasswordCancel}
-                className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
-              >
-                <Icon name={Icons.close} className="text-gray-600 dark:text-gray-300" />
-              </div>
+            <div>
+              <h4 className="font-medium text-gray-900 dark:text-gray-100">Change Password</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Update your account password for security</p>
             </div>
 
             {passwordErrorMessage && <Notification type={NotificationType.ERROR}>{passwordErrorMessage}</Notification>}
