@@ -1,5 +1,5 @@
 const ApiResponse = require("../pojo/ApiResponse");
-const { userSchema, schemaForUpdatingPassword } = require("../schemas/userSchema");
+const { userSchema, schemaForUpdatingPassword, schemaForUpdatingProfile } = require("../schemas/userSchema");
 
 function validateUserSchema(req, res, next) {
   const { name, email, password } = req.body;
@@ -35,8 +35,20 @@ function validateSchemaForPassword(req, res, next) {
   next();
 }
 
+function validateSchemaForProfile(req, res, next) {
+  const { name, bio, location, dateOfBirth } = req.body;
+  const validationResult = schemaForUpdatingProfile.validate({ name, bio, location, dateOfBirth });
+  if (validationResult.error) {
+    res.send(new ApiResponse(false, validationResult.error.details[0].message));
+    return;
+  }
+
+  next();
+}
+
 module.exports = {
   validateUserSchema,
   validateUserSchemaForSignIn,
   validateSchemaForPassword,
+  validateSchemaForProfile,
 };
