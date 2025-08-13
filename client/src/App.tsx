@@ -17,6 +17,7 @@ const Categories = lazy(() => import("./pages/Categories"));
 const Backlog = lazy(() => import("./pages/Backlog"));
 const Completed = lazy(() => import("./pages/Completed"));
 const Settings = lazy(() => import("./pages/Settings"));
+const Profile = lazy(() => import("./pages/Profile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
@@ -117,6 +118,15 @@ function App() {
                 element={
                   <Suspense fallback={<PageLoading text="Loading Settings..." />}>
                     <Settings />
+                  </Suspense>
+                }
+              />
+
+              <Route
+                path="/profile"
+                element={
+                  <Suspense fallback={<PageLoading text="Loading Profile..." />}>
+                    <Profile />
                   </Suspense>
                 }
               />

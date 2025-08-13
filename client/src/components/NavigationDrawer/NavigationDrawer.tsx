@@ -36,8 +36,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
   const handleLogout = () => logout();
 
   const handleEditProfile = () => {
-    // Navigate to settings page (account/profile section). Using hash for future in-page scroll support.
-    navigate("/settings#account");
+    navigate("/profile");
     if (isMobile) onClose();
   };
 
