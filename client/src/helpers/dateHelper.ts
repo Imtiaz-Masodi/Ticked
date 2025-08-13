@@ -39,3 +39,10 @@ export function getUserFriendlyDateTime(dateString?: string): string {
 
   return `${formattedDate} ${formattedTime}`;
 }
+
+export function formatDateToISOString(date?: Date | string): string {
+  if (!date) return "";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return d.toISOString().split("T")[0]; // Returns YYYY-MM-DD format
+}
