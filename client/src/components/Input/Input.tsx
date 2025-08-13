@@ -65,7 +65,9 @@ const Input = ({
         <input
           name={name}
           value={value}
-          className={`w-full bg-transparent px-3 py-2.5 pr-10 rounded-lg text-slate-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed dark:[color-scheme:dark] [color-scheme:light] placeholder:text-slate-400 dark:placeholder:text-gray-500 ${className}`}
+          className={`w-full bg-transparent px-3 py-2.5 rounded-lg text-slate-700 dark:text-gray-200 text-sm focus-visible:outline-none disabled:cursor-not-allowed dark:[color-scheme:dark] [color-scheme:light] placeholder:text-slate-400 dark:placeholder:text-gray-500 ${className} ${
+            type === InputTypes.password ? "pr-10" : ""
+          }`}
           type={type === InputTypes.password ? (displayPassword ? InputTypes.text : InputTypes.password) : type}
           placeholder={placeholder}
           disabled={disabled}
