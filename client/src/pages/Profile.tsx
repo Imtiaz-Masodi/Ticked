@@ -7,9 +7,12 @@ import { Icons } from "../components/Icon/IconMap";
 import { ProfileCard } from "../components/ProfileCard";
 import { ProfileForm } from "../components/ProfileForm";
 import { UpdatePassword } from "../sections/UpdatePassword";
+import { useLocation } from "react-router-dom";
 
 const Profile: React.FC = () => {
   const { data: userData, isLoading: isLoadingUser, error: userError } = useGetCurrentUserQuery();
+  const location = useLocation();
+  const showUpdatePasswordForm = location.search.includes("update-password=1");
 
   const user = userData?.payload?.user;
 
@@ -44,7 +47,7 @@ const Profile: React.FC = () => {
         </div>
         <div className="lg:col-span-2">
           <ProfileForm user={user} />
-          <UpdatePassword user={user} />
+          <UpdatePassword user={user} showUpdateForm={showUpdatePasswordForm} />
         </div>
       </div>
     </div>
