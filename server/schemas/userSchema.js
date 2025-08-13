@@ -22,7 +22,21 @@ const schemaForUpdatingPassword = Joi.object({
   "any.only": "{{#label}} doesn't match with New Password.",
 });
 
+const schemaForUpdatingProfile = Joi.object({
+  name: Joi.string().min(3).max(50).optional().label("Name"),
+  bio: Joi.string().max(500).optional().allow("").label("Bio"),
+  location: Joi.string().max(100).optional().allow("").label("Location"),
+  dateOfBirth: Joi.date().optional().label("Date of Birth"),
+}).messages({
+  "string.min": "{{#label}} must be at least {{#limit}} characters long.",
+  "string.max": "{{#label}} cannot be more than {{#limit}} characters long.",
+  "string.uri": "{{#label}} must be a valid URL.",
+  "string.pattern.base": "{{#label}} must be a valid phone number.",
+  "date.base": "{{#label}} must be a valid date.",
+});
+
 module.exports = {
   userSchema,
   schemaForUpdatingPassword,
+  schemaForUpdatingProfile,
 };
