@@ -6,6 +6,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, minLength: constants.USER_PASSWORD_MIN_LENGTH },
+  bio: { type: String, maxLength: 500, default: "" },
+  location: { type: String, maxLength: 100, default: "" },
+  dateOfBirth: { type: Date },
   createdOn: { type: Date, default: Date.now },
   accountVerified: { type: Boolean, default: false },
   accountDeactivated: { type: Boolean, default: false },
@@ -28,7 +31,7 @@ userSchema.methods.omitSensitiveInfo = function () {
   const user = this.toObject();
   delete user.password;
   if (!user.accountDeactivated) delete user.accountDeactivated;
-  if (user.accountVerified) delete user.accountVerified;
+  // if (user.accountVerified) delete user.accountVerified;
   return user;
 };
 
