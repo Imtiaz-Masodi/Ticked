@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useUpdatePasswordMutation } from "../../store/api/accountApi";
 import { Button } from "../../components/Button";
 import { ButtonType, ButtonVariant } from "../../components/Button/Button.enum";
@@ -13,13 +13,15 @@ import { User } from "../../types/User";
 
 interface UpdatePasswordProps {
   user: User;
+  showUpdateForm?: boolean;
 }
 
-export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user }) => {
+export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user, showUpdateForm = false }) => {
   const { showToast } = useToast();
+  const formRef = useRef<HTMLDivElement>(null);
 
   // Password change state
-  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [showPasswordChange, setShowPasswordChange] = useState(showUpdateForm);
   const [updatePassword, { isLoading: isUpdatingPassword }] = useUpdatePasswordMutation();
   const [passwordForm, setPasswordForm] = useState<UpdatePasswordRequestType>({
     currentPassword: "",
@@ -28,6 +30,17 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user }) => {
   });
   const [passwordErrors, setPasswordErrors] = useState<Partial<UpdatePasswordRequestType>>({});
   const [passwordErrorMessage, setPasswordErrorMessage] = useState<string>("");
+
+  // Scroll password form into view
+  useEffect(() => {
+    if (showPasswordChange && formRef.current) {
+      formRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        inline: "nearest",
+      });
+    }
+  }, [showPasswordChange, showUpdateForm]);
 
   const validatePasswordForm = () => {
     const newErrors: Partial<UpdatePasswordRequestType> = {};
@@ -94,7 +107,10 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user }) => {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
+    <div
+      ref={formRef}
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6"
+    >
       <div className="p-6 border-b border-gray-200 dark:border-gray-700">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Security</h3>
       </div>
