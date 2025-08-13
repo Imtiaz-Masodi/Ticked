@@ -5,6 +5,7 @@ const {
   validateUserSchema,
   validateUserSchemaForSignIn,
   validateSchemaForPassword,
+  validateSchemaForProfile,
 } = require("../middlewares/validateUserSchema");
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.post("/forgot-password/reset", userController.resetPasswordWithToken); //
 router.use(authentication);
 router.get("/me", userController.getUserDetails);
 router.post("/update-password", validateSchemaForPassword, userController.updatePassword);
+router.post("/update-profile", validateSchemaForProfile, userController.updateProfile);
 
 module.exports = router;

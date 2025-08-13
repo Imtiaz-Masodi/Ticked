@@ -225,11 +225,37 @@ async function resetPasswordWithToken(req, res) {
   }
 }
 
+async function updateProfile(req, res) {
+  try {
+    const { name, bio, location, dateOfBirth } = req.body;
+    const { user } = req.stash;
+
+    // Update the allowed fields
+    if (name !== undefined) user.name = name;
+    if (bio !== undefined) user.bio = bio;
+    if (location !== undefined) user.location = location;
+    if (dateOfBirth !== undefined) user.dateOfBirth = dateOfBirth;
+
+    // Validate the updated user
+    const { errors } = (await user.validateSync()) || {};
+    if (errors) {
+      handleInvalidMongoSchemaError(res, errors[Object.keys(errors)[0]].message);
+      return;
+    }
+
+    const updatedUser = await user.save();
+    res.send(new ApiResponse(true, constants.PROFILE_UPDATED, { user: updatedUser.omitSensitiveInfo() }));
+  } catch (ex) {
+    handleCommonError(res, ex);
+  }
+}
+
 module.exports = {
   createUser,
   validateUserCredentials,
   getUserDetails,
   updatePassword,
+  updateProfile,
   verifyEmail,
   requestPasswordReset,
   verifyPasswordResetOtp,

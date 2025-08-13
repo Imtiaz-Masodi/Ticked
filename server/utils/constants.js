@@ -47,6 +47,7 @@ module.exports = {
   TOKEN_AND_PASSWORD_REQUIRED: "tokenId and newPassword are required",
   INVALID_OR_EXPIRED_OTP: "Invalid or expired OTP",
   INVALID_TOKEN: "Invalid token",
+  PROFILE_UPDATED: "Profile updated successfully",
 
   INVALID_PAYLOAD: "Invalid Payload.",
   INTERNAL_SERVER_ERROR: "Internal server error. Please try again later.",
