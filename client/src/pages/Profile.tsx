@@ -6,6 +6,7 @@ import { Icon } from "../components/Icon";
 import { Icons } from "../components/Icon/IconMap";
 import { ProfileCard } from "../components/ProfileCard";
 import { ProfileForm } from "../components/ProfileForm";
+import { UpdatePassword } from "../sections/UpdatePassword";
 
 const Profile: React.FC = () => {
   const { data: userData, isLoading: isLoadingUser, error: userError } = useGetCurrentUserQuery();
@@ -43,6 +44,7 @@ const Profile: React.FC = () => {
         </div>
         <div className="lg:col-span-2">
           <ProfileForm user={user} />
+          <UpdatePassword user={user} />
         </div>
       </div>
     </div>
