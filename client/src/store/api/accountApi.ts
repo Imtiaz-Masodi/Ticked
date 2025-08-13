@@ -3,6 +3,7 @@ import { customBaseQuery } from "./customBaseQuery";
 import { ApiResponse } from "../../types/ApiResponse";
 import { User } from "../../types/User";
 import { UpdatePasswordRequestType } from "../../types/UpdatePasswordRequestType";
+import { UpdateProfileRequestType } from "../../types/UpdateProfileRequestType";
 
 // API slice for account related endpoints
 export const accountApi = createApi({
@@ -24,7 +25,16 @@ export const accountApi = createApi({
         data: { currentPassword, newPassword, confirmPassword },
       }),
     }),
+    updateProfile: builder.mutation<ApiResponse<{ user: User }>, UpdateProfileRequestType>({
+      query: (profileData) => ({
+        url: "/account/update-profile",
+        method: "POST",
+        data: profileData,
+      }),
+      // Invalidate the current user cache when profile is updated
+      invalidatesTags: [{ type: "Account", id: "ME" }],
+    }),
   }),
 });
 
-export const { useGetCurrentUserQuery, useUpdatePasswordMutation } = accountApi;
+export const { useGetCurrentUserQuery, useUpdatePasswordMutation, useUpdateProfileMutation } = accountApi;
