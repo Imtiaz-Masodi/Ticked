@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { useUpdateProfileMutation } from "../../store/api/accountApi";
 import { Button } from "../Button";
@@ -30,7 +29,6 @@ interface ProfileFormProps {
 type ProfileFormValues = UpdateProfileRequestType;
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
-  const navigate = useNavigate();
   const { showToast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
@@ -203,32 +201,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
               />
             </div>
           </form>
-        </div>
-      </div>
-
-      {/* Password Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mt-6">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Security</h3>
-        </div>
-        <div className="p-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-medium text-gray-900 dark:text-gray-100">Password</h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Last updated: {new Date(user.createdOn).toLocaleDateString()}
-              </p>
-            </div>
-            <Button
-              variant={ButtonVariant.secondary}
-              type={ButtonType.outline}
-              onClick={() => navigate("/settings#account")}
-              startIcon={Icons.edit}
-              size={Size.sm}
-            >
-              Change Password
-            </Button>
-          </div>
         </div>
       </div>
     </>
