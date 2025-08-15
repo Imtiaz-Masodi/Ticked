@@ -47,11 +47,10 @@ export const useMobileDetect = (breakpoint = Breakpoints.MOBILE): boolean => {
  * @param maxBreakpoint - Optional maximum pixel width (default: 1024)
  * @returns boolean indicating if current screen is tablet size
  */
-export const useTabletDetect = (
-  minBreakpoint = Breakpoints.MOBILE,
-  maxBreakpoint = Breakpoints.TABLET
-): boolean => {
-  return useMediaQuery(
-    `(min-width: ${minBreakpoint}px) and (max-width: ${maxBreakpoint}px)`
-  );
+export const useTabletDetect = (minBreakpoint = Breakpoints.MOBILE, maxBreakpoint = Breakpoints.TABLET): boolean => {
+  return useMediaQuery(`(min-width: ${minBreakpoint}px) and (max-width: ${maxBreakpoint}px)`);
+};
+
+export const useTabletOrAboveDetect = (breakpoint = Breakpoints.TABLET): boolean => {
+  return useMediaQuery(`(min-width: ${breakpoint}px)`);
 };
