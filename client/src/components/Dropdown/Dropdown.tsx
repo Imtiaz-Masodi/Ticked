@@ -9,11 +9,12 @@ type DropdownProps<T> = {
   errorMessage?: string;
   disabled?: boolean;
   options: ReadonlyArray<T>;
-  getLabel: (option: T) => string;
+  getLabel: (option: T) => string | React.ReactNode;
+  getLabelKey?: (option: T) => string;
   onChange?: (name: string, value: T) => void;
 };
 
-function Dropdown<T>({ name, label, value, options, disabled = false, errorMessage, getLabel, onChange }: DropdownProps<T>) {
+function Dropdown<T>({ name, label, value, options, disabled = false, errorMessage, getLabel, getLabelKey, onChange }: DropdownProps<T>) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,7 +60,7 @@ function Dropdown<T>({ name, label, value, options, disabled = false, errorMessa
           <ul className="max-h-60 overflow-auto m-2">
             {options.map((option: T) => (
               <li
-                key={getLabel(option)}
+                key={getLabelKey ? getLabelKey(option) : getLabel(option) as string}
                 className={`px-3 py-2 text-sm text-slate-700 dark:text-gray-200 hover:bg-slate-100 dark:hover:bg-gray-600 cursor-pointer select-none rounded-md transition-colors`}
                 onClick={() => {
                   onChange?.(name, option);
