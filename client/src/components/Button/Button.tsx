@@ -114,6 +114,7 @@ const Button = ({
         ${isLoading ? "cursor-not-allowed" : ""}
         ${className}
       `}
+      type="button"
       onClick={handleOnClick}
       disabled={disabled}
     >
