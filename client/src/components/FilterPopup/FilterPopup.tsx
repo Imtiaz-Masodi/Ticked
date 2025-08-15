@@ -178,7 +178,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           {/* Categories */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Categories</h4>
-            <div className="space-y-2 max-h-32 overflow-y-auto">
+            <div className="space-y-2 max-h-32 overflow-y-auto pl-1.5">
               {categories.map((category: Category) => (
                 <Checkbox
                   key={category._id}
@@ -195,7 +195,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           {/* Priority */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Priority</h4>
-            <div className="space-y-2">
+            <div className="space-y-2 pl-1.5">
               {Object.values(Priority).map((priority) => (
                 <Checkbox
                   key={priority}
@@ -212,7 +212,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           {/* Status */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Status</h4>
-            <div className="space-y-2">
+            <div className="space-y-2 pl-1.5">
               {Object.values(TaskStatus).map((status) => (
                 <Checkbox
                   key={status}
@@ -229,7 +229,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           {/* Due Date */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Due Date Range</h4>
-            <div className="space-y-3">
+            <div className="space-y-3 pl-1.5">
               <div>
                 <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1">From</label>
                 <input
