@@ -174,7 +174,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           />
         </div>
 
-        <div className="space-y-6 max-h-96 overflow-y-auto">
+        <div className="space-y-6 max-h-96 overflow-y-auto p-0.5">
           {/* Categories */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Categories</h4>
