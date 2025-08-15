@@ -62,7 +62,16 @@ function TaskForm(props: TaskFormProps) {
         label="Category"
         value={values?.category}
         options={categories}
-        getLabel={(category) => category.name}
+        getLabel={(category) => (
+          <div className="flex items-center">
+            <div
+              className="w-3 h-3 rounded-full mr-2.5"
+              style={{ backgroundColor: category.categoryColorCode || "#A78C00" }}
+            />
+            <span>{category.name}</span>
+          </div>
+        )}
+        getLabelKey={(category) => category._id}
         onChange={handleDropdownChange}
         errorMessage={touched.category ? errors.category : undefined}
         disabled={isSubmitting}
