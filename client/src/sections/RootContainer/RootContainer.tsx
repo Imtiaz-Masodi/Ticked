@@ -6,6 +6,7 @@ import { NAV_ITEMS } from "../../utils/navigationConfig";
 import { authHelper } from "../../helpers/authHelper";
 import { EVENT_AUTH_EXPIRED } from "../../utils/constants";
 import { useLogout } from "../../hooks";
+import { SearchFilterProvider } from "../../contexts/SearchFilterContext";
 
 function RootContainer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -17,6 +18,10 @@ function RootContainer() {
   const handleToggleDrawer = () => {
     setIsDrawerOpen((prev) => !prev);
   };
+
+  // Determine if the current page should show search/filter functionality
+  const shouldShowSearchFilter =
+    ["/", "/backlogs", "/completed"].includes(location.pathname) || location.pathname.startsWith("/task/");
 
   useEffect(() => {
     if (!isUserLoggedIn) {
@@ -38,18 +43,20 @@ function RootContainer() {
   }, [logout]);
 
   return (
-    <div id="root-container" className="min-h-dvh bg-zinc-50 dark:bg-gray-900">
-      <Header onMenuIconClick={handleToggleDrawer} />
-      <NavigationDrawer
-        isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
-        navItems={NAV_ITEMS}
-        activeNavItemPath={location.pathname}
-      />
-      <div className="py-16 md:pl-80 transition-all duration-300">
-        <Outlet />
+    <SearchFilterProvider>
+      <div id="root-container" className="min-h-dvh bg-zinc-50 dark:bg-gray-900">
+        <Header onMenuIconClick={handleToggleDrawer} showSearchFilter={shouldShowSearchFilter} />
+        <NavigationDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          navItems={NAV_ITEMS}
+          activeNavItemPath={location.pathname}
+        />
+        <div className="py-16 md:pl-80 transition-all duration-300">
+          <Outlet />
+        </div>
       </div>
-    </div>
+    </SearchFilterProvider>
   );
 }
 
