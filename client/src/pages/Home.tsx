@@ -3,8 +3,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
-import { TaskStatus, Breakpoints } from "../utils/enums";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import { TaskStatus } from "../utils/enums";
+import { useTabletOrAboveDetect } from "../hooks/useMediaQuery";
 import { Suspense, lazy } from "react";
 import { PageLoading } from "../components/Loader";
 
@@ -18,7 +18,7 @@ function Home() {
   const isUserLoggedIn = authHelper.isUserLoggedIn();
 
   // Check if we're on a larger screen (tablet and above)
-  const isLargeScreen = useMediaQuery(`(min-width: ${Breakpoints.TABLET}px)`);
+  const isLargeScreen = useTabletOrAboveDetect();
 
   // Check if we're currently viewing a task (URL includes /task/:taskId)
   const isViewingTask = location.pathname.startsWith("/task/") && taskId;

@@ -5,12 +5,13 @@ import { NavigationDrawer } from "../../components/NavigationDrawer";
 import { NAV_ITEMS } from "../../utils/navigationConfig";
 import { authHelper } from "../../helpers/authHelper";
 import { EVENT_AUTH_EXPIRED } from "../../utils/constants";
-import { useLogout } from "../../hooks";
+import { useLogout, useTabletOrAboveDetect } from "../../hooks";
 import { SearchFilterProvider } from "../../contexts/SearchFilterContext";
 
 function RootContainer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const isUserLoggedIn = authHelper.isUserLoggedIn();
+  const isLargeScreen = useTabletOrAboveDetect();
   const navigate = useNavigate();
   const location = useLocation();
   const logout = useLogout();
@@ -21,7 +22,8 @@ function RootContainer() {
 
   // Determine if the current page should show search/filter functionality
   const shouldShowSearchFilter =
-    ["/", "/backlogs", "/completed"].includes(location.pathname) || location.pathname.startsWith("/task/");
+    ["/", "/backlogs", "/completed"].includes(location.pathname) ||
+    (isLargeScreen && location.pathname.startsWith("/task/"));
 
   useEffect(() => {
     if (!isUserLoggedIn) {
