@@ -180,21 +180,14 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Categories</h4>
             <div className="space-y-2 max-h-32 overflow-y-auto">
               {categories.map((category: Category) => (
-                <div key={category._id} className="flex items-center">
-                  <Checkbox
-                    label=""
-                    name={`category-${category._id}`}
-                    checked={localFilters.categories.includes(category._id)}
-                    onChange={(e) => handleCategoryChange(category._id, e.target.checked)}
-                  />
-                  <div className="ml-2 flex items-center">
-                    <div
-                      className="w-3 h-3 rounded-full mr-2"
-                      style={{ backgroundColor: category.categoryColorCode }}
-                    />
-                    <span className="text-sm text-slate-700 dark:text-gray-200">{category.name}</span>
-                  </div>
-                </div>
+                <Checkbox
+                  key={category._id}
+                  name={`category-${category._id}`}
+                  checked={localFilters.categories.includes(category._id)}
+                  onChange={(e) => handleCategoryChange(category._id, e.target.checked)}
+                  label={category.name}
+                  checkboxSize={Size.sm}
+                />
               ))}
             </div>
           </div>
@@ -204,15 +197,14 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Priority</h4>
             <div className="space-y-2">
               {Object.values(Priority).map((priority) => (
-                <div key={priority} className="flex items-center">
-                  <Checkbox
-                    label=""
-                    name={`priority-${priority}`}
-                    checked={localFilters.priorities.includes(priority)}
-                    onChange={(e) => handlePriorityChange(priority, e.target.checked)}
-                  />
-                  <span className="ml-2 text-sm text-slate-700 dark:text-gray-200">{priorityLabels[priority]}</span>
-                </div>
+                <Checkbox
+                  key={priority}
+                  name={`priority-${priority}`}
+                  checked={localFilters.priorities.includes(priority)}
+                  onChange={(e) => handlePriorityChange(priority, e.target.checked)}
+                  label={priorityLabels[priority]}
+                  checkboxSize={Size.sm}
+                />
               ))}
             </div>
           </div>
@@ -222,15 +214,14 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Status</h4>
             <div className="space-y-2">
               {Object.values(TaskStatus).map((status) => (
-                <div key={status} className="flex items-center">
-                  <Checkbox
-                    label=""
-                    name={`status-${status}`}
-                    checked={localFilters.statuses.includes(status)}
-                    onChange={(e) => handleStatusChange(status, e.target.checked)}
-                  />
-                  <span className="ml-2 text-sm text-slate-700 dark:text-gray-200">{TaskStatusLabel[status]}</span>
-                </div>
+                <Checkbox
+                  key={status}
+                  name={`status-${status}`}
+                  checked={localFilters.statuses.includes(status)}
+                  onChange={(e) => handleStatusChange(status, e.target.checked)}
+                  label={TaskStatusLabel[status]}
+                  checkboxSize={Size.sm}
+                />
               ))}
             </div>
           </div>
