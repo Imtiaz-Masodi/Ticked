@@ -63,7 +63,10 @@ function Header({ onMenuIconClick, showSearchFilter = false }: HeaderProps) {
             }}
           />
         )}
-        <AppLogo className={`text-white ${isMobile && state.isSearchActive ? "hidden" : ""}`} size={Size.sm} />
+        <AppLogo
+          className={`text-white ${isMobile && showSearchFilter && state.isSearchActive ? "hidden" : ""}`}
+          size={Size.sm}
+        />
       </div>
 
       <div className="flex items-center flex-grow justify-end">
