@@ -178,7 +178,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
           {/* Categories */}
           <div>
             <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Categories</h4>
-            <div className="space-y-2 max-h-32 overflow-y-auto pl-1.5">
+            <div className="space-y-2 pl-1.5">
               {categories.map((category: Category) => (
                 <Checkbox
                   key={category._id}
