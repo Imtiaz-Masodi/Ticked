@@ -32,6 +32,7 @@ import MenuDotsComponent from "../../assets/svg/menu_dots.svg";
 import LightModeComponent from "../../assets/svg/light_mode.svg";
 import DarkModeComponent from "../../assets/svg/dark_mode.svg";
 import DocumentComponent from "../../assets/svg/document.svg";
+import FilterComponent from "../../assets/svg/filter.svg";
 
 export enum Icons {
   hidden = "hidden",
@@ -67,6 +68,7 @@ export enum Icons {
   lightMode = "light-mode",
   darkMode = "dark-mode",
   document = "document",
+  filter = "filter",
 }
 
 type IconMapType = {
@@ -106,4 +108,5 @@ export const IconMap: IconMapType = {
   [Icons.lightMode]: LightModeComponent,
   [Icons.darkMode]: DarkModeComponent,
   [Icons.document]: DocumentComponent,
+  [Icons.filter]: FilterComponent,
 };
