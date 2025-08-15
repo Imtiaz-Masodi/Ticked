@@ -185,7 +185,15 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
                   name={`category-${category._id}`}
                   checked={localFilters.categories.includes(category._id)}
                   onChange={(e) => handleCategoryChange(category._id, e.target.checked)}
-                  label={category.name}
+                  label={
+                    <div className="ml-1 flex items-center">
+                      <div
+                        className="w-3 h-3 rounded-full mr-1.5"
+                        style={{ backgroundColor: category.categoryColorCode }}
+                      />
+                      <span>{category.name}</span>
+                    </div>
+                  }
                   checkboxSize={Size.sm}
                 />
               ))}
