@@ -33,6 +33,10 @@ function Header({ onMenuIconClick, showSearchFilter = false }: HeaderProps) {
     setShowBack(!isNavItem);
   }, [location]);
 
+  useEffect(() => {
+    setIsFilterOpen(false);
+  }, [state.isSearchActive]);
+
   // Always show icon on mobile, and show hamburger for NAV_ITEMS or back for other routes
   const shouldShowIcon = isMobile || showBack;
 
@@ -65,27 +69,25 @@ function Header({ onMenuIconClick, showSearchFilter = false }: HeaderProps) {
       <div className="flex items-center flex-grow justify-end">
         {/* Search Input - shown when search is active */}
         {showSearchFilter && state.isSearchActive && (
-          <div className={`flex-1 max-w-md ${isMobile ? "w-full mx-auto" : ""}`} ref={filterTriggerRef}>
-            <SearchInput onFilterClick={handleFilterClick} />
-          </div>
+          <>
+            <div className={`flex-1 max-w-md ${isMobile ? "w-full mx-auto" : ""}`} ref={filterTriggerRef}>
+              <SearchInput onFilterClick={handleFilterClick} />
+            </div>
+            <FilterPopup isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} triggerRef={filterTriggerRef} />
+          </>
         )}
 
         {/* Search Icon - shown when search is not active and search filter is enabled */}
         {showSearchFilter && !state.isSearchActive && (
           <Icon
             name={Icons.search}
-            className="text-gray-700 dark:text-gray-300 cursor-pointer p-3"
+            className="text-gray-700 dark:text-gray-300 text-lg cursor-pointer p-3"
             onClick={handleSearchIconClick}
           />
         )}
 
         <DarkModeToggle />
       </div>
-
-      {/* Filter Popup */}
-      {showSearchFilter && state.isSearchActive && (
-        <FilterPopup isOpen={isFilterOpen} onClose={() => setIsFilterOpen(false)} triggerRef={filterTriggerRef} />
-      )}
     </header>
   );
 }
