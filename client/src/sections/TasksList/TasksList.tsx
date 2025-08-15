@@ -1,9 +1,6 @@
 import { Swipeable, SwipeableBgContent } from "../../components/Swipeable";
 import { TaskItem } from "../../components/TaskItem";
-import {
-  useGetTasksQuery,
-  useUpdateTaskStatusMutation,
-} from "../../store/api/taskApi";
+import { useGetTasksQuery, useUpdateTaskStatusMutation } from "../../store/api/taskApi";
 import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
 import { TasksPageSkeleton } from "../../components/Skeleton";
@@ -11,6 +8,9 @@ import { TaskStatus } from "../../utils/enums";
 import { getSwipeBackgroundContent, getTitleByStatus } from "./TasksList.helper";
 import { useApiToast } from "../../utils/toastUtils";
 import { useToast } from "../../hooks";
+import { useSearchFilter } from "../../hooks";
+import { filterTasks, hasActiveSearchOrFilter } from "../../utils/taskFilterUtils";
+import { useMemo } from "react";
 
 type TasksListProps = {
   status?: TaskStatus | TaskStatus[];
@@ -24,7 +24,17 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
   const toast = useToast();
-  const tasks = data?.payload?.tasks || [];
+  const searchFilterState = useSearchFilter();
+
+  // Apply search and filter to tasks
+  const tasks = useMemo(() => {
+    const allTasks = data?.payload?.tasks || [];
+
+    if (!hasActiveSearchOrFilter(searchFilterState.state)) {
+      return allTasks;
+    }
+    return filterTasks(allTasks, searchFilterState.state);
+  }, [data?.payload?.tasks, searchFilterState.state]);
 
   const revertTaskStatus = async (taskId: string, previousStatus: TaskStatus) => {
     try {
@@ -37,21 +47,24 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
 
   const handleUpdateTaskStatus = async (taskId: string, newTaskStatus: TaskStatus) => {
     // Find the current task to get its current status for undo functionality
-    const currentTask = tasks.find(task => task._id === taskId);
+    const allTasks = data?.payload?.tasks || [];
+    const currentTask = allTasks.find((task) => task._id === taskId);
     const previousStatus = currentTask?.status;
 
     try {
       await updateTaskStatus({ taskId, taskStatus: newTaskStatus });
-      
+
       // Show success toast with undo action
       apiSuccess("Updated the task status", {
-        action: previousStatus ? {
-          label: "Undo",
-          onClick: async function(toastId: string) {
-            toast.hideToast(toastId);
-            revertTaskStatus(taskId, previousStatus);
-          }
-        } : undefined
+        action: previousStatus
+          ? {
+              label: "Undo",
+              onClick: async function (toastId: string) {
+                toast.hideToast(toastId);
+                revertTaskStatus(taskId, previousStatus);
+              },
+            }
+          : undefined,
       });
     } catch (error) {
       console.error("Failed to update task status:", error);
@@ -97,7 +110,9 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
               )
             }
             onSwipeLeft={leftSwipeContent ? () => handleUpdateTaskStatus(task._id, leftSwipeContent.status) : undefined}
-            onSwipeRight={rightSwipeContent ? () => handleUpdateTaskStatus(task._id, rightSwipeContent?.status) : undefined}
+            onSwipeRight={
+              rightSwipeContent ? () => handleUpdateTaskStatus(task._id, rightSwipeContent?.status) : undefined
+            }
             key={task._id}
           >
             <TaskItem task={task} />
