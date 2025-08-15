@@ -4,7 +4,7 @@ import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 
 type CheckboxProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
+  label: string | React.ReactNode;
   checkboxSize?: Size;
 };
 
