@@ -12,7 +12,7 @@ interface SearchInputProps {
 
 const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
   ({ placeholder = "Search tasks...", onFilterClick, className = "" }, filterIconRef) => {
-    const { state, setSearchQuery, hasActiveFilters } = useSearchFilter();
+    const { state, setSearchQuery, setSearchActive, hasActiveFilters } = useSearchFilter();
     const [localQuery, setLocalQuery] = useState(state.searchQuery);
     const inputRef = useRef<HTMLInputElement>(null);
     const isMobile = useMobileDetect();
@@ -70,7 +70,12 @@ const SearchInput = forwardRef<HTMLDivElement, SearchInputProps>(
           className="w-full bg-transparent pl-10 pr-12 py-2.5 rounded-lg text-slate-700 dark:text-gray-200 text-sm focus-visible:outline-none placeholder:text-slate-400 dark:placeholder:text-gray-500"
         />
 
-        <div className="absolute right-3" ref={filterIconRef}>
+        <div className="absolute right-3 flex gap-2" ref={filterIconRef}>
+          <Icon
+            name={Icons.close}
+            className="text-sm text-slate-400 dark:text-gray-500 hover:text-slate-600 dark:hover:text-gray-300 cursor-pointer"
+            onClick={() => setSearchActive(false)}
+          />
           <Icon
             name={Icons.filter}
             onClick={onFilterClick}
