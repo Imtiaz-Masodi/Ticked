@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchFilter, FilterOptions } from "../../hooks/useSearchFilter";
 import { useGetCategoriesQuery } from "../../store/api/categoryApi";
-import { Priority, TaskStatus, TaskStatusLabel } from "../../utils/enums";
+import { Priority, Size, TaskStatus, TaskStatusLabel } from "../../utils/enums";
 import { Button } from "../Button";
-import { ButtonType } from "../Button/Button.enum";
+import { ButtonType, ButtonVariant } from "../Button/Button.enum";
 import { Checkbox } from "../Checkbox";
 import { Icons } from "../Icon/IconMap";
+import { Icon } from "../Icon";
 import { Category } from "../../types/Category";
 
 interface FilterPopupProps {
@@ -166,6 +167,11 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
       <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg shadow-lg p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-medium text-slate-700 dark:text-gray-200">Filter Tasks</h3>
+          <Icon
+            name={Icons.close}
+            onClick={onClose}
+            className="text-lg text-slate-700 dark:text-gray-200 hover:text-slate-700 dark:hover:text-gray-200 transition-colors"
+          />
         </div>
 
         <div className="space-y-6 max-h-96 overflow-y-auto">
@@ -257,10 +263,16 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
 
         {/* Actions */}
         <div className="flex gap-2 mt-6 pt-4 border-t border-slate-200 dark:border-gray-600">
-          <Button type={ButtonType.outline} onClick={handleClear} className="flex-1 text-sm">
+          <Button
+            type={ButtonType.outline}
+            size={Size.sm}
+            variant={ButtonVariant.secondary}
+            onClick={handleClear}
+            className="flex-1 text-sm"
+          >
             Clear All
           </Button>
-          <Button type={ButtonType.solid} startIcon={Icons.check} onClick={handleApply} className="flex-1 text-sm">
+          <Button type={ButtonType.solid} size={Size.sm} onClick={handleApply} className="flex-1 text-sm">
             Apply
           </Button>
         </div>
