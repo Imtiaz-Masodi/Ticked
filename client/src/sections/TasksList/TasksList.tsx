@@ -5,7 +5,7 @@ import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
 import { TasksPageSkeleton } from "../../components/Skeleton";
 import { TaskStatus } from "../../utils/enums";
-import { getSwipeBackgroundContent, getTitleByStatus } from "./TasksList.helper";
+import { getSwipeBackgroundContent, groupTasksByStatus } from "./TasksList.helper";
 import { useApiToast } from "../../utils/toastUtils";
 import { useToast } from "../../hooks";
 import { useSearchFilter } from "../../hooks";
@@ -13,27 +13,28 @@ import { filterTasks, hasActiveSearchOrFilter } from "../../utils/taskFilterUtil
 import { useMemo } from "react";
 
 type TasksListProps = {
-  status?: TaskStatus | TaskStatus[];
-  title?: string;
   leftAction?: TaskStatus;
   rightAction?: TaskStatus;
 };
 
-function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
+function TasksList({ leftAction, rightAction }: TasksListProps) {
   const { data, isLoading } = useGetTasksQuery();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
   const toast = useToast();
   const searchFilterState = useSearchFilter();
 
-  // Apply search and filter to tasks
-  const tasks = useMemo(() => {
+  // Apply search and filter to tasks and group by status
+  const groupedTasks = useMemo(() => {
     const allTasks = data?.payload?.tasks || [];
+    let filteredTasks = allTasks;
 
-    if (!hasActiveSearchOrFilter(searchFilterState.state)) {
-      return allTasks;
+    if (hasActiveSearchOrFilter(searchFilterState.state)) {
+      filteredTasks = filterTasks(allTasks, searchFilterState.state);
     }
-    return filterTasks(allTasks, searchFilterState.state);
+
+    // Group tasks by status using helper function
+    return groupTasksByStatus(filteredTasks);
   }, [data?.payload?.tasks, searchFilterState.state]);
 
   const revertTaskStatus = async (taskId: string, previousStatus: TaskStatus) => {
@@ -75,49 +76,70 @@ function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
   const leftSwipeContent = leftAction ? getSwipeBackgroundContent(leftAction) : undefined;
   const rightSwipeContent = rightAction ? getSwipeBackgroundContent(rightAction) : undefined;
 
-  if (!isLoading && !tasks.length) {
+  // Function to render a group of tasks with a title
+  const renderTaskGroup = (tasks: Task[], groupTitle: string) => {
+    if (tasks.length === 0) return null;
+
+    return (
+      <div key={groupTitle} className="w-full">
+        <p className="text-sm font-bold text-zinc-600 dark:text-gray-300 self-start mx-2 mb-2">
+          {groupTitle} ({tasks.length})
+        </p>
+        {tasks.map((task: Task) => (
+          <div key={task._id} className="mb-2">
+            <Swipeable
+              className="rounded-md shadow-sm"
+              swipingLeftBgContent={
+                leftSwipeContent && (
+                  <SwipeableBgContent
+                    text={leftSwipeContent.text}
+                    icon={leftSwipeContent.icon}
+                    themeColorClasses={leftSwipeContent.themeColorClasses}
+                  />
+                )
+              }
+              swipingRightBgContent={
+                rightSwipeContent && (
+                  <SwipeableBgContent
+                    text={rightSwipeContent.text}
+                    icon={rightSwipeContent.icon}
+                    themeColorClasses={rightSwipeContent.themeColorClasses}
+                  />
+                )
+              }
+              onSwipeLeft={
+                leftSwipeContent ? () => handleUpdateTaskStatus(task._id, leftSwipeContent.status) : undefined
+              }
+              onSwipeRight={
+                rightSwipeContent ? () => handleUpdateTaskStatus(task._id, rightSwipeContent?.status) : undefined
+              }
+            >
+              <TaskItem task={task} />
+            </Swipeable>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // Calculate total tasks count for NoData check
+  const totalTasks = groupedTasks.active.length + groupedTasks.completed.length + groupedTasks.backlog.length;
+
+  if (!isLoading && totalTasks === 0) {
     return <NoData />;
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-4 gap-2 mt-3">
-      <p className="text-sm font-bold text-zinc-600 dark:text-gray-300 self-start mx-2">
-        {title || getTitleByStatus(status)}
-      </p>
-
+    <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-4 gap-4 mt-3">
       {isLoading && <TasksPageSkeleton taskItemsCount={15} />}
 
-      {!isLoading &&
-        tasks.map((task: Task) => (
-          <Swipeable
-            className="rounded-md shadow-sm"
-            swipingLeftBgContent={
-              leftSwipeContent && (
-                <SwipeableBgContent
-                  text={leftSwipeContent.text}
-                  icon={leftSwipeContent.icon}
-                  themeColorClasses={leftSwipeContent.themeColorClasses}
-                />
-              )
-            }
-            swipingRightBgContent={
-              rightSwipeContent && (
-                <SwipeableBgContent
-                  text={rightSwipeContent.text}
-                  icon={rightSwipeContent.icon}
-                  themeColorClasses={rightSwipeContent.themeColorClasses}
-                />
-              )
-            }
-            onSwipeLeft={leftSwipeContent ? () => handleUpdateTaskStatus(task._id, leftSwipeContent.status) : undefined}
-            onSwipeRight={
-              rightSwipeContent ? () => handleUpdateTaskStatus(task._id, rightSwipeContent?.status) : undefined
-            }
-            key={task._id}
-          >
-            <TaskItem task={task} />
-          </Swipeable>
-        ))}
+      {!isLoading && (
+        <>
+          {renderTaskGroup(groupedTasks.active, "Active Tasks")}
+          {renderTaskGroup(groupedTasks.completed, "Completed Tasks")}
+          {renderTaskGroup(groupedTasks.backlog, "Backlog Tasks")}
+        </>
+      )}
     </div>
   );
 }

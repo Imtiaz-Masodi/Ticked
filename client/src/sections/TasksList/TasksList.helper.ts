@@ -1,5 +1,39 @@
 import { Icons } from "../../components/Icon/IconMap";
 import { TaskStatus, TaskStatusLabel } from "../../utils/enums";
+import { Task } from "../../types/Task";
+
+// Type for grouped tasks
+export type GroupedTasks = {
+  active: Task[];
+  completed: Task[];
+  backlog: Task[];
+};
+
+// Helper function to group tasks by status in a single loop
+export const groupTasksByStatus = (tasks: Task[]): GroupedTasks => {
+  return tasks.reduce(
+    (groups, task) => {
+      switch (task.status) {
+        case TaskStatus.todo:
+        case TaskStatus.inprogress:
+          groups.active.push(task);
+          break;
+        case TaskStatus.completed:
+          groups.completed.push(task);
+          break;
+        case TaskStatus.backlog:
+          groups.backlog.push(task);
+          break;
+      }
+      return groups;
+    },
+    {
+      active: [] as Task[],
+      completed: [] as Task[],
+      backlog: [] as Task[],
+    }
+  );
+};
 
 // Helper function to generate swipe background content based on task status
 export const getSwipeBackgroundContent = (action: TaskStatus) => {
