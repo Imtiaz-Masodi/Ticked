@@ -233,31 +233,6 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
               ))}
             </div>
           </div>
-
-          {/* Due Date */}
-          <div>
-            <h4 className="text-sm font-medium text-slate-600 dark:text-gray-300 mb-3">Due Date Range</h4>
-            <div className="space-y-3 pl-1.5">
-              <div>
-                <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1">From</label>
-                <input
-                  type="date"
-                  value={dueDateStart}
-                  onChange={(e) => setDueDateStart(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-slate-500 dark:text-gray-400 mb-1">To</label>
-                <input
-                  type="date"
-                  value={dueDateEnd}
-                  onChange={(e) => setDueDateEnd(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-slate-200 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Actions */}
