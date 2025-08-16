@@ -74,6 +74,26 @@ function App() {
                 }
               />
 
+              {/* Tasks route with status filtering */}
+              <Route
+                path="/tasks/:id"
+                element={
+                  <Suspense fallback={<PageLoading text="Loading tasks..." />}>
+                    <Home />
+                  </Suspense>
+                }
+              />
+
+              {/* Legacy /tasks route redirect to /tasks/all */}
+              <Route
+                path="/tasks"
+                element={
+                  <Suspense fallback={<PageLoading text="Loading tasks..." />}>
+                    <Home />
+                  </Suspense>
+                }
+              />
+
               {/* Task viewing routes - same Home component for responsive behavior */}
               <Route path="/task/:taskId" element={<Home />} />
 
