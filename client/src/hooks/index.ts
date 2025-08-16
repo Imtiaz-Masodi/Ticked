@@ -4,3 +4,4 @@ export * from "./useMediaQuery";
 export * from "./useToast";
 export * from "./useToastContext";
 export * from "./useSearchFilter";
+export * from "./useStatusTypeFilter";
