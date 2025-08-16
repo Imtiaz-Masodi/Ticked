@@ -4,7 +4,7 @@ import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
 import { TaskStatus } from "../utils/enums";
-import { useTabletOrAboveDetect } from "../hooks/useMediaQuery";
+import { useTabletOrAboveDetect, useStatusTypeFilter } from "../hooks";
 import { Suspense, lazy } from "react";
 import { PageLoading } from "../components/Loader";
 
@@ -16,6 +16,9 @@ function Home() {
   const { taskId } = useParams<{ taskId?: string }>();
   const location = useLocation();
   const isUserLoggedIn = authHelper.isUserLoggedIn();
+
+  // Handle statusType query parameter and update filters
+  useStatusTypeFilter();
 
   // Check if we're on a larger screen (tablet and above)
   const isLargeScreen = useTabletOrAboveDetect();
@@ -39,12 +42,7 @@ function Home() {
       <div className={`${isLargeScreen && isViewingTask ? "flex gap-0 max-w-screen-2xl mx-auto" : ""}`}>
         {/* Tasks List - takes half width on large screens when viewing a task */}
         <div className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"}`}>
-          <TasksList
-            title="Active Tasks"
-            status={[TaskStatus.todo, TaskStatus.inprogress]}
-            leftAction={TaskStatus.completed}
-            rightAction={TaskStatus.backlog}
-          />
+          <TasksList leftAction={TaskStatus.completed} rightAction={TaskStatus.backlog} />
         </div>
 
         {/* Task Viewer - only shown on large screens */}
