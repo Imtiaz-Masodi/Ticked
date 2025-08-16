@@ -22,7 +22,7 @@ function RootContainer() {
 
   // Determine if the current page should show search/filter functionality
   const shouldShowSearchFilter =
-    ["/", "/backlogs", "/completed"].includes(location.pathname) ||
+    location.pathname.startsWith("/tasks/") ||
     (isLargeScreen && location.pathname.startsWith("/task/") && location.pathname !== "/task/new");
 
   useEffect(() => {
