@@ -2,23 +2,32 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { Task } from "../../types/Task";
 import { customBaseQuery } from "./customBaseQuery";
 import { ApiResponse } from "../../types/ApiResponse";
+import { TaskStatus } from "../../utils/enums";
 
 export const taskApi = createApi({
   reducerPath: "taskApi",
   baseQuery: customBaseQuery(),
   tagTypes: ["Task"],
   endpoints: (builder) => ({
-    getTasks: builder.query<ApiResponse<{ tasks: Task[] }>, { status?: string | string[] } | undefined>({
-      query: ({ status } = {}) => ({
-        url: "/task/list",
-        method: "GET",
-        params: status ? { status } : undefined,
-      }),
+    getTasks: builder.query<
+      ApiResponse<{ tasks: Task[] }>,
+      { status?: TaskStatus | TaskStatus[]; categoryId?: string } | void
+    >({
+      query: ({ status, categoryId } = {}) => {
+        return {
+          url: "/task/list",
+          method: "GET",
+          params: {
+            ...(status && { status }),
+            ...(categoryId && { categoryId }),
+          },
+        };
+      },
       providesTags: (result) =>
         result?.payload?.tasks
           ? [
-              ...result.payload.tasks.map((task: Task) => ({type: "Task" as const, id: task._id })),
-              { type: "Task", id: "LIST" }
+              ...result.payload.tasks.map((task: Task) => ({ type: "Task" as const, id: task._id })),
+              { type: "Task", id: "LIST" },
             ]
           : [{ type: "Task", id: "LIST" }],
     }),
@@ -28,20 +37,6 @@ export const taskApi = createApi({
         method: "GET",
       }),
       providesTags: (_result, _error, taskId) => [{ type: "Task", id: taskId }],
-    }),
-    getTasksByCategory: builder.query<ApiResponse<{ tasks: Task[] }>, { categoryId: string }>({
-      query: ({ categoryId }) => ({
-        url: "/task/list",
-        method: "GET",
-        params: { categoryId },
-      }),
-      providesTags: (result) =>
-        result?.payload?.tasks
-          ? [
-              ...result.payload.tasks.map((task: Task) => ({ type: "Task" as const, id: task._id })),
-              { type: "Task", id: "LIST" },
-            ]
-          : [{ type: "Task", id: "LIST" }],
     }),
     createTask: builder.mutation<ApiResponse<unknown>, Task>({
       query: (task) => ({
@@ -86,7 +81,6 @@ export const taskApi = createApi({
 export const {
   useGetTasksQuery,
   useGetTaskByIdQuery,
-  useGetTasksByCategoryQuery,
   useCreateTaskMutation,
   useUpdateTaskMutation,
   useUpdateTaskStatusMutation,

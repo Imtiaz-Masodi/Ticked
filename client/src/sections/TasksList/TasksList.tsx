@@ -20,7 +20,7 @@ type TasksListProps = {
 };
 
 function TasksList({ status, title, leftAction, rightAction }: TasksListProps) {
-  const { data, isLoading } = useGetTasksQuery({ status });
+  const { data, isLoading } = useGetTasksQuery();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
   const toast = useToast();

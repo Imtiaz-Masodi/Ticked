@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useGetTasksByCategoryQuery } from "../../store/api/taskApi";
+import { useGetTasksQuery } from "../../store/api/taskApi";
 import { useDeleteCategoryMutation, useUpdateCategoryMutation } from "../../store/api/categoryApi";
 import { Category } from "../../types/Category";
 import { ApiResponseStatus } from "../../utils/enums";
@@ -35,7 +35,7 @@ function CategoryCard({ category }: CategoryCardProps) {
   const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
   const [updateCategory, { isLoading: isUpdating }] = useUpdateCategoryMutation();
 
-  const { data: tasksByCategory, isLoading } = useGetTasksByCategoryQuery({ categoryId: category._id });
+  const { data: tasksByCategory, isLoading } = useGetTasksQuery({ categoryId: category._id });
 
   // Reset edited values when category changes
   useEffect(() => {
