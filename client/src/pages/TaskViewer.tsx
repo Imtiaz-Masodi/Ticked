@@ -184,9 +184,9 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               {!isEditMode && (
                 <div
                   onClick={() => setIsEditMode(true)}
-                  className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-200 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
+                  className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-400 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
                 >
-                  <Icon name={Icons.edit} className="text-sky-600 dark:text-sky-400" />
+                  <Icon name={Icons.edit} className="text-sky-400 dark:text-sky-400" />
                 </div>
               )}
               {isEditMode && (
