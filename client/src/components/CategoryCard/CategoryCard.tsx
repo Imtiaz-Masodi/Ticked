@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useGetTasksQuery } from "../../store/api/taskApi";
 import { useDeleteCategoryMutation, useUpdateCategoryMutation } from "../../store/api/categoryApi";
 import { Category } from "../../types/Category";
-import { ApiResponseStatus } from "../../utils/enums";
+import { ApiResponseStatus, Size } from "../../utils/enums";
 import { Icons } from "../Icon/IconMap";
 import { Menu } from "../Menu";
 import { Icon } from "../Icon";
@@ -13,8 +14,10 @@ import { Tooltip } from "../Tooltip";
 import { useMobileDetect } from "../../hooks";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import { ButtonType } from "../Button/Button.enum";
+import { ButtonType, ButtonVariant } from "../Button/Button.enum";
 import { ColorPickerPopup } from "../ColorPickerPopup";
+import { useSearchFilter } from "../../hooks/useSearchFilter";
+import { TASK_ROUTES } from "../../utils/routes";
 import CategoryTaskStats from "./CategoryTaskStats";
 
 interface CategoryCardProps {
@@ -30,6 +33,8 @@ function CategoryCard({ category }: CategoryCardProps) {
   const colorButtonRef = useRef<HTMLDivElement>(null);
   const menuTriggerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMobileDetect();
+  const navigate = useNavigate();
+  const { updateFilters } = useSearchFilter();
 
   const { addToast } = useToastContext();
   const [deleteCategory, { isLoading: isDeleting }] = useDeleteCategoryMutation();
@@ -49,6 +54,13 @@ function CategoryCard({ category }: CategoryCardProps) {
       setEditedColor(category.categoryColorCode);
     }
   }, [category.categoryColorCode, category.name, isEditing]);
+
+  const handleViewCategoryTasks = () => {
+    // Apply filter for this specific category
+    updateFilters({ categories: [category._id] }, true);
+    // Navigate to tasks/all route
+    navigate(TASK_ROUTES.TASKS_ALL);
+  };
 
   const menuItems = getCategoryMenuItems(category);
 
@@ -81,7 +93,11 @@ function CategoryCard({ category }: CategoryCardProps) {
 
   const handleSaveEdit = async () => {
     try {
-      const response = await updateCategory({ id: category._id, categoryName: editedName.trim(), categoryColorCode: editedColor }).unwrap();
+      const response = await updateCategory({
+        id: category._id,
+        categoryName: editedName.trim(),
+        categoryColorCode: editedColor,
+      }).unwrap();
       if (response.status === ApiResponseStatus.success) setIsEditing(false);
       addToast({
         id: Date.now().toString(),
@@ -112,7 +128,7 @@ function CategoryCard({ category }: CategoryCardProps) {
   };
 
   const categoryDetailsChanged = useMemo(() => {
-    return (editedName !== category.name || editedColor !== category.categoryColorCode);
+    return editedName !== category.name || editedColor !== category.categoryColorCode;
   }, [editedName, editedColor, category.name, category.categoryColorCode]);
 
   return (
@@ -120,7 +136,9 @@ function CategoryCard({ category }: CategoryCardProps) {
       <div className="flex items-center gap-3 mb-6">
         <div className="relative">
           <div
-            className={`w-5 h-5 rounded-full flex-shrink-0 shadow-inner inner-shadow-glossy ${isEditing ? "cursor-pointer" : "cursor-default"}`}
+            className={`w-5 h-5 rounded-full flex-shrink-0 shadow-inner inner-shadow-glossy ${
+              isEditing ? "cursor-pointer" : "cursor-default"
+            }`}
             style={{ backgroundColor: isEditing ? editedColor : category.categoryColorCode }}
             onClick={() => setIsColorPickerOpen(isEditing && true)}
             ref={colorButtonRef}
@@ -159,9 +177,7 @@ function CategoryCard({ category }: CategoryCardProps) {
             />
           ) : (
             <>
-              <h3 className="text-xl leading-tight text-zinc-700 dark:text-gray-200 select-none">
-                {category.name}
-              </h3>
+              <h3 className="text-xl leading-tight text-zinc-700 dark:text-gray-200 select-none">{category.name}</h3>
               {category.updatedOn && (
                 <p className="text-sm text-zinc-500 dark:text-gray-400 select-none">
                   Updated on {new Date(category.updatedOn).toLocaleDateString()}
@@ -219,10 +235,24 @@ function CategoryCard({ category }: CategoryCardProps) {
         )}
       </div>
 
-      <CategoryTaskStats
-        tasksByCategory={tasksByCategory}
-        isLoading={isLoading}
-      />
+      <CategoryTaskStats tasksByCategory={tasksByCategory} isLoading={isLoading} />
+
+      {/* View tasks button */}
+      {!isEditing && (tasksByCategory?.payload?.tasks.length || 0) > 0 && (
+        <div className="mt-4">
+          <Button
+            size={Size.sm}
+            variant={ButtonVariant.primary}
+            type={ButtonType.outline}
+            endIcon={Icons.arrowRight}
+            onClick={handleViewCategoryTasks}
+            className="w-full !text-sm"
+            disabled={isDeleting || isUpdating}
+          >
+            View Tasks
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
