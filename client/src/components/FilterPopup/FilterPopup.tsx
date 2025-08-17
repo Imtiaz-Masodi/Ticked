@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSearchFilter, FilterOptions } from "../../hooks/useSearchFilter";
+import { useSearchFilter } from "../../hooks/useSearchFilter";
 import { useGetCategoriesQuery } from "../../store/api/categoryApi";
 import { Priority, Size, TaskStatus, TaskStatusLabel } from "../../utils/enums";
-import { Button } from "../Button";
-import { ButtonType, ButtonVariant } from "../Button/Button.enum";
 import { Checkbox } from "../Checkbox";
 import { Icons } from "../Icon/IconMap";
 import { Icon } from "../Icon";
@@ -20,9 +18,6 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
   const { data: categoriesData } = useGetCategoriesQuery();
   const popupRef = useRef<HTMLDivElement>(null);
 
-  const [localFilters, setLocalFilters] = useState<FilterOptions>(state.filters);
-  const [dueDateStart, setDueDateStart] = useState(state.filters.dueDateRange?.start || "");
-  const [dueDateEnd, setDueDateEnd] = useState(state.filters.dueDateRange?.end || "");
   const [position, setPosition] = useState({ top: 0, left: 0, opacity: 0 });
 
   const categories = categoriesData?.payload?.categories || [];
@@ -84,65 +79,32 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
     };
   }, [isOpen, onClose, triggerRef]);
 
-  // Sync with context state
-  useEffect(() => {
-    setLocalFilters(state.filters);
-    setDueDateStart(state.filters.dueDateRange?.start || "");
-    setDueDateEnd(state.filters.dueDateRange?.end || "");
-  }, [state.filters]);
-
-  // Update date range when dates change
-  useEffect(() => {
-    setLocalFilters((prev: FilterOptions) => ({
-      ...prev,
-      dueDateRange:
-        dueDateStart || dueDateEnd
-          ? {
-              start: dueDateStart || undefined,
-              end: dueDateEnd || undefined,
-            }
-          : undefined,
-    }));
-  }, [dueDateStart, dueDateEnd]);
-
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
-    setLocalFilters((prev: FilterOptions) => ({
-      ...prev,
-      categories: checked
-        ? [...prev.categories, categoryId]
-        : prev.categories.filter((id: string) => id !== categoryId),
-    }));
+    const newCategories = checked
+      ? [...state.filters.categories, categoryId]
+      : state.filters.categories.filter((id: string) => id !== categoryId);
+
+    updateFilters({ categories: newCategories });
   };
 
   const handlePriorityChange = (priority: Priority, checked: boolean) => {
-    setLocalFilters((prev: FilterOptions) => ({
-      ...prev,
-      priorities: checked ? [...prev.priorities, priority] : prev.priorities.filter((p: Priority) => p !== priority),
-    }));
+    const newPriorities = checked
+      ? [...state.filters.priorities, priority]
+      : state.filters.priorities.filter((p: Priority) => p !== priority);
+
+    updateFilters({ priorities: newPriorities });
   };
 
   const handleStatusChange = (status: TaskStatus, checked: boolean) => {
-    setLocalFilters((prev: FilterOptions) => ({
-      ...prev,
-      statuses: checked ? [...prev.statuses, status] : prev.statuses.filter((s: TaskStatus) => s !== status),
-    }));
-  };
+    const newStatuses = checked
+      ? [...state.filters.statuses, status]
+      : state.filters.statuses.filter((s: TaskStatus) => s !== status);
 
-  const handleApply = () => {
-    updateFilters(localFilters);
-    onClose();
+    updateFilters({ statuses: newStatuses });
   };
 
   const handleClear = () => {
     clearFilters();
-    setLocalFilters({
-      categories: [],
-      priorities: [],
-      statuses: [],
-      dueDateRange: undefined,
-    });
-    setDueDateStart("");
-    setDueDateEnd("");
   };
 
   const priorityLabels = {
@@ -165,12 +127,17 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
     >
       {/* Content */}
       <div className="bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg shadow-lg p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-slate-700 dark:text-gray-200">Filter Tasks</h3>
+        <div className="flex items-center justify-between mb-4 gap-2">
           <Icon
             name={Icons.close}
             onClick={onClose}
-            className="text-lg text-slate-700 dark:text-gray-200 hover:text-slate-700 dark:hover:text-gray-200 transition-colors"
+            className="text-lg text-slate-100 dark:text-gray-200 hover:text-slate-300 dark:hover:text-gray-400 transition-colors cursor-pointer"
+          />
+          <h3 className="text-lg font-medium text-slate-700 dark:text-gray-200 flex-grow">Filter Tasks</h3>
+          <Icon
+            name={Icons.delete}
+            onClick={handleClear}
+            className="text-lg text-slate-100 dark:text-gray-200 hover:text-slate-300 dark:hover:text-gray-400 transition-colors cursor-pointer"
           />
         </div>
 
@@ -183,7 +150,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
                 <Checkbox
                   key={category._id}
                   name={`category-${category._id}`}
-                  checked={localFilters.categories.includes(category._id)}
+                  checked={state.filters.categories.includes(category._id)}
                   onChange={(e) => handleCategoryChange(category._id, e.target.checked)}
                   label={
                     <div className="ml-1 flex items-center">
@@ -208,7 +175,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
                 <Checkbox
                   key={priority}
                   name={`priority-${priority}`}
-                  checked={localFilters.priorities.includes(priority)}
+                  checked={state.filters.priorities.includes(priority)}
                   onChange={(e) => handlePriorityChange(priority, e.target.checked)}
                   label={priorityLabels[priority]}
                   checkboxSize={Size.sm}
@@ -225,7 +192,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
                 <Checkbox
                   key={status}
                   name={`status-${status}`}
-                  checked={localFilters.statuses.includes(status)}
+                  checked={state.filters.statuses.includes(status)}
                   onChange={(e) => handleStatusChange(status, e.target.checked)}
                   label={TaskStatusLabel[status]}
                   checkboxSize={Size.sm}
@@ -233,22 +200,6 @@ const FilterPopup: React.FC<FilterPopupProps> = ({ isOpen, onClose, triggerRef }
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Actions */}
-        <div className="flex gap-2 mt-6 pt-4 border-t border-slate-200 dark:border-gray-600">
-          <Button
-            type={ButtonType.outline}
-            size={Size.sm}
-            variant={ButtonVariant.secondary}
-            onClick={handleClear}
-            className="flex-1 text-sm"
-          >
-            Clear All
-          </Button>
-          <Button type={ButtonType.solid} size={Size.sm} onClick={handleApply} className="flex-1 text-sm">
-            Apply
-          </Button>
         </div>
       </div>
     </div>
