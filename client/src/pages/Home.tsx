@@ -7,6 +7,7 @@ import { TaskStatus } from "../utils/enums";
 import { useTabletOrAboveDetect, useStatusTypeFilter } from "../hooks";
 import { Suspense, lazy } from "react";
 import { PageLoading } from "../components/Loader";
+import { TASK_ROUTES } from "../utils/routes";
 
 // Lazy load TaskViewer component
 const TaskViewer = lazy(() => import("./TaskViewer"));
@@ -57,7 +58,7 @@ function Home() {
 
       {/* Floating Action Button - positioned relative to the tasks list */}
       {(!isViewingTask || !isLargeScreen) && (
-        <FloatingActionButton icon={Icons.add} onClick={() => navigate("/task/new")} />
+        <FloatingActionButton icon={Icons.add} onClick={() => navigate(TASK_ROUTES.TASK_NEW)} />
       )}
     </div>
   );

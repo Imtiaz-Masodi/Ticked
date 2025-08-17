@@ -6,6 +6,7 @@ import { SettingItem } from "../../components/SettingItem";
 import { useApiToast } from "../../utils/toastUtils";
 import { useLogout } from "../../hooks";
 import { useNavigate } from "react-router-dom";
+import { APP_ROUTES } from "../../utils/routes";
 
 const AccountSettingsSection: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const AccountSettingsSection: React.FC = () => {
   const handleLogout = () => logout();
 
   const handleChangePassword = () => {
-    navigate("/profile?update-password=1");
+    navigate(`${APP_ROUTES.PROFILE}?update-password=1`);
   };
 
   const handleDeleteAccount = () => {

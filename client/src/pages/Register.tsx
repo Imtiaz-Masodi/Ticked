@@ -13,6 +13,7 @@ import { ButtonType } from "../components/Button/Button.enum";
 import { authService } from "../api/authService";
 import { ERROR_REGISTRATION_FAILED } from "../utils/constants";
 import { DarkModeToggle } from "../components/DarkModeToggle";
+import { AUTH_ROUTES, ROUTE_BUILDERS } from "../utils/routes";
 
 function Register() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function Register() {
       const response = await authService.register(values);
       if (response.success) {
         // Redirect to email verification page with the email as a query parameter
-        navigate(`/verify-email?email=${encodeURIComponent(values.email)}`);
+        navigate(ROUTE_BUILDERS.verifyEmail(values.email));
       } else {
         setErrorMessage(response.message || ERROR_REGISTRATION_FAILED);
       }
@@ -68,7 +69,7 @@ function Register() {
           <Button
             size={Size.sm}
             type={ButtonType.link}
-            onClick={() => navigate("/login")}
+            onClick={() => navigate(AUTH_ROUTES.LOGIN)}
             className="ps-1 pe-1"
             disabled={formik.isSubmitting}
           >

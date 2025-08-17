@@ -12,20 +12,12 @@ type StatusType = "all" | "active" | "completed" | "backlog";
 export const useStatusTypeFilter = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
+  const { statusType } = useParams<{ statusType: StatusType }>();
   const { updateFilters, clearFilters } = useSearchFilter();
 
   useEffect(() => {
-    // Handle legacy /tasks route by redirecting to /tasks/all
-    if (location.pathname === "/tasks") {
-      navigate("/tasks/all", { replace: true });
-      return;
-    }
-
     // Check if we're on a tasks route with an id parameter
-    if (location.pathname.startsWith("/tasks/") && id) {
-      const statusType = id as StatusType;
-
+    if (location.pathname.startsWith("/tasks/") && statusType) {
       // Check if the id is a valid status type
       if (["all", "active", "completed", "backlog"].includes(statusType)) {
         // Apply filters based on statusType
@@ -63,5 +55,5 @@ export const useStatusTypeFilter = () => {
       }
       // If it's not a status type, it might be a task ID - don't handle filtering in that case
     }
-  }, [location.pathname, id, updateFilters, clearFilters, navigate]);
+  }, [location.pathname, statusType, updateFilters, clearFilters, navigate]);
 };

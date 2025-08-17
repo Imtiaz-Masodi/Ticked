@@ -3,6 +3,7 @@ import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { useMobileDetect, useLogout } from "../../hooks";
 import { UserInfoHeader } from "../UserInfoHeader";
+import { APP_ROUTES } from "../../utils/routes";
 
 export type NavigationItem = {
   name: string;
@@ -35,11 +36,6 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
   const logout = useLogout();
   const handleLogout = () => logout();
 
-  const handleEditProfile = () => {
-    navigate("/profile");
-    if (isMobile) onClose();
-  };
-
   return (
     <>
       {/* Overlay for mobile with CSS fade effect */}
@@ -64,7 +60,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
       >
         <div className="flex flex-col h-full">
           {/* User Info */}
-          <UserInfoHeader onEditProfile={handleEditProfile} />
+          <UserInfoHeader onEditProfile={() => handleNavigation(APP_ROUTES.PROFILE)} />
           {/* Navigation Items */}
           <div className="flex-grow py-4">
             {navItems.map((item) => {

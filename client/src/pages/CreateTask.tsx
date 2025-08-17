@@ -9,16 +9,14 @@ import { useCreateTaskMutation } from "../store/api/taskApi";
 import { Task } from "../types/Task";
 import { Notification, NotificationType } from "../components/Notification";
 import { useApiToast } from "../utils/toastUtils";
+import { TASK_ROUTES } from "../utils/routes";
 
 function CreateTask() {
   const navigate = useNavigate();
   const toast = useApiToast();
   const [triggerCreateTask, createTaskResponse] = useCreateTaskMutation();
 
-  const handleFormSubmit = async (
-    values: TaskFormValues,
-    { setSubmitting }: FormikHelpers<TaskFormValues>
-  ) => {
+  const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
     try {
       const response = await triggerCreateTask({
         title: values.title,
@@ -31,7 +29,7 @@ function CreateTask() {
       if (response.data?.status === ApiResponseStatus.success) {
         formik.resetForm();
         toast.apiSuccess(response.data.message || "Task created successfully!");
-        setTimeout(() => navigate("/"), 1500);
+        setTimeout(() => navigate(TASK_ROUTES.TASKS_ALL), 1500);
       }
     } catch (ex) {
       console.log((ex as Error).message);
@@ -55,9 +53,7 @@ function CreateTask() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-6 -mb-16 px-4">
       <div className="my-8">
-        <div className="text-center text-2xl sm:text-3xl text-slate-800 dark:text-white/80">
-          Create Task
-        </div>
+        <div className="text-center text-2xl sm:text-3xl text-slate-800 dark:text-white/80">Create Task</div>
         <div className="text-center text-sm text-slate-500 dark:text-gray-400 font-light">
           Start organizing your tasks effortlessly
         </div>
@@ -66,14 +62,10 @@ function CreateTask() {
       <div className="max-w-md mx-auto">
         {createTaskResponse.data?.status == ApiResponseStatus.failed && (
           <div className="mb-4">
-            <Notification
-              type={NotificationType.ERROR}
-            >
-              {createTaskResponse.data?.message}
-            </Notification>
+            <Notification type={NotificationType.ERROR}>{createTaskResponse.data?.message}</Notification>
           </div>
         )}
-        
+
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
           <div className="flex flex-col gap-4">
             {/* @ts-expect-error Ignore */}

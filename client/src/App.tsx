@@ -5,6 +5,7 @@ import { ToastContainer } from "./components/Toast";
 import { ToastProvider } from "./contexts/ToastContext";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
 import { PageLoading } from "./components/Loader";
+import { AUTH_ROUTES, APP_ROUTES, TASK_ROUTES } from "./utils/routes";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
@@ -14,8 +15,6 @@ const Register = lazy(() => import("./pages/Register"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const Categories = lazy(() => import("./pages/Categories"));
-const Backlog = lazy(() => import("./pages/Backlog"));
-const Completed = lazy(() => import("./pages/Completed"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Profile = lazy(() => import("./pages/Profile"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -28,7 +27,7 @@ function App() {
           <ToastContainer />
           <Routes>
             <Route
-              path="/login"
+              path={AUTH_ROUTES.LOGIN}
               element={
                 <Suspense fallback={<PageLoading text="Loading Login Page..." />}>
                   <Login />
@@ -37,7 +36,7 @@ function App() {
             />
 
             <Route
-              path="/register"
+              path={AUTH_ROUTES.REGISTER}
               element={
                 <Suspense fallback={<PageLoading text="Loading Signup Page..." />}>
                   <Register />
@@ -46,7 +45,7 @@ function App() {
             />
 
             <Route
-              path="/verify-email"
+              path={AUTH_ROUTES.VERIFY_EMAIL}
               element={
                 <Suspense fallback={<PageLoading text="Loading Verification Page..." />}>
                   <VerifyEmail />
@@ -55,7 +54,7 @@ function App() {
             />
 
             <Route
-              path="/forgot-password"
+              path={AUTH_ROUTES.FORGOT_PASSWORD}
               element={
                 <Suspense fallback={<PageLoading text="Loading Forgot Password Page..." />}>
                   <ForgotPassword />
@@ -65,7 +64,7 @@ function App() {
 
             <Route element={<RootContainer />}>
               <Route
-                path="/"
+                path={APP_ROUTES.HOME}
                 index
                 element={
                   <Suspense fallback={<PageLoading text="Loading home page..." />}>
@@ -76,17 +75,7 @@ function App() {
 
               {/* Tasks route with status filtering */}
               <Route
-                path="/tasks/:id"
-                element={
-                  <Suspense fallback={<PageLoading text="Loading tasks..." />}>
-                    <Home />
-                  </Suspense>
-                }
-              />
-
-              {/* Legacy /tasks route redirect to /tasks/all */}
-              <Route
-                path="/tasks"
+                path={TASK_ROUTES.TASKS_BY_STATUS}
                 element={
                   <Suspense fallback={<PageLoading text="Loading tasks..." />}>
                     <Home />
@@ -95,10 +84,10 @@ function App() {
               />
 
               {/* Task viewing routes - same Home component for responsive behavior */}
-              <Route path="/task/:taskId" element={<Home />} />
+              <Route path={TASK_ROUTES.TASK_VIEW} element={<Home />} />
 
               <Route
-                path="/task/new"
+                path={TASK_ROUTES.TASK_NEW}
                 element={
                   <Suspense fallback={<PageLoading text="Loading Tasks..." />}>
                     <CreateTask />
@@ -107,7 +96,7 @@ function App() {
               />
 
               <Route
-                path="/categories"
+                path={APP_ROUTES.CATEGORIES}
                 element={
                   <Suspense fallback={<PageLoading text="Loading Categories..." />}>
                     <Categories />
@@ -116,25 +105,7 @@ function App() {
               />
 
               <Route
-                path="/backlogs"
-                element={
-                  <Suspense fallback={<PageLoading text="Loading Backlogs..." />}>
-                    <Backlog />
-                  </Suspense>
-                }
-              />
-
-              <Route
-                path="/completed"
-                element={
-                  <Suspense fallback={<PageLoading text="Loading Completed Tasks..." />}>
-                    <Completed />
-                  </Suspense>
-                }
-              />
-
-              <Route
-                path="/settings"
+                path={APP_ROUTES.SETTINGS}
                 element={
                   <Suspense fallback={<PageLoading text="Loading Settings..." />}>
                     <Settings />
@@ -143,7 +114,7 @@ function App() {
               />
 
               <Route
-                path="/profile"
+                path={APP_ROUTES.PROFILE}
                 element={
                   <Suspense fallback={<PageLoading text="Loading Profile..." />}>
                     <Profile />
@@ -153,7 +124,7 @@ function App() {
             </Route>
 
             <Route
-              path="*"
+              path={APP_ROUTES.NOT_FOUND}
               element={
                 <Suspense fallback={<PageLoading text="Loading..." />}>
                   <NotFound />

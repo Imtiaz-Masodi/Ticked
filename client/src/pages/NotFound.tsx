@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Header from "../components/Header/Header";
+import { APP_ROUTES } from "../utils/routes";
 
 function NotFound() {
   return (
@@ -10,7 +11,10 @@ function NotFound() {
       <p className="text-zinc-600 text-center select-none">
         Sorry, the page you are looking for doesn't exist or has been moved.
       </p>
-      <Link to="/" className="mt-4 px-6 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition-colors">
+      <Link
+        to={APP_ROUTES.HOME}
+        className="mt-4 px-6 py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 transition-colors"
+      >
         Go Home
       </Link>
     </div>

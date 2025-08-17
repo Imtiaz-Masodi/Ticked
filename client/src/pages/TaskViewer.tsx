@@ -20,6 +20,7 @@ import { useApiToast } from "../utils/toastUtils";
 import Badge from "../components/Badge";
 import TaskErrorState from "../components/TaskErrorState";
 import { TaskViewerSkeleton } from "../components/Skeleton";
+import { TASK_ROUTES } from "../utils/routes";
 
 type TaskViewerProps = {
   isInline?: boolean;
@@ -164,7 +165,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               {/* Back button for inline mode */}
               {isInline && (
                 <button
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate(TASK_ROUTES.TASKS_ALL)}
                   className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-gray-300 dark:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
                   title="Go back to tasks"
                 >

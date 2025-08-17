@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { authHelper } from "../helpers/authHelper";
 import { DarkModeToggle } from "../components/DarkModeToggle";
 import { useToast } from "../hooks";
+import { APP_ROUTES, AUTH_ROUTES, ROUTE_BUILDERS } from "../utils/routes";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Login = () => {
   // Check if user is already logged in on component mount
   useEffect(() => {
     if (authHelper.isUserLoggedIn()) {
-      navigate("/");
+      navigate(APP_ROUTES.HOME, { replace: true });
     }
   }, [navigate]);
 
@@ -31,7 +32,7 @@ const Login = () => {
     try {
       const response = await authService.login(values);
       if (response.success) {
-        navigate("/");
+        navigate(APP_ROUTES.HOME, { replace: true });
       } else {
         setErrorMessage(response.message || ERROR_LOGIN_FAILED);
 
@@ -43,7 +44,7 @@ const Login = () => {
             action: {
               label: "Verify Now",
               onClick: () => {
-                navigate(`/verify-email?email=${encodeURIComponent(values.email)}&generate=1`);
+                navigate(ROUTE_BUILDERS.verifyEmail(values.email, true));
               },
             },
           });
@@ -85,7 +86,7 @@ const Login = () => {
           <Button
             size={Size.sm}
             type={ButtonType.link}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate(AUTH_ROUTES.REGISTER)}
             className="ps-1 pe-1"
             disabled={formik.isSubmitting}
           >

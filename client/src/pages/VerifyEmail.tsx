@@ -7,6 +7,7 @@ import { OtpPurpose, Size } from "../utils/enums";
 import { DarkModeToggle } from "../components/DarkModeToggle";
 import { VerificationForm, VerificationFormValues, validateVerificationForm } from "../sections/VerificationForm";
 import { authService } from "../api/authService";
+import { AUTH_ROUTES, APP_ROUTES } from "../utils/routes";
 
 function VerifyEmail() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function VerifyEmail() {
   // Redirect if no email is provided
   useEffect(() => {
     if (!email) {
-      navigate("/login");
+      navigate(AUTH_ROUTES.LOGIN, { replace: true });
     }
   }, [email, navigate]);
 
@@ -57,7 +58,7 @@ function VerifyEmail() {
       if (response.success) {
         setSuccessMessage("Email verified successfully! Redirecting in a moment.");
         setTimeout(() => {
-          navigate("/");
+          navigate(APP_ROUTES.HOME, { replace: true });
         }, 2000);
       } else {
         setErrorMessage(response.message || "Verification failed. Please try again.");

@@ -9,6 +9,7 @@ import { authService } from "../api/authService";
 import { DarkModeToggle } from "../components/DarkModeToggle";
 import { RequestResetStage, VerifyResetStage, ResetPasswordStage } from "../sections/ForgotPassword";
 import { EMAIL_REGEX } from "../utils/constants";
+import { AUTH_ROUTES } from "../utils/routes";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ const ForgotPassword = () => {
             setEmailTouched={setEmailTouched}
             isSubmitting={isSubmitting}
             onSubmit={handleRequest}
-            onBackToLogin={() => navigate("/login")}
+            onBackToLogin={() => navigate(AUTH_ROUTES.LOGIN)}
             validateEmail={validateEmail}
           />
         )}
@@ -184,7 +185,7 @@ const ForgotPassword = () => {
             setRetypePassword={setRetypePassword}
             isSubmitting={isSubmitting}
             onReset={handleReset}
-            onBackToLogin={() => navigate("/login")}
+            onBackToLogin={() => navigate(AUTH_ROUTES.LOGIN)}
             passwordError={passwordError}
           />
         )}
@@ -195,7 +196,7 @@ const ForgotPassword = () => {
               Password changed successfully. Redirecting to login...
             </p>
             <div className="flex justify-center items-center text-sm mt-4">
-              <Button type={ButtonType.link} onClick={() => navigate("/login")}>
+              <Button type={ButtonType.link} onClick={() => navigate(AUTH_ROUTES.LOGIN)}>
                 Go to Login
               </Button>
             </div>

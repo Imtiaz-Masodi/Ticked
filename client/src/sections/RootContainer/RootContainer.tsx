@@ -7,6 +7,7 @@ import { authHelper } from "../../helpers/authHelper";
 import { EVENT_AUTH_EXPIRED } from "../../utils/constants";
 import { useLogout, useTabletOrAboveDetect } from "../../hooks";
 import { SearchFilterProvider } from "../../contexts/SearchFilterContext";
+import { AUTH_ROUTES, TASK_ROUTES } from "../../utils/routes";
 
 function RootContainer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -23,11 +24,11 @@ function RootContainer() {
   // Determine if the current page should show search/filter functionality
   const shouldShowSearchFilter =
     location.pathname.startsWith("/tasks/") ||
-    (isLargeScreen && location.pathname.startsWith("/task/") && location.pathname !== "/task/new");
+    (isLargeScreen && location.pathname.startsWith("/task/") && location.pathname !== TASK_ROUTES.TASK_NEW);
 
   useEffect(() => {
     if (!isUserLoggedIn) {
-      navigate("/login");
+      navigate(AUTH_ROUTES.LOGIN, { replace: true });
     }
   }, [isUserLoggedIn, navigate]);
 

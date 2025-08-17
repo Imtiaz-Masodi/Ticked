@@ -6,6 +6,7 @@ import { clearUser } from "../store/slices/userSlice";
 import { taskApi } from "../store/api/taskApi";
 import { categoryApi } from "../store/api/categoryApi";
 import { accountApi } from "../store/api/accountApi";
+import { AUTH_ROUTES } from "../utils/routes";
 
 /**
  * Hook returning a logout function that:
@@ -30,7 +31,7 @@ export function useLogout() {
       dispatch(accountApi.util.resetApiState());
 
       if (options?.redirect !== false) {
-        navigate("/login");
+        navigate(AUTH_ROUTES.LOGIN);
       }
     },
     [dispatch, navigate]
