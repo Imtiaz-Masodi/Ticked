@@ -10,14 +10,25 @@ import { Icons } from "../Icon/IconMap";
 import { DarkModeToggle } from "../DarkModeToggle";
 import { SearchInput } from "../SearchInput";
 import { FilterPopup } from "../FilterPopup";
-import { useSearchFilter } from "../../hooks";
+import { FilterOptions, SearchFilterState } from "../../hooks/useSearchFilter";
+
+type SearchFilterContextType = {
+  state: SearchFilterState;
+  setSearchQuery: (query: string) => void;
+  setSearchActive: (active: boolean) => void;
+  updateFilters: (filters: Partial<FilterOptions>) => void;
+  clearFilters: () => void;
+  resetAll: () => void;
+  hasActiveFilters: boolean;
+};
 
 type HeaderProps = {
   onMenuIconClick: () => void;
   showSearchFilter?: boolean;
+  searchFilters?: SearchFilterContextType;
 };
 
-function Header({ onMenuIconClick, showSearchFilter = false }: HeaderProps) {
+function Header({ onMenuIconClick, showSearchFilter = false, searchFilters }: HeaderProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [showBack, setShowBack] = useState(false);
@@ -25,7 +36,9 @@ function Header({ onMenuIconClick, showSearchFilter = false }: HeaderProps) {
   const isMobile = useMobileDetect();
   const filterTriggerRef = useRef<HTMLDivElement>(null);
 
-  const { state, setSearchActive } = useSearchFilter();
+  // Use searchFilters if provided, otherwise create default empty state
+  const state = searchFilters?.state ?? { isSearchActive: false };
+  const setSearchActive = searchFilters?.setSearchActive ?? (() => {});
 
   useEffect(() => {
     // Check if current path is in NAV_ITEMS

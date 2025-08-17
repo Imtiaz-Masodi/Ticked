@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import Header from "../../components/Header/Header";
 import { NavigationDrawer } from "../../components/NavigationDrawer";
 import { NAV_ITEMS } from "../../utils/navigationConfig";
 import { authHelper } from "../../helpers/authHelper";
@@ -8,6 +7,7 @@ import { EVENT_AUTH_EXPIRED } from "../../utils/constants";
 import { useLogout, useTabletOrAboveDetect } from "../../hooks";
 import { SearchFilterProvider } from "../../contexts/SearchFilterContext";
 import { AUTH_ROUTES, TASK_ROUTES } from "../../utils/routes";
+import { HeaderWithSearch } from "../../components/Header";
 
 function RootContainer() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -48,7 +48,7 @@ function RootContainer() {
   return (
     <SearchFilterProvider>
       <div id="root-container" className="min-h-dvh bg-zinc-50 dark:bg-gray-900">
-        <Header onMenuIconClick={handleToggleDrawer} showSearchFilter={shouldShowSearchFilter} />
+        <HeaderWithSearch onMenuIconClick={handleToggleDrawer} showSearchFilter={shouldShowSearchFilter} />
         <NavigationDrawer
           isOpen={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}
