@@ -55,7 +55,7 @@ export const getSwipeBackgroundContent = (action: TaskStatus) => {
     case TaskStatus.inprogress:
       return {
         text: TaskStatusLabel.inprogress,
-        icon: Icons.task,
+        icon: Icons.taskActive,
         themeColorClasses: "bg-yellow-500",
         status: TaskStatus.inprogress,
       };
@@ -68,6 +68,37 @@ export const getSwipeBackgroundContent = (action: TaskStatus) => {
       };
     default:
       return undefined;
+  }
+};
+
+// Helper function to get swipe actions based on current task status
+export const getSwipeActionsForTask = (currentStatus: TaskStatus) => {
+  switch (currentStatus) {
+    case TaskStatus.todo:
+      return {
+        leftAction: getSwipeBackgroundContent(TaskStatus.completed),
+        rightAction: getSwipeBackgroundContent(TaskStatus.backlog),
+      };
+    case TaskStatus.inprogress:
+      return {
+        leftAction: getSwipeBackgroundContent(TaskStatus.completed),
+        rightAction: getSwipeBackgroundContent(TaskStatus.backlog),
+      };
+    case TaskStatus.completed:
+      return {
+        leftAction: getSwipeBackgroundContent(TaskStatus.inprogress),
+        rightAction: getSwipeBackgroundContent(TaskStatus.todo),
+      };
+    case TaskStatus.backlog:
+      return {
+        leftAction: getSwipeBackgroundContent(TaskStatus.todo),
+        rightAction: undefined, // No right action for backlog
+      };
+    default:
+      return {
+        leftAction: undefined,
+        rightAction: undefined,
+      };
   }
 };
 

@@ -5,19 +5,14 @@ import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
 import { TasksPageSkeleton } from "../../components/Skeleton";
 import { TaskStatus } from "../../utils/enums";
-import { getSwipeBackgroundContent, groupTasksByStatus } from "./TasksList.helper";
+import { groupTasksByStatus, getSwipeActionsForTask } from "./TasksList.helper";
 import { useApiToast } from "../../utils/toastUtils";
 import { useToast } from "../../hooks";
 import { useSearchFilter } from "../../hooks";
 import { filterTasks, hasActiveSearchOrFilter } from "../../utils/taskFilterUtils";
 import { useMemo } from "react";
 
-type TasksListProps = {
-  leftAction?: TaskStatus;
-  rightAction?: TaskStatus;
-};
-
-function TasksList({ leftAction, rightAction }: TasksListProps) {
+function TasksList() {
   const { data, isLoading } = useGetTasksQuery();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
@@ -72,10 +67,6 @@ function TasksList({ leftAction, rightAction }: TasksListProps) {
     }
   };
 
-  // Generate swipe background content based on actions (only if actions are defined)
-  const leftSwipeContent = leftAction ? getSwipeBackgroundContent(leftAction) : undefined;
-  const rightSwipeContent = rightAction ? getSwipeBackgroundContent(rightAction) : undefined;
-
   // Function to render a group of tasks with a title
   const renderTaskGroup = (tasks: Task[], groupTitle: string) => {
     if (tasks.length === 0) return null;
@@ -85,39 +76,40 @@ function TasksList({ leftAction, rightAction }: TasksListProps) {
         <p className="text-sm font-bold text-zinc-600 dark:text-gray-300 self-start mx-2 mb-2">
           {groupTitle} ({tasks.length})
         </p>
-        {tasks.map((task: Task) => (
-          <div key={task._id} className="mb-2">
-            <Swipeable
-              className="rounded-md shadow-sm"
-              swipingLeftBgContent={
-                leftSwipeContent && (
-                  <SwipeableBgContent
-                    text={leftSwipeContent.text}
-                    icon={leftSwipeContent.icon}
-                    themeColorClasses={leftSwipeContent.themeColorClasses}
-                  />
-                )
-              }
-              swipingRightBgContent={
-                rightSwipeContent && (
-                  <SwipeableBgContent
-                    text={rightSwipeContent.text}
-                    icon={rightSwipeContent.icon}
-                    themeColorClasses={rightSwipeContent.themeColorClasses}
-                  />
-                )
-              }
-              onSwipeLeft={
-                leftSwipeContent ? () => handleUpdateTaskStatus(task._id, leftSwipeContent.status) : undefined
-              }
-              onSwipeRight={
-                rightSwipeContent ? () => handleUpdateTaskStatus(task._id, rightSwipeContent?.status) : undefined
-              }
-            >
-              <TaskItem task={task} />
-            </Swipeable>
-          </div>
-        ))}
+        {tasks.map((task: Task) => {
+          // Get swipe actions based on current task status
+          const { leftAction, rightAction } = getSwipeActionsForTask(task.status);
+
+          return (
+            <div key={task._id} className="mb-2">
+              <Swipeable
+                className="rounded-md shadow-sm"
+                swipingLeftBgContent={
+                  leftAction && (
+                    <SwipeableBgContent
+                      text={leftAction.text}
+                      icon={leftAction.icon}
+                      themeColorClasses={leftAction.themeColorClasses}
+                    />
+                  )
+                }
+                swipingRightBgContent={
+                  rightAction && (
+                    <SwipeableBgContent
+                      text={rightAction.text}
+                      icon={rightAction.icon}
+                      themeColorClasses={rightAction.themeColorClasses}
+                    />
+                  )
+                }
+                onSwipeLeft={leftAction ? () => handleUpdateTaskStatus(task._id, leftAction.status) : undefined}
+                onSwipeRight={rightAction ? () => handleUpdateTaskStatus(task._id, rightAction.status) : undefined}
+              >
+                <TaskItem task={task} />
+              </Swipeable>
+            </div>
+          );
+        })}
       </div>
     );
   };

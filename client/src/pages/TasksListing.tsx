@@ -3,7 +3,6 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
-import { TaskStatus } from "../utils/enums";
 import { useTabletOrAboveDetect, useStatusTypeFilter } from "../hooks";
 import { Suspense, lazy, useEffect } from "react";
 import { PageLoading } from "../components/Loader";
@@ -61,7 +60,7 @@ function TasksListing() {
       <div className={`${isLargeScreen && isViewingTask ? "flex gap-0 max-w-screen-2xl mx-auto" : ""}`}>
         {/* Tasks List - takes half width on large screens when viewing a task */}
         <div className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"}`}>
-          <TasksList leftAction={TaskStatus.completed} rightAction={TaskStatus.backlog} />
+          <TasksList />
         </div>
 
         {/* Task Viewer - only shown on large screens */}
