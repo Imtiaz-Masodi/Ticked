@@ -10,6 +10,7 @@ import NotificationComponent from "../../assets/svg/notification.svg";
 import LogoutComponent from "../../assets/svg/logout.svg";
 import AddComponent from "../../assets/svg/add.svg";
 import ArrowBackComponent from "../../assets/svg/arrow_back.svg";
+import ArrowRightComponent from "../../assets/svg/arrow_right.svg";
 import DownComponent from "../../assets/svg/down.svg";
 import ArchiveComponent from "../../assets/svg/archive.svg";
 import CategoryComponent from "../../assets/svg/category.svg";
@@ -47,6 +48,7 @@ export enum Icons {
   logout = "logout",
   add = "add",
   arrowBack = "arrow-back",
+  arrowRight = "arrow-right",
   down = "down",
   archive = "archive",
   category = "category",
@@ -88,6 +90,7 @@ export const IconMap: IconMapType = {
   [Icons.logout]: LogoutComponent,
   [Icons.add]: AddComponent,
   [Icons.arrowBack]: ArrowBackComponent,
+  [Icons.arrowRight]: ArrowRightComponent,
   [Icons.down]: DownComponent,
   [Icons.archive]: ArchiveComponent,
   [Icons.category]: CategoryComponent,
