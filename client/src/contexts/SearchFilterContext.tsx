@@ -22,7 +22,7 @@ interface SearchFilterContextType {
   state: SearchFilterState;
   setSearchQuery: (query: string) => void;
   setSearchActive: (active: boolean) => void;
-  updateFilters: (filters: Partial<FilterOptions>) => void;
+  updateFilters: (filters: Partial<FilterOptions>, overrideFilters?: boolean) => void;
   clearFilters: () => void;
   resetAll: () => void;
   hasActiveFilters: boolean;
@@ -67,9 +67,9 @@ export const SearchFilterProvider: React.FC<SearchFilterProviderProps> = ({ chil
     }));
   }, []);
 
-  const updateFilters = useCallback((newFilters: Partial<FilterOptions>) => {
+  const updateFilters = useCallback((newFilters: Partial<FilterOptions>, overrideFilters: boolean = false) => {
     setState((prev) => {
-      const updatedFilters = { ...prev.filters, ...newFilters };
+      const updatedFilters = { ...(overrideFilters ? initialState.filters : prev.filters), ...newFilters };
       const hasFilters =
         updatedFilters.categories.length > 0 ||
         updatedFilters.priorities.length > 0 ||
