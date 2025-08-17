@@ -9,6 +9,7 @@ import { AUTH_ROUTES, APP_ROUTES, TASK_ROUTES } from "./utils/routes";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
+const TasksListing = lazy(() => import("./pages/TasksListing"));
 const CreateTask = lazy(() => import("./pages/CreateTask"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
@@ -78,13 +79,13 @@ function App() {
                 path={TASK_ROUTES.TASKS_BY_STATUS}
                 element={
                   <Suspense fallback={<PageLoading text="Loading tasks..." />}>
-                    <Home />
+                    <TasksListing />
                   </Suspense>
                 }
               />
 
               {/* Task viewing routes - same Home component for responsive behavior */}
-              <Route path={TASK_ROUTES.TASK_VIEW} element={<Home />} />
+              <Route path={TASK_ROUTES.TASK_VIEW} element={<TasksListing />} />
 
               <Route
                 path={TASK_ROUTES.TASK_NEW}

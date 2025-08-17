@@ -13,7 +13,7 @@ export const AUTH_ROUTES = {
 
 // Main Application Routes
 export const APP_ROUTES = {
-  HOME: "/tasks/all",
+  HOME: "/",
   PROFILE: "/profile",
   SETTINGS: "/settings",
   CATEGORIES: "/categories",
