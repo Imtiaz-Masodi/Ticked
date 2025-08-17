@@ -18,6 +18,7 @@ import LabelComponent from "../../assets/svg/label.svg";
 import MenuComponent from "../../assets/svg/menu.svg";
 import TaskDoneComponent from "../../assets/svg/task_done.svg";
 import TaskComponent from "../../assets/svg/task.svg";
+import TaskActiveComponent from "../../assets/svg/task_active.svg";
 import CloudComponent from "../../assets/svg/cloud.svg";
 import CloudOffComponent from "../../assets/svg/cloud_off.svg";
 import CloudUploadComponent from "../../assets/svg/cloud_upload.svg";
@@ -53,6 +54,7 @@ export enum Icons {
   label = "label",
   menu = "menu",
   task = "task",
+  taskActive = "task-active",
   taskDone = "task-done",
   cloud = "cloud",
   cloudOff = "cloud-off",
@@ -93,6 +95,7 @@ export const IconMap: IconMapType = {
   [Icons.label]: LabelComponent,
   [Icons.menu]: MenuComponent,
   [Icons.task]: TaskComponent,
+  [Icons.taskActive]: TaskActiveComponent,
   [Icons.taskDone]: TaskDoneComponent,
   [Icons.cloud]: CloudComponent,
   [Icons.cloudOff]: CloudOffComponent,
