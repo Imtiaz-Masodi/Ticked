@@ -8,6 +8,7 @@ import { APP_ROUTES } from "../../utils/routes";
 export type NavigationItem = {
   name: string;
   path: string;
+  queryParams?: Record<string, string>;
   icon: Icons;
 };
 
@@ -26,8 +27,14 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
   // Use activeNavItemPath prop if provided, otherwise fall back to location.pathname
   const currentActivePath = activeNavItemPath ?? location.pathname;
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
+  const handleNavigation = (path: string, queryParams?: Record<string, string>) => {
+    const url = new URL(path, window.location.origin);
+    if (queryParams) {
+      Object.entries(queryParams).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+      });
+    }
+    navigate(url.pathname + url.search);
     if (isMobile) {
       onClose();
     }
@@ -78,7 +85,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
                         : "hover:bg-zinc-50 dark:hover:bg-gray-700"
                     }
                   `}
-                  onClick={() => handleNavigation(item.path)}
+                  onClick={() => handleNavigation(item.path, item.queryParams)}
                 >
                   <Icon
                     name={item.icon}

@@ -5,7 +5,7 @@ import { Icons } from "../components/Icon/IconMap";
 import { TasksList } from "../sections/TasksList";
 import { TaskStatus } from "../utils/enums";
 import { useTabletOrAboveDetect, useStatusTypeFilter } from "../hooks";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { PageLoading } from "../components/Loader";
 import { TASK_ROUTES } from "../utils/routes";
 
@@ -18,8 +18,26 @@ function TasksListing() {
   const location = useLocation();
   const isUserLoggedIn = authHelper.isUserLoggedIn();
 
-  // Handle statusType query parameter and update filters
-  useStatusTypeFilter();
+  // Check if we should apply filter based on query parameter
+  const searchParams = new URLSearchParams(location.search);
+  const shouldApplyFilter = searchParams.get("applyFilter") === "1";
+
+  // Handle statusType query parameter and update filters conditionally
+  useEffect(() => {
+    if (shouldApplyFilter) {
+      // Remove the applyFilter parameter from URL without reloading
+      const newSearchParams = new URLSearchParams(location.search);
+      newSearchParams.delete("applyFilter");
+      const newSearch = newSearchParams.toString();
+      const newUrl = `${location.pathname}${newSearch ? `?${newSearch}` : ""}`;
+
+      // Use replace to avoid adding to history
+      navigate(newUrl, { replace: true });
+    }
+  }, [shouldApplyFilter, location.search, location.pathname, navigate]);
+
+  // Apply status type filter only when applyFilter=1 was present
+  useStatusTypeFilter(shouldApplyFilter);
 
   // Check if we're on a larger screen (tablet and above)
   const isLargeScreen = useTabletOrAboveDetect();
