@@ -8,17 +8,17 @@ import { PageLoading } from "./components/Loader";
 import { AUTH_ROUTES, APP_ROUTES, TASK_ROUTES } from "./utils/routes";
 import "./App.css";
 
-const Categories = lazy(() => import("./pages/Categories"));
-const CreateTask = lazy(() => import("./pages/CreateTask"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const Home = lazy(() => import("./pages/Home"));
-const Login = lazy(() => import("./pages/Login"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const Profile = lazy(() => import("./pages/Profile"));
-const Register = lazy(() => import("./pages/Register"));
-const Settings = lazy(() => import("./pages/Settings"));
 const TasksListing = lazy(() => import("./pages/TasksListing"));
+const CreateTask = lazy(() => import("./pages/CreateTask"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const Categories = lazy(() => import("./pages/Categories"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Profile = lazy(() => import("./pages/Profile"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
