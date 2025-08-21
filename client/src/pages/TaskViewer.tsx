@@ -2,7 +2,12 @@ import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
-import { useGetTaskByIdQuery, useUpdateTaskMutation, useUpdateTaskStatusMutation } from "../store/api/taskApi";
+import {
+  useGetTaskByIdQuery,
+  useUpdateTaskMutation,
+  useUpdateTaskStatusMutation,
+  useDeleteTaskMutation,
+} from "../store/api/taskApi";
 import { useGetCategoriesQuery } from "../store/api/categoryApi";
 import { ApiResponseStatus, Priority, TaskStatus, TaskStatusLabel, Size } from "../utils/enums";
 import { priorityColorMap, priorityOptions, statusOptions, statusBadgeClasses } from "../utils/options";
@@ -21,6 +26,7 @@ import Badge from "../components/Badge";
 import TaskErrorState from "../components/TaskErrorState";
 import { TaskViewerSkeleton } from "../components/Skeleton";
 import { TASK_ROUTES } from "../utils/routes";
+import { ConfirmationDialog } from "../components/ConfirmationDialog";
 
 type TaskViewerProps = {
   isInline?: boolean;
@@ -30,6 +36,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const { taskId } = useParams<{ taskId: string }>();
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const toast = useApiToast();
 
   // API hooks
@@ -37,6 +44,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const { data: categoriesData } = useGetCategoriesQuery();
   const [updateTask] = useUpdateTaskMutation();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
+  const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
 
   const task = taskData?.payload?.task;
   const categories = useMemo(() => categoriesData?.payload?.categories || [], [categoriesData]);
@@ -113,6 +121,23 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
     }
   };
 
+  const handleDeleteTask = async () => {
+    if (!task) return;
+
+    try {
+      const response = await deleteTask(task._id);
+      if (response.data?.status === ApiResponseStatus.success) {
+        toast.apiSuccess("Task deleted successfully!");
+        setShowDeleteConfirm(false);
+        // Navigate back to tasks list
+        navigate(TASK_ROUTES.TASKS_ALL);
+      }
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+      toast.apiError("Failed to delete task");
+    }
+  };
+
   const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
     if (!task) return;
 
@@ -183,12 +208,22 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
 
             <div className="flex items-center gap-2">
               {!isEditMode && (
-                <div
-                  onClick={() => setIsEditMode(true)}
-                  className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-400 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
-                >
-                  <Icon name={Icons.edit} className="text-sky-400 dark:text-sky-400" />
-                </div>
+                <>
+                  <div
+                    onClick={() => setIsEditMode(true)}
+                    className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-400 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
+                    title="Edit task"
+                  >
+                    <Icon name={Icons.edit} className="text-sky-400 dark:text-sky-400" />
+                  </div>
+                  <div
+                    onClick={() => setShowDeleteConfirm(true)}
+                    className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-red-400 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors cursor-pointer flex items-center justify-center"
+                    title="Delete task"
+                  >
+                    <Icon name={Icons.delete} className="text-red-500 dark:text-red-400" />
+                  </div>
+                </>
               )}
               {isEditMode && (
                 <>
@@ -397,6 +432,20 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             </div>
           </div>
         </div>
+
+        {/* Delete Confirmation Dialog */}
+        <ConfirmationDialog
+          isOpen={showDeleteConfirm}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleDeleteTask}
+          title="Delete Task"
+          message={`Are you sure you want to delete "${task?.title}"? This action cannot be undone.`}
+          confirmText="Delete"
+          cancelText="Cancel"
+          variant="danger"
+          isLoading={isDeleting}
+          disabled={isDeleting}
+        />
       </div>
     </div>
   );
