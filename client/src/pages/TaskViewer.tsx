@@ -206,7 +206,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               <Badge className="capitalize">{task.priority} Priority</Badge>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
               {!isEditMode && (
                 <>
                   <div
