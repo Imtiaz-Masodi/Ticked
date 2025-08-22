@@ -439,7 +439,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           onClose={() => setShowDeleteConfirm(false)}
           onConfirm={handleDeleteTask}
           title="Delete Task"
-          message={`Are you sure you want to delete "${task?.title}"? This action cannot be undone.`}
+          message={`Are you sure you want to delete this task? This action cannot be undone.`}
           confirmText="Delete"
           cancelText="Cancel"
           variant="danger"
