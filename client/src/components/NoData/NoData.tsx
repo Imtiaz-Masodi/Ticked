@@ -1,19 +1,16 @@
-import { Link } from "react-router-dom";
-import { Icon } from "../Icon";
+import { useNavigate } from "react-router-dom";
 import { Icons } from "../Icon/IconMap";
+import { Button, ButtonVariant } from "../Button";
+import { EmptyStateIcon } from "../EmptyStateIcon";
 import { TASK_ROUTES } from "../../utils/routes";
 
 function NoData() {
+  const navigate = useNavigate();
+
   return (
     <div className="max-w-screen-sm h-[80vh] mx-auto flex flex-col items-center justify-center px-2 gap-6">
-      {/* Empty state icon using CSS */}
-      <div className="relative">
-        <div className="w-24 h-24 rounded-full border-4 border-dashed border-zinc-300 dark:border-gray-600 flex items-center justify-center">
-          <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-gray-700 flex items-center justify-center">
-            <Icon name={Icons.document} className="w-6 h-6 text-zinc-400 dark:text-gray-500" />
-          </div>
-        </div>
-      </div>
+      {/* Empty state icon using reusable component */}
+      <EmptyStateIcon icon={Icons.document} size="lg" />
 
       {/* Message */}
       <div className="text-center space-y-2">
@@ -24,13 +21,9 @@ function NoData() {
       </div>
 
       {/* Call to action */}
-      <Link
-        to={TASK_ROUTES.TASK_NEW}
-        className="inline-flex items-center gap-2 px-8 py-3 bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 text-white rounded-lg font-medium transition-colors duration-200 shadow-sm hover:shadow-md"
-      >
-        <Icon name={Icons.add} className="w-5 h-5" />
+      <Button onClick={() => navigate(TASK_ROUTES.TASK_NEW)} variant={ButtonVariant.info} startIcon={Icons.add}>
         Create Task
-      </Link>
+      </Button>
     </div>
   );
 }
