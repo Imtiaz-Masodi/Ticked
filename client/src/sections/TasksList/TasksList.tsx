@@ -3,6 +3,7 @@ import { TaskItem } from "../../components/TaskItem";
 import { useGetTasksQuery, useUpdateTaskStatusMutation } from "../../store/api/taskApi";
 import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
+import { NoFilterResults } from "../../components/NoFilterResults";
 import { TasksPageSkeleton } from "../../components/Skeleton";
 import { TaskStatus } from "../../utils/enums";
 import { groupTasksByStatus, getSwipeActionsForTask } from "./TasksList.helper";
@@ -116,8 +117,13 @@ function TasksList() {
 
   // Calculate total tasks count for NoData check
   const totalTasks = groupedTasks.active.length + groupedTasks.completed.length + groupedTasks.backlog.length;
+  const hasActiveFiltersOrSearch = hasActiveSearchOrFilter(searchFilterState.state);
 
   if (!isLoading && totalTasks === 0) {
+    // Show different components based on whether filters/search are active
+    if (hasActiveFiltersOrSearch) {
+      return <NoFilterResults />;
+    }
     return <NoData />;
   }
 
