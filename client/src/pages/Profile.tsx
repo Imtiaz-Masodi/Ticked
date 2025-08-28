@@ -1,11 +1,11 @@
 import React from "react";
 import { useGetCurrentUserQuery } from "../store/api/accountApi";
 import { Button } from "../components/Button";
-import { PageLoading } from "../components/Loader";
 import { Icon } from "../components/Icon";
 import { Icons } from "../components/Icon/IconMap";
 import { ProfileCard } from "../components/ProfileCard";
 import { ProfileForm } from "../components/ProfileForm";
+import { ProfilePageSkeleton } from "../components/Skeleton";
 import { UpdatePassword } from "../sections/UpdatePassword";
 import { useLocation } from "react-router-dom";
 
@@ -17,7 +17,7 @@ const Profile: React.FC = () => {
   const user = userData?.payload?.user;
 
   if (isLoadingUser) {
-    return <PageLoading text="Loading profile..." />;
+    return <ProfilePageSkeleton />;
   }
 
   if (userError || !user) {
