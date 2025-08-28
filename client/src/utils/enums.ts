@@ -10,6 +10,13 @@ export enum Priority {
   high = "high",
 }
 
+export enum StatusType {
+  all = "all",
+  active = "active",
+  completed = "completed",
+  backlog = "backlog",
+}
+
 export enum ApiResponseStatus {
   success = "success",
   failed = "failed",
