@@ -1,6 +1,7 @@
 import { Icons } from "../../components/Icon/IconMap";
-import { TaskStatus, TaskStatusLabel } from "../../utils/enums";
+import { TaskStatus, TaskStatusLabel, StatusType } from "../../utils/enums";
 import { Task } from "../../types/Task";
+import { FilterOptions } from "../../contexts/SearchFilterContext";
 
 // Type for grouped tasks
 export type GroupedTasks = {
@@ -109,4 +110,70 @@ export const getTitleByStatus = (status?: string | string[]) => {
   if (status.includes(TaskStatus.completed)) return "Completed Tasks";
   if (status.includes(TaskStatus.backlog)) return "Backlog Tasks";
   return "Tasks";
+};
+
+/**
+ * Helper function to get the expected route-specific filters based on the current URL
+ */
+export const getRouteSpecificFilters = (statusType?: StatusType): Partial<FilterOptions> => {
+  switch (statusType) {
+    case StatusType.active:
+      return {
+        statuses: [TaskStatus.todo, TaskStatus.inprogress],
+        categories: [],
+        priorities: [],
+        dueDateRange: undefined,
+      };
+    case StatusType.completed:
+      return {
+        statuses: [TaskStatus.completed],
+        categories: [],
+        priorities: [],
+        dueDateRange: undefined,
+      };
+    case StatusType.backlog:
+      return {
+        statuses: [TaskStatus.backlog],
+        categories: [],
+        priorities: [],
+        dueDateRange: undefined,
+      };
+    case StatusType.all:
+    default:
+      return {
+        categories: [],
+        priorities: [],
+        statuses: [],
+        dueDateRange: undefined,
+      };
+  }
+};
+
+/**
+ * Helper function to check if current filters are only route-specific filters
+ */
+export const hasOnlyRouteSpecificFilters = (
+  currentFilters: FilterOptions,
+  routeSpecificFilters: Partial<FilterOptions>,
+  searchQuery: string
+): boolean => {
+  // If there's a search query, it's not just route-specific
+  if (searchQuery.trim() !== "") {
+    return false;
+  }
+
+  // Compare each filter type
+  const categoriesMatch =
+    JSON.stringify(currentFilters.categories.sort()) === JSON.stringify((routeSpecificFilters.categories || []).sort());
+
+  const prioritiesMatch =
+    JSON.stringify(currentFilters.priorities.sort()) === JSON.stringify((routeSpecificFilters.priorities || []).sort());
+
+  const statusesMatch =
+    JSON.stringify(currentFilters.statuses.sort()) === JSON.stringify((routeSpecificFilters.statuses || []).sort());
+
+  const dueDateMatch =
+    JSON.stringify(currentFilters.dueDateRange) === JSON.stringify(routeSpecificFilters.dueDateRange);
+
+  return categoriesMatch && prioritiesMatch && statusesMatch && dueDateMatch;
 };
