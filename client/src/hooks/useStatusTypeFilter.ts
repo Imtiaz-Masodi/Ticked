@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useSearchFilter } from "./useSearchFilter";
-import { TaskStatus } from "../utils/enums";
-
-type StatusType = "all" | "active" | "completed" | "backlog";
+import { TaskStatus, StatusType } from "../utils/enums";
 
 /**
  * Custom hook to handle URL parameter :id for status types and update SearchFilterContext
@@ -23,13 +21,13 @@ export const useStatusTypeFilter = (shouldApplyFilter: boolean = true) => {
     // Check if we're on a tasks route with an id parameter
     if (location.pathname.startsWith("/tasks/") && statusType) {
       // Check if the id is a valid status type
-      if (["all", "active", "completed", "backlog"].includes(statusType)) {
+      if (Object.values(StatusType).includes(statusType as StatusType)) {
         // Apply filters based on statusType
         switch (statusType) {
-          case "all":
+          case StatusType.all:
             clearFilters();
             break;
-          case "active":
+          case StatusType.active:
             updateFilters({
               statuses: [TaskStatus.todo, TaskStatus.inprogress],
               categories: [],
@@ -37,7 +35,7 @@ export const useStatusTypeFilter = (shouldApplyFilter: boolean = true) => {
               dueDateRange: undefined,
             });
             break;
-          case "completed":
+          case StatusType.completed:
             updateFilters({
               statuses: [TaskStatus.completed],
               categories: [],
@@ -45,7 +43,7 @@ export const useStatusTypeFilter = (shouldApplyFilter: boolean = true) => {
               dueDateRange: undefined,
             });
             break;
-          case "backlog":
+          case StatusType.backlog:
             updateFilters({
               statuses: [TaskStatus.backlog],
               categories: [],
