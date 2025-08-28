@@ -30,7 +30,7 @@ function NoFilterResults({ statusType }: NoFilterResultsProps) {
   };
 
   return (
-    <div className="max-w-screen-sm h-[60vh] mx-auto flex flex-col items-center justify-center px-2 gap-6">
+    <div className="max-w-screen-sm h-[80vh] mx-auto flex flex-col items-center justify-center px-2 gap-6">
       {/* Empty state icon using reusable component */}
       <EmptyStateIcon
         icon={Icons.filter}
