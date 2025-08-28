@@ -5,13 +5,19 @@ import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
 import { NoFilterResults } from "../../components/NoFilterResults";
 import { TasksPageSkeleton } from "../../components/Skeleton";
-import { TaskStatus } from "../../utils/enums";
-import { groupTasksByStatus, getSwipeActionsForTask } from "./TasksList.helper";
+import { TaskStatus, StatusType } from "../../utils/enums";
+import {
+  groupTasksByStatus,
+  getSwipeActionsForTask,
+  getRouteSpecificFilters,
+  hasOnlyRouteSpecificFilters,
+} from "./TasksList.helper";
 import { useApiToast } from "../../utils/toastUtils";
 import { useToast } from "../../hooks";
 import { useSearchFilter } from "../../hooks";
 import { filterTasks, hasActiveSearchOrFilter } from "../../utils/taskFilterUtils";
 import { useMemo } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 function TasksList() {
   const { data, isLoading } = useGetTasksQuery();
@@ -19,6 +25,8 @@ function TasksList() {
   const { apiSuccess } = useApiToast();
   const toast = useToast();
   const searchFilterState = useSearchFilter();
+  const location = useLocation();
+  const { statusType } = useParams<{ statusType: StatusType }>();
 
   // Apply search and filter to tasks and group by status
   const groupedTasks = useMemo(() => {
@@ -32,6 +40,21 @@ function TasksList() {
     // Group tasks by status using helper function
     return groupTasksByStatus(filteredTasks);
   }, [data?.payload?.tasks, searchFilterState.state]);
+
+  // Determine if current filters are only route-specific
+  const isOnlyRouteSpecificFilters = useMemo(() => {
+    // Only check for route-specific filters on tasks routes
+    if (!location.pathname.startsWith("/tasks/") || !statusType) {
+      return false;
+    }
+
+    const routeSpecificFilters = getRouteSpecificFilters(statusType);
+    return hasOnlyRouteSpecificFilters(
+      searchFilterState.state.filters,
+      routeSpecificFilters,
+      searchFilterState.state.searchQuery
+    );
+  }, [location.pathname, statusType, searchFilterState.state]);
 
   const revertTaskStatus = async (taskId: string, previousStatus: TaskStatus) => {
     try {
@@ -120,9 +143,10 @@ function TasksList() {
   const hasActiveFiltersOrSearch = hasActiveSearchOrFilter(searchFilterState.state);
 
   if (!isLoading && totalTasks === 0) {
-    // Show different components based on whether filters/search are active
-    if (hasActiveFiltersOrSearch) {
-      return <NoFilterResults />;
+    // If only route-specific filters are applied (no additional user filters), show NoData
+    // Otherwise, show NoFilterResults for additional user-applied filters
+    if (hasActiveFiltersOrSearch && !isOnlyRouteSpecificFilters) {
+      return <NoFilterResults statusType={statusType} />;
     }
     return <NoData />;
   }
