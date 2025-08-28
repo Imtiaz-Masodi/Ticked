@@ -2,16 +2,29 @@ import { Icons } from "../Icon/IconMap";
 import { Button, ButtonVariant } from "../Button";
 import { EmptyStateIcon } from "../EmptyStateIcon";
 import { useSearchFilter } from "../../hooks";
+import { getRouteSpecificFilters } from "../../sections/TasksList/TasksList.helper";
+import { StatusType } from "../../utils/enums";
 
-function NoFilterResults() {
-  const { clearFilters, resetAll, state } = useSearchFilter();
+interface NoFilterResultsProps {
+  statusType?: StatusType;
+}
+
+function NoFilterResults({ statusType }: NoFilterResultsProps) {
+  const { clearFilters, updateFilters, state, setSearchActive } = useSearchFilter();
 
   const handleClearFilters = () => {
+    // Clear search query if present
     if (state.searchQuery.trim()) {
-      // If there's both search and filters, clear everything
-      resetAll();
+      setSearchActive(false);
+    }
+
+    // Check if we're on a route that should have specific filters
+    if (statusType && statusType !== StatusType.all) {
+      // Reset to route-specific filters instead of clearing everything
+      const routeSpecificFilters = getRouteSpecificFilters(statusType);
+      updateFilters(routeSpecificFilters, true); // true = override all filters
     } else {
-      // If only filters are applied, clear just filters
+      // For /tasks/all or other routes, clear all filters
       clearFilters();
     }
   };
