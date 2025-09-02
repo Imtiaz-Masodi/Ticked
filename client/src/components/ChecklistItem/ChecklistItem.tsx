@@ -2,9 +2,7 @@ import { useState } from "react";
 import { ChecklistItem as ChecklistItemType } from "../../types/Task";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
-import { Checkbox } from "../Checkbox";
 import ChecklistItemInput from "../ChecklistItemInput";
-import { Size } from "../../utils";
 
 type ChecklistItemProps = {
   item: ChecklistItemType;
@@ -37,7 +35,7 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
   };
 
   return (
-    <div className="py-1">
+    <div className="py-px">
       {isEditing ? (
         <ChecklistItemInput
           initialValue={item.text}
@@ -49,14 +47,45 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
       ) : (
         <div className="flex items-center gap-3 group">
           <div className="flex-grow">
-            <Checkbox
-              label={item.text}
-              checked={item.completed}
-              onChange={handleToggleComplete}
-              disabled={isUpdating || isDeleting}
-              checkboxSize={Size.sm}
-              name={item._id}
-            />
+            <div className="relative flex flex-row justify-start items-center gap-2">
+              <input
+                type="checkbox"
+                name={item._id}
+                id={item._id}
+                className={`
+                  appearance-none peer size-4 
+                  border border-gray-300 dark:border-gray-600 rounded-full bg-transparent shrink-0 
+                  checked:bg-emerald-500 checked:border-emerald-500 
+                  disabled:border-gray-300 disabled:checked:bg-gray-300 disabled:cursor-not-allowed
+                  dark:disabled:border-gray-600 dark:disabled:checked:bg-gray-600
+                  cursor-pointer
+                `}
+                checked={item.completed}
+                disabled={isUpdating || isDeleting}
+                onChange={handleToggleComplete}
+              />
+              <Icon
+                name={Icons.check}
+                className={`
+                  absolute hidden justify-center items-center size-4 text-white
+                  peer-checked:flex peer-checked:text-sm pointer-events-none
+                `}
+              />
+              <label
+                htmlFor={item._id}
+                className={`
+                  cursor-pointer peer-disabled:text-gray-400 dark:peer-disabled:text-gray-500 peer-disabled:cursor-not-allowed 
+                  whitespace-nowrap select-none  text-sm
+                  ${
+                    item.completed
+                      ? "line-through text-gray-500 dark:text-gray-400"
+                      : "text-zinc-700 dark:text-gray-200"
+                  }
+                `}
+              >
+                {item.text}
+              </label>
+            </div>
           </div>
 
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
