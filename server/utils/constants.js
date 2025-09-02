@@ -37,6 +37,15 @@ module.exports = {
   TASK_STATUS_UPDATED: "Task status updated successfully",
   INVALID_TASK_ON_DELETED_ITEM: "Cannot perform this action on deleted item",
 
+  // Checklist constants
+  CHECKLIST_ITEM_TEXT_REQUIRED: "Checklist item text is required",
+  INVALID_TASK_OR_CHECKLIST_ITEM_ID: "Invalid task or checklist item ID",
+  INVALID_UPDATE_FIELDS: "Invalid update fields",
+  CHECKLIST_ITEM_NOT_FOUND: "Checklist item not found",
+  CHECKLIST_ITEM_ADDED: "Checklist item added successfully",
+  CHECKLIST_ITEM_UPDATED: "Checklist item updated successfully",
+  CHECKLIST_ITEM_DELETED: "Checklist item deleted successfully",
+
   OTP_SENT_FOR_VERIFICATION: "OTP Sent on email for verification",
   EMAIL_AND_OTP_REQUIRED: "Email and OTP are required",
   ACCOUNT_NOT_FOUND: "No account found with the provided email",
