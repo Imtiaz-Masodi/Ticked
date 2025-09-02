@@ -286,9 +286,15 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                 rows={4}
               />
             ) : (
-              <p className="text-slate-600 dark:text-gray-400 whitespace-pre-wrap">
-                {task.description || "No description provided"}
-              </p>
+              (task.description || task.checklistItems?.length === 0) && (
+                <p
+                  className={`${
+                    task.description ? "text-slate-600 dark:text-gray-400" : "text-slate-400 dark:text-gray-600 italic"
+                  } whitespace-pre-wrap`}
+                >
+                  {task.description || "- No task description provided -"}
+                </p>
+              )
             )}
           </div>
 
