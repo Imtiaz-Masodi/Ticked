@@ -1,6 +1,14 @@
 import { Priority, TaskStatus } from "../utils/enums";
 import { User } from "./User";
 
+export type ChecklistItem = {
+  _id: string;
+  text: string;
+  completed: boolean;
+  createdOn: string;
+  updatedOn: string;
+};
+
 export type Task = {
   _id: string;
   title: string;
@@ -13,4 +21,5 @@ export type Task = {
   categoryId: string;
   status: TaskStatus;
   user: User;
+  checklistItems: ChecklistItem[];
 };
