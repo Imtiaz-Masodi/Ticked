@@ -3,7 +3,8 @@ import { Task } from "../types/Task";
 export interface ChecklistProgress {
   totalItems: number;
   completedItems: number;
-  progress: number;
+  progressPercent: number;
+  isCompleted: boolean;
 }
 
 /**
@@ -15,11 +16,13 @@ export function calculateChecklistProgress(task: Task): ChecklistProgress {
   const checklistItems = task.checklistItems || [];
   const totalItems = checklistItems.length;
   const completedItems = checklistItems.filter((item) => item.completed).length;
-  const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+  const progressPercent = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0;
+  const isCompleted = progressPercent === 100;
 
   return {
     totalItems,
     completedItems,
-    progress,
+    progressPercent,
+    isCompleted,
   };
 }
