@@ -27,6 +27,7 @@ import TaskErrorState from "../components/TaskErrorState";
 import { TaskViewerSkeleton } from "../components/Skeleton";
 import { TASK_ROUTES } from "../utils/routes";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
+import Checklist from "../components/Checklist";
 
 type TaskViewerProps = {
   isInline?: boolean;
@@ -273,7 +274,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           </div>
 
           {/* Description */}
-          <div className="mb-6">
+          <div className="mb-2">
             {isEditMode ? (
               <TextArea
                 label="Description"
@@ -290,6 +291,13 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
               </p>
             )}
           </div>
+
+          {/* Checklist */}
+          {!isEditMode && (
+            <div className="mb-4">
+              <Checklist taskId={task._id} items={task.checklistItems || []} />
+            </div>
+          )}
 
           {/* Task Details Grid */}
           <div className="grid grid-cols-2 gap-6 mb-6">
