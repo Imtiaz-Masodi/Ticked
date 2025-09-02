@@ -55,7 +55,7 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
                 className={`
                   appearance-none peer size-4 
                   border border-gray-300 dark:border-gray-600 rounded-full bg-transparent shrink-0 
-                  checked:bg-emerald-500 checked:border-emerald-500 
+                  checked:bg-emerald-500 checked:border-emerald-500 dark:checked:border-emerald-500 
                   disabled:border-gray-300 disabled:checked:bg-gray-300 disabled:cursor-not-allowed
                   dark:disabled:border-gray-600 dark:disabled:checked:bg-gray-600
                   cursor-pointer
