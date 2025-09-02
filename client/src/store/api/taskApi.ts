@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { Task } from "../../types/Task";
+import { Task, ChecklistItem } from "../../types/Task";
 import { customBaseQuery } from "./customBaseQuery";
 import { ApiResponse } from "../../types/ApiResponse";
 import { TaskStatus } from "../../utils/enums";
@@ -75,6 +75,42 @@ export const taskApi = createApi({
         { type: "Task", id: "LIST" },
       ],
     }),
+    // Checklist Items Management
+    addChecklistItem: builder.mutation<ApiResponse<{ task: Task }>, { taskId: string; text: string }>({
+      query: ({ taskId, text }) => ({
+        url: `/task/${taskId}/checklist`,
+        method: "POST",
+        data: { text },
+      }),
+      invalidatesTags: (_result, _error, { taskId }) => [
+        { type: "Task", id: taskId },
+        { type: "Task", id: "LIST" },
+      ],
+    }),
+    updateChecklistItem: builder.mutation<
+      ApiResponse<{ task: Task }>,
+      { taskId: string; itemId: string; updates: Partial<ChecklistItem> }
+    >({
+      query: ({ taskId, itemId, updates }) => ({
+        url: `/task/${taskId}/checklist/${itemId}`,
+        method: "PUT",
+        data: updates,
+      }),
+      invalidatesTags: (_result, _error, { taskId }) => [
+        { type: "Task", id: taskId },
+        { type: "Task", id: "LIST" },
+      ],
+    }),
+    deleteChecklistItem: builder.mutation<ApiResponse<{ task: Task }>, { taskId: string; itemId: string }>({
+      query: ({ taskId, itemId }) => ({
+        url: `/task/${taskId}/checklist/${itemId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (_result, _error, { taskId }) => [
+        { type: "Task", id: taskId },
+        { type: "Task", id: "LIST" },
+      ],
+    }),
   }),
 });
 
@@ -85,4 +121,7 @@ export const {
   useUpdateTaskMutation,
   useUpdateTaskStatusMutation,
   useDeleteTaskMutation,
+  useAddChecklistItemMutation,
+  useUpdateChecklistItemMutation,
+  useDeleteChecklistItemMutation,
 } = taskApi;
