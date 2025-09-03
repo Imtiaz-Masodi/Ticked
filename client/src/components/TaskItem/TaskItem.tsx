@@ -7,6 +7,7 @@ import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { useNavigate, useParams } from "react-router-dom";
 import { RelativeDateText } from "../RelativeDateText";
+import { TaskStatus } from "../../utils";
 
 type TaskItemProps = React.PropsWithChildren<{
   task: Task;
@@ -43,15 +44,24 @@ function TaskItem({ task }: TaskItemProps) {
       <div className="flex flex-col justify-center flex-grow gap-1">
         <h2 className="text-xl text-zinc-700 dark:text-gray-200 leading-tight select-none">{task.title}</h2>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {category ? (
-            <p style={{ color: category.categoryColorCode }} className="text-xs select-none">
-              {category.name}
-            </p>
+            <div className="flex items-center gap-1">
+              <Icon name={Icons.category} className="text-xs text-gray-500 dark:text-gray-400" />
+              <p style={{ color: category.categoryColorCode }} className="text-xs select-none">
+                {category.name}
+              </p>
+            </div>
           ) : (
             <SkeletonBox width="w-10" height="h-3" />
           )}
-          <RelativeDateText date={task.dueDate} showTime={false} className="text-xs" />
+
+          {task.status !== TaskStatus.completed && (
+            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+              <Icon name={Icons.calendarClock} className="text-xs" />
+              <RelativeDateText date={task.dueDate} showTime={false} className="text-xs" />
+            </div>
+          )}
 
           {/* Checklist Progress Indicator */}
           {totalItems > 0 && (
