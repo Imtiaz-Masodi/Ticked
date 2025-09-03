@@ -52,7 +52,7 @@ export const RelativeDateText: React.FC<RelativeDateTextProps> = ({
     colorClasses = "text-gray-700 dark:text-gray-300";
   }
 
-  const combinedClassName = `${colorClasses} ${className}`.trim();
+  const combinedClassName = `${colorClasses} ${className} select-none`.trim();
 
   return <span className={combinedClassName}>{displayText}</span>;
 };
