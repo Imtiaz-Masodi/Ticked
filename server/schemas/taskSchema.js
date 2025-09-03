@@ -8,10 +8,9 @@ const taskSchema = Joi.object({
   }),
   description: Joi.string().allow("").optional(),
   completed: Joi.boolean().default(false),
-  dueDate: Joi.date().iso().optional().messages({
+  dueDate: Joi.date().iso().allow(null).optional().messages({
     "date.base": '"dueDate" must be a valid date',
-    "date.iso":
-      '"dueDate" must be a valid ISO date string in format YYYY-MM-DD',
+    "date.iso": "dueDate must be in ISO 8601 date format",
   }),
   priority: Joi.string()
     .optional()

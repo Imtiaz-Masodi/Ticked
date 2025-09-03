@@ -112,7 +112,7 @@ async function updateTask(req, res) {
       {
         title,
         description,
-        dueDate,
+        dueDate: dueDate || null,
         status,
         priority,
         categoryId,
