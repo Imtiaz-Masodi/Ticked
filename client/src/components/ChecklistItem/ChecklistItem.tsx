@@ -7,7 +7,7 @@ import { Menu, MenuItem } from "../Menu";
 import { CircularLoader } from "../Loader";
 import { useMobileDetect } from "../../hooks/useMediaQuery";
 import { useUpdateChecklistItemMutation, useDeleteChecklistItemMutation } from "../../store/api/taskApi";
-import { ApiResponseStatus } from "../../utils/enums";
+import { ApiResponseStatus, Size } from "../../utils/enums";
 import { useApiToast } from "../../utils/toastUtils";
 
 type ChecklistItemProps = {
@@ -195,7 +195,7 @@ function ChecklistItem({ item, taskId }: ChecklistItemProps) {
               <>
                 {isUpdating || isDeleting ? (
                   <div className="opacity-100 flex items-center justify-center">
-                    <CircularLoader size="xs" className="text-gray-400 dark:text-gray-500" />
+                    <CircularLoader size={Size.sm} className="text-gray-400 dark:text-gray-500" />
                   </div>
                 ) : (
                   <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2">
