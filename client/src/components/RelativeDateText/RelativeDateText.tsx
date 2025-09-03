@@ -54,7 +54,7 @@ export const RelativeDateText: React.FC<RelativeDateTextProps> = ({
       colorClasses = "text-amber-600 dark:text-amber-400";
     } else {
       // Future: default color
-      colorClasses = "text-gray-700 dark:text-gray-300";
+      colorClasses = "text-gray-500 dark:text-gray-400";
     }
   }
   // If useInheritedColor is true, colorClasses remains empty and text inherits parent color
