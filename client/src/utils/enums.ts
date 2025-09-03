@@ -48,6 +48,13 @@ export enum ForgotPasswordStage {
   DONE = "DONE",
 }
 
+export interface RelativeDateResult {
+  dateString: string;
+  timeString: string;
+  dateTimeString: string;
+  timeComparison: -1 | 0 | 1; // -1: past, 0: current date, 1: future
+}
+
 /**
  * Common breakpoints for responsive design
  */
