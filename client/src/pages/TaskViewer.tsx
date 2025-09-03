@@ -438,16 +438,12 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
               <div>
                 <span className="font-medium">Created:</span>{" "}
-                <RelativeDateText date={task.createdOn} showTime={true} className="text-slate-500 dark:text-gray-400" />
+                <RelativeDateText date={task.createdOn} showTime={false} useInheritedColor={true} />
               </div>
               {task.updatedOn && (
                 <div>
                   <span className="font-medium">Last Updated:</span>{" "}
-                  <RelativeDateText
-                    date={task.updatedOn}
-                    showTime={true}
-                    className="text-slate-500 dark:text-gray-400"
-                  />
+                  <RelativeDateText date={task.updatedOn} showTime={true} useInheritedColor={true} />
                 </div>
               )}
             </div>
