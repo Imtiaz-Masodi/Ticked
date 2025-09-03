@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
@@ -19,6 +19,7 @@ import { ButtonType, ButtonVariant } from "../components/Button/Button.enum";
 import { Input } from "../components/Input";
 import { TextArea } from "../components/TextArea";
 import { Dropdown } from "../components/Dropdown";
+import { Toggle } from "../components/Toggle";
 import { Icon } from "../components/Icon";
 import { Icons } from "../components/Icon/IconMap";
 import { useApiToast } from "../utils/toastUtils";
@@ -39,6 +40,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [hasDueDate, setHasDueDate] = useState(false);
   const toast = useApiToast();
 
   // API hooks
@@ -148,10 +150,17 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
         ...task,
         title: values.title,
         description: values.description || "",
-        dueDate: values.dueDate && values.dueTime ? `${values.dueDate}T${values.dueTime}:00` : task.dueDate,
         priority: values.priority.value,
         categoryId: values.category!._id,
       };
+
+      // Only include due date if both date and time are provided
+      if (values.dueDate && values.dueTime) {
+        updatedTask.dueDate = `${values.dueDate}T${values.dueTime}:00`;
+      } else {
+        // Remove due date if either date or time is missing
+        updatedTask.dueDate = undefined;
+      }
 
       const response = await updateTask({ task: updatedTask });
       if (response.data?.status === ApiResponseStatus.success) {
@@ -172,6 +181,39 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
     onSubmit: handleFormSubmit,
     validate: validateTaskForm,
   });
+
+  // Sync toggle state with task's due date
+  useEffect(() => {
+    if (task) {
+      setHasDueDate(!!task.dueDate);
+    }
+  }, [task]);
+
+  // Handle toggle change for due date
+  const handleToggleChange = (value: boolean) => {
+    setHasDueDate(value);
+
+    if (value) {
+      // Set default values when toggle is turned on (if they're empty)
+      if (!formik.values.dueDate && !initialFormValues.dueDate) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const tomorrowString = tomorrow.toISOString().split("T")[0];
+        formik.setFieldValue("dueDate", tomorrowString);
+      } else if (!formik.values.dueDate && initialFormValues.dueDate) {
+        formik.setFieldValue("dueDate", initialFormValues.dueDate);
+      }
+      if (!formik.values.dueTime && !initialFormValues.dueTime) {
+        formik.setFieldValue("dueTime", "12:00");
+      } else if (!formik.values.dueTime && initialFormValues.dueTime) {
+        formik.setFieldValue("dueTime", initialFormValues.dueTime);
+      }
+    } else {
+      // Clear due date and time when toggle is turned off
+      formik.setFieldValue("dueDate", "");
+      formik.setFieldValue("dueTime", "");
+    }
+  };
 
   if (isLoadingTask) {
     return <TaskViewerSkeleton isInline={isInline} />;
@@ -370,23 +412,34 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             {/* Due Date - Spans both columns when in edit mode */}
             <div className={isEditMode ? "col-span-2" : ""}>
               {isEditMode ? (
-                <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    label="Due Date"
-                    type="date"
-                    name="dueDate"
-                    value={formik.values.dueDate}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <Input
-                    label="Due Time"
-                    type="time"
-                    name="dueTime"
-                    value={formik.values.dueTime}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
+                <div className="space-y-4">
+                  {hasDueDate && (
+                    <div className="grid grid-cols-2 gap-4">
+                      <Input
+                        label="Due Date"
+                        type="date"
+                        name="dueDate"
+                        value={formik.values.dueDate}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        errorMessage={formik.touched.dueDate ? formik.errors.dueDate : undefined}
+                      />
+                      <Input
+                        label="Due Time"
+                        type="time"
+                        name="dueTime"
+                        value={formik.values.dueTime}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        errorMessage={formik.touched.dueTime ? formik.errors.dueTime : undefined}
+                      />
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between px-1">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Set Due Date</label>
+                    <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} />
+                  </div>
                 </div>
               ) : (
                 <>
