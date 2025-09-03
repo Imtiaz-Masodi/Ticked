@@ -44,7 +44,7 @@ function TaskItem({ task }: TaskItemProps) {
       <div className="flex flex-col justify-center flex-grow gap-1">
         <h2 className="text-xl text-zinc-700 dark:text-gray-200 leading-tight select-none">{task.title}</h2>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 md:gap-4">
           {category ? (
             <div className="flex items-center gap-1">
               <Icon name={Icons.category} className="text-xs text-gray-500 dark:text-gray-400" />
@@ -65,12 +65,9 @@ function TaskItem({ task }: TaskItemProps) {
 
           {/* Checklist Progress Indicator */}
           {totalItems > 0 && (
-            <div className="flex items-center gap-1 ml-2">
-              <Icon
-                name={isCompleted ? Icons.taskDone : Icons.task}
-                className={`text-sm ${isCompleted ? "text-green-500" : "text-gray-500 dark:text-gray-400"}`}
-              />
-              <span className="text-xs text-gray-500 dark:text-gray-400 select-none">
+            <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
+              <Icon name={isCompleted ? Icons.taskDone : Icons.task} className={`text-sm`} />
+              <span className="text-xs  select-none">
                 {completedItems}/{totalItems}
               </span>
             </div>
