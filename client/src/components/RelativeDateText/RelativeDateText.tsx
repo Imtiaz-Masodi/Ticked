@@ -48,7 +48,7 @@ export const RelativeDateText: React.FC<RelativeDateTextProps> = ({
   if (!useInheritedColor) {
     if (timeComparison === -1) {
       // Past: red color
-      colorClasses = "text-red-600 dark:text-red-400";
+      colorClasses = "text-rose-700 dark:text-rose-400";
     } else if (timeComparison === 0) {
       // Current date: yellow/orange color
       colorClasses = "text-amber-600 dark:text-amber-400";
