@@ -15,11 +15,22 @@ export function validateTaskForm(values: TaskFormValues) {
   if (priority === null) {
     errors.priority = "Priority is required";
   }
-  if (dueDate && !/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
-    errors.dueDate = "Due date must be in YYYY-MM-DD format";
+
+  // If dueDate has a value, validate both date and time
+  if (dueDate) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate)) {
+      errors.dueDate = "Due date must be in YYYY-MM-DD format";
+    }
+    if (!dueTime) {
+      errors.dueTime = "Due time is required when due date is set";
+    } else if (!/^\d{2}:\d{2}$/.test(dueTime)) {
+      errors.dueTime = "Due time must be in HH:MM format";
+    }
   }
-  if (dueTime && !/^\d{2}:\d{2}$/.test(dueTime)) {
-    errors.dueTime = "Due time must be in HH:MM format";
+
+  // If dueTime has a value but no dueDate, require dueDate
+  if (dueTime && !dueDate) {
+    errors.dueDate = "Due date is required when due time is set";
   }
 
   return errors;

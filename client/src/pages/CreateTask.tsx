@@ -2,7 +2,6 @@ import { FormikHelpers, useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { TaskForm, TaskFormValues } from "../sections/TaskForm";
 import { ApiResponseStatus, Priority } from "../utils/enums";
-import { getTomorrowDateString } from "../helpers/dateHelper";
 import { Category } from "../types/Category";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
 import { useCreateTaskMutation } from "../store/api/taskApi";
@@ -18,13 +17,20 @@ function CreateTask() {
 
   const handleFormSubmit = async (values: TaskFormValues, { setSubmitting }: FormikHelpers<TaskFormValues>) => {
     try {
-      const response = await triggerCreateTask({
+      const taskData: Partial<Task> = {
         title: values.title,
         description: values.description || "",
-        dueDate: `${values.dueDate}T${values.dueTime}:00`,
         priority: values.priority.value,
         categoryId: values.category!._id,
-      } as Task);
+      };
+
+      // Only include due date if both date and time are provided
+      if (values.dueDate) {
+        taskData.dueDate = `${values.dueDate}`;
+        if (values.dueTime) taskData.dueDate = `${values.dueDate}T${values.dueTime}:00`;
+      }
+
+      const response = await triggerCreateTask(taskData as Task);
 
       if (response.data?.status === ApiResponseStatus.success) {
         formik.resetForm();
@@ -43,8 +49,8 @@ function CreateTask() {
       title: "",
       priority: { label: "Medium", value: Priority.medium },
       category: { _id: "3", name: "Others" } as Category,
-      dueDate: getTomorrowDateString(),
-      dueTime: "12:00",
+      dueDate: "",
+      dueTime: "",
     },
     onSubmit: handleFormSubmit,
     validate: validateTaskForm,
