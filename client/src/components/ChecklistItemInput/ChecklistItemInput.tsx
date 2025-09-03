@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
+import { CircularLoader } from "../Loader";
 
 type ChecklistItemInputProps = {
   initialValue?: string;
@@ -72,7 +73,7 @@ function ChecklistItemInput({
         title="Save"
       >
         {isLoading ? (
-          <div className="w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+          <CircularLoader size="xs" className="text-gray-400 dark:text-gray-500" />
         ) : (
           <Icon name={Icons.check} className="w-4 h-4" />
         )}
