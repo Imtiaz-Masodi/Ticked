@@ -21,7 +21,7 @@ interface RelativeDateTextProps {
  */
 export const RelativeDateText: React.FC<RelativeDateTextProps> = ({
   date,
-  use24HourFormat = true,
+  use24HourFormat = false,
   showTime = true,
   className = "",
 }) => {
