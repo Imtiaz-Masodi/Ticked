@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ChecklistItem as ChecklistItemType } from "../../types/Task";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import ChecklistItemInput from "../ChecklistItemInput";
+import { Menu, MenuItem } from "../Menu";
+import { useMobileDetect } from "../../hooks/useMediaQuery";
 
 type ChecklistItemProps = {
   item: ChecklistItemType;
@@ -14,6 +16,9 @@ type ChecklistItemProps = {
 
 function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeleting = false }: ChecklistItemProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuTriggerRef = useRef<HTMLButtonElement>(null);
+  const isMobile = useMobileDetect();
 
   const handleToggleComplete = async () => {
     await onUpdate(item._id, { completed: !item.completed });
@@ -33,6 +38,36 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
   const handleDelete = async () => {
     await onDelete(item._id);
   };
+
+  const handleMenuItemClick = (menuId: string) => {
+    setIsMenuOpen(false); // Close menu immediately when action is selected
+    switch (menuId) {
+      case "edit":
+        setIsEditing(true);
+        break;
+      case "delete":
+        handleDelete();
+        break;
+    }
+  };
+
+  const menuItems: MenuItem[] = [
+    {
+      menuId: "edit",
+      label: "Edit",
+      icon: Icons.edit,
+    },
+    {
+      menuId: "delete",
+      label: "Delete",
+      icon: Icons.delete,
+      variant: "danger" as const,
+    },
+  ].filter((item) => {
+    // Hide delete option if currently deleting to prevent confusion
+    if (item.menuId === "delete" && isDeleting) return false;
+    return true;
+  });
 
   return (
     <div className="py-px">
@@ -88,34 +123,83 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
             </div>
           </div>
 
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button
-              onClick={() => setIsEditing(true)}
-              disabled={isUpdating || isDeleting}
-              className="p-1"
-              title="Edit item"
-            >
-              <Icon
-                name={Icons.edit}
-                className="w-3 h-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
-              />
-            </button>
-
-            <button
-              onClick={handleDelete}
-              disabled={isUpdating || isDeleting}
-              className="p-1 transition-colors"
-              title="Delete item"
-            >
-              {isDeleting ? (
-                <div className="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <Icon
-                  name={Icons.delete}
-                  className="w-3 h-3 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400"
+          <div className="flex items-center gap-1 relative">
+            {isMobile ? (
+              <>
+                <button
+                  ref={menuTriggerRef}
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  disabled={isUpdating || isDeleting}
+                  className={`p-1 -mr-2 transition-colors ${isMenuOpen ? "text-gray-600 dark:text-gray-300" : ""}`}
+                  title="More actions"
+                >
+                  {isDeleting ? (
+                    <div className="w-4 h-4 border border-gray-400 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Icon
+                      name={Icons.menuDots}
+                      className="w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                    />
+                  )}
+                </button>
+                <Menu
+                  isOpen={isMenuOpen}
+                  onClose={() => setIsMenuOpen(false)}
+                  onMenuItemClick={handleMenuItemClick}
+                  items={menuItems}
+                  triggerRef={menuTriggerRef}
+                  className="!top-0"
+                  position="bottom"
                 />
-              )}
-            </button>
+              </>
+            ) : (
+              <>
+                <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2">
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    disabled={isUpdating || isDeleting}
+                    className={`
+                      flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
+                      transition-all duration-200 hover:scale-105 active:scale-95
+                      bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600
+                      text-gray-600 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200
+                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                      shadow-sm hover:shadow-md
+                    `}
+                    title="Edit checklist item"
+                  >
+                    <Icon name={Icons.edit} className="w-3 h-3" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    onClick={handleDelete}
+                    disabled={isUpdating || isDeleting}
+                    className={`
+                      flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
+                      transition-all duration-200 hover:scale-105 active:scale-95
+                      bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50
+                      text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
+                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                      shadow-sm hover:shadow-md
+                    `}
+                    title="Delete checklist item"
+                  >
+                    {isDeleting ? (
+                      <>
+                        <div className="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin" />
+                        <span>Deleting...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Icon name={Icons.delete} className="w-3 h-3" />
+                        <span>Delete</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
