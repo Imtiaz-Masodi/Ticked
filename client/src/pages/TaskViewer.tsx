@@ -28,6 +28,7 @@ import { TaskViewerSkeleton } from "../components/Skeleton";
 import { TASK_ROUTES } from "../utils/routes";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
 import Checklist from "../components/Checklist";
+import { RelativeDateText } from "../components/RelativeDateText";
 
 type TaskViewerProps = {
   isInline?: boolean;
@@ -436,11 +437,17 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
               <div>
-                <span className="font-medium">Created:</span> {getUserFriendlyDateTime(task.createdOn)}
+                <span className="font-medium">Created:</span>{" "}
+                <RelativeDateText date={task.createdOn} showTime={true} className="text-slate-500 dark:text-gray-400" />
               </div>
               {task.updatedOn && (
                 <div>
-                  <span className="font-medium">Last Updated:</span> {getUserFriendlyDateTime(task.updatedOn)}
+                  <span className="font-medium">Last Updated:</span>{" "}
+                  <RelativeDateText
+                    date={task.updatedOn}
+                    showTime={true}
+                    className="text-slate-500 dark:text-gray-400"
+                  />
                 </div>
               )}
             </div>

@@ -1,4 +1,3 @@
-import { getUserFriendlyDate } from "../../helpers/dateHelper";
 import { calculateChecklistProgress } from "../../helpers/taskHelper";
 import { useGetCategoriesQuery } from "../../store/api/categoryApi";
 import { Task } from "../../types/Task";
@@ -7,6 +6,7 @@ import { SkeletonBox } from "../Skeleton";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { useNavigate, useParams } from "react-router-dom";
+import { RelativeDateText } from "../RelativeDateText";
 
 type TaskItemProps = React.PropsWithChildren<{
   task: Task;
@@ -51,7 +51,7 @@ function TaskItem({ task }: TaskItemProps) {
           ) : (
             <SkeletonBox width="w-10" height="h-3" />
           )}
-          <p className="text-xs text-zinc-700 dark:text-gray-300 select-none">{getUserFriendlyDate(task.dueDate)}</p>
+          <RelativeDateText date={task.dueDate} showTime={false} className="text-xs" />
 
           {/* Checklist Progress Indicator */}
           {totalItems > 0 && (
