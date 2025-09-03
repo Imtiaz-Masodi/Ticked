@@ -2,11 +2,7 @@ import { useState } from "react";
 import { ChecklistItem as ChecklistItemType } from "../../types/Task";
 import ChecklistItem from "../ChecklistItem";
 import ChecklistItemInput from "../ChecklistItemInput";
-import {
-  useAddChecklistItemMutation,
-  useUpdateChecklistItemMutation,
-  useDeleteChecklistItemMutation,
-} from "../../store/api/taskApi";
+import { useAddChecklistItemMutation } from "../../store/api/taskApi";
 import { ApiResponseStatus } from "../../utils/enums";
 import { useApiToast } from "../../utils/toastUtils";
 
@@ -17,15 +13,11 @@ type ChecklistProps = {
 
 function Checklist({ taskId, items }: ChecklistProps) {
   const [showAddInput, setShowAddInput] = useState(false);
-  const [updatingItemId, setUpdatingItemId] = useState<string | undefined>();
-  const [deletingItemId, setDeletingItemId] = useState<string | undefined>();
 
   const toast = useApiToast();
 
   // Checklist API hooks
   const [addChecklistItem, { isLoading: isAddingChecklistItem }] = useAddChecklistItemMutation();
-  const [updateChecklistItem] = useUpdateChecklistItemMutation();
-  const [deleteChecklistItem] = useDeleteChecklistItemMutation();
 
   // Checklist handlers
   const handleAddChecklistItem = async (text: string) => {
@@ -37,36 +29,6 @@ function Checklist({ taskId, items }: ChecklistProps) {
     } catch (error) {
       console.error("Failed to add checklist item:", error);
       toast.apiError("Failed to add checklist item");
-    }
-  };
-
-  const handleUpdateChecklistItem = async (itemId: string, updates: Partial<ChecklistItemType>) => {
-    setUpdatingItemId(itemId);
-    try {
-      const response = await updateChecklistItem({ taskId, itemId, updates });
-      if (response.data?.status !== ApiResponseStatus.success) {
-        toast.apiError("Failed to update checklist item");
-      }
-    } catch (error) {
-      console.error("Failed to update checklist item:", error);
-      toast.apiError("Failed to update checklist item");
-    } finally {
-      setUpdatingItemId(undefined);
-    }
-  };
-
-  const handleDeleteChecklistItem = async (itemId: string) => {
-    setDeletingItemId(itemId);
-    try {
-      const response = await deleteChecklistItem({ taskId, itemId });
-      if (response.data?.status !== ApiResponseStatus.success) {
-        toast.apiError("Failed to delete checklist item");
-      }
-    } catch (error) {
-      console.error("Failed to delete checklist item:", error);
-      toast.apiError("Failed to delete checklist item");
-    } finally {
-      setDeletingItemId(undefined);
     }
   };
 
@@ -85,14 +47,7 @@ function Checklist({ taskId, items }: ChecklistProps) {
       {items.length > 0 && (
         <div className="space-y-1">
           {items.map((item) => (
-            <ChecklistItem
-              key={item._id}
-              item={item}
-              onUpdate={handleUpdateChecklistItem}
-              onDelete={handleDeleteChecklistItem}
-              isUpdating={updatingItemId === item._id}
-              isDeleting={deletingItemId === item._id}
-            />
+            <ChecklistItem key={item._id} item={item} taskId={taskId} />
           ))}
         </div>
       )}

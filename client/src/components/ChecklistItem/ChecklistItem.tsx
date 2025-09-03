@@ -5,28 +5,66 @@ import { Icons } from "../Icon/IconMap";
 import ChecklistItemInput from "../ChecklistItemInput";
 import { Menu, MenuItem } from "../Menu";
 import { useMobileDetect } from "../../hooks/useMediaQuery";
+import { useUpdateChecklistItemMutation, useDeleteChecklistItemMutation } from "../../store/api/taskApi";
+import { ApiResponseStatus } from "../../utils/enums";
+import { useApiToast } from "../../utils/toastUtils";
 
 type ChecklistItemProps = {
   item: ChecklistItemType;
-  onUpdate: (itemId: string, updates: Partial<ChecklistItemType>) => Promise<void>;
-  onDelete: (itemId: string) => Promise<void>;
-  isUpdating?: boolean;
-  isDeleting?: boolean;
+  taskId: string;
 };
 
-function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeleting = false }: ChecklistItemProps) {
+function ChecklistItem({ item, taskId }: ChecklistItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const isMobile = useMobileDetect();
 
+  const toast = useApiToast();
+
+  // API hooks
+  const [updateChecklistItem] = useUpdateChecklistItemMutation();
+  const [deleteChecklistItem] = useDeleteChecklistItemMutation();
+
+  const handleUpdateChecklistItem = async (itemId: string, updates: Partial<ChecklistItemType>) => {
+    setIsUpdating(true);
+    try {
+      const response = await updateChecklistItem({ taskId, itemId, updates });
+      if (response.data?.status !== ApiResponseStatus.success) {
+        toast.apiError("Failed to update checklist item");
+      }
+    } catch (error) {
+      console.error("Failed to update checklist item:", error);
+      toast.apiError("Failed to update checklist item");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleDeleteChecklistItem = async (itemId: string) => {
+    setIsDeleting(true);
+    try {
+      const response = await deleteChecklistItem({ taskId, itemId });
+      if (response.data?.status !== ApiResponseStatus.success) {
+        toast.apiError("Failed to delete checklist item");
+      }
+    } catch (error) {
+      console.error("Failed to delete checklist item:", error);
+      toast.apiError("Failed to delete checklist item");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const handleToggleComplete = async () => {
-    await onUpdate(item._id, { completed: !item.completed });
+    await handleUpdateChecklistItem(item._id, { completed: !item.completed });
   };
 
   const handleSaveEdit = async (text: string) => {
     if (text.trim() && text.trim() !== item.text) {
-      await onUpdate(item._id, { text: text.trim() });
+      await handleUpdateChecklistItem(item._id, { text: text.trim() });
     }
     setIsEditing(false);
   };
@@ -36,7 +74,7 @@ function ChecklistItem({ item, onUpdate, onDelete, isUpdating = false, isDeletin
   };
 
   const handleDelete = async () => {
-    await onDelete(item._id);
+    await handleDeleteChecklistItem(item._id);
   };
 
   const handleMenuItemClick = (menuId: string) => {
