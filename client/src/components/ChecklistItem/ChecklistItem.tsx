@@ -4,6 +4,7 @@ import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import ChecklistItemInput from "../ChecklistItemInput";
 import { Menu, MenuItem } from "../Menu";
+import { CircularLoader } from "../Loader";
 import { useMobileDetect } from "../../hooks/useMediaQuery";
 import { useUpdateChecklistItemMutation, useDeleteChecklistItemMutation } from "../../store/api/taskApi";
 import { ApiResponseStatus } from "../../utils/enums";
@@ -171,8 +172,8 @@ function ChecklistItem({ item, taskId }: ChecklistItemProps) {
                   className={`p-1 -mr-2 transition-colors ${isMenuOpen ? "text-gray-600 dark:text-gray-300" : ""}`}
                   title="More actions"
                 >
-                  {isDeleting ? (
-                    <div className="w-4 h-4 border border-gray-400 border-t-transparent rounded-full animate-spin" />
+                  {isUpdating || isDeleting ? (
+                    <CircularLoader size="xs" className="text-gray-400 dark:text-gray-500" />
                   ) : (
                     <Icon
                       name={Icons.menuDots}
@@ -192,50 +193,47 @@ function ChecklistItem({ item, taskId }: ChecklistItemProps) {
               </>
             ) : (
               <>
-                <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2">
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    disabled={isUpdating || isDeleting}
-                    className={`
-                      flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
-                      transition-all duration-200 hover:scale-105 active:scale-95
-                      bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600
-                      text-gray-600 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200
-                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                      shadow-sm hover:shadow-md
-                    `}
-                    title="Edit checklist item"
-                  >
-                    <Icon name={Icons.edit} className="w-3 h-3" />
-                    <span>Edit</span>
-                  </button>
+                {isUpdating || isDeleting ? (
+                  <div className="opacity-100 flex items-center justify-center">
+                    <CircularLoader size="xs" className="text-gray-400 dark:text-gray-500" />
+                  </div>
+                ) : (
+                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-2">
+                    <button
+                      onClick={() => setIsEditing(true)}
+                      disabled={isUpdating || isDeleting}
+                      className={`
+                        flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
+                        transition-all duration-200 hover:scale-105 active:scale-95
+                        bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600
+                        text-gray-600 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200
+                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                        shadow-sm hover:shadow-md
+                      `}
+                      title="Edit checklist item"
+                    >
+                      <Icon name={Icons.edit} className="w-3 h-3" />
+                      <span>Edit</span>
+                    </button>
 
-                  <button
-                    onClick={handleDelete}
-                    disabled={isUpdating || isDeleting}
-                    className={`
-                      flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
-                      transition-all duration-200 hover:scale-105 active:scale-95
-                      bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50
-                      text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
-                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                      shadow-sm hover:shadow-md
-                    `}
-                    title="Delete checklist item"
-                  >
-                    {isDeleting ? (
-                      <>
-                        <div className="w-3 h-3 border border-red-500 border-t-transparent rounded-full animate-spin" />
-                        <span>Deleting...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Icon name={Icons.delete} className="w-3 h-3" />
-                        <span>Delete</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                    <button
+                      onClick={handleDelete}
+                      disabled={isUpdating || isDeleting}
+                      className={`
+                        flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium
+                        transition-all duration-200 hover:scale-105 active:scale-95
+                        bg-red-50 hover:bg-red-100 dark:bg-red-900/30 dark:hover:bg-red-900/50
+                        text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300
+                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                        shadow-sm hover:shadow-md
+                      `}
+                      title="Delete checklist item"
+                    >
+                      <Icon name={Icons.delete} className="w-3 h-3" />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
