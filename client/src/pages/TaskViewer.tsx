@@ -255,13 +255,15 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             <div className="flex items-center gap-4">
               {!isEditMode && (
                 <>
-                  <div
-                    onClick={() => setIsEditMode(true)}
-                    className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-400 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
-                    title="Edit task"
-                  >
-                    <Icon name={Icons.edit} className="text-sky-400 dark:text-sky-400" />
-                  </div>
+                  {task.status !== TaskStatus.completed && (
+                    <div
+                      onClick={() => setIsEditMode(true)}
+                      className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-sky-400 dark:border-sky-500 hover:bg-slate-50 dark:hover:bg-gray-600 transition-colors cursor-pointer flex items-center justify-center"
+                      title="Edit task"
+                    >
+                      <Icon name={Icons.edit} className="text-sky-400 dark:text-sky-400" />
+                    </div>
+                  )}
                   <div
                     onClick={() => setShowDeleteConfirm(true)}
                     className="w-8 h-8 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-red-400 dark:border-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors cursor-pointer flex items-center justify-center"
@@ -346,7 +348,11 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           {/* Checklist */}
           {!isEditMode && (
             <div className="mb-4">
-              <Checklist taskId={task._id} items={task.checklistItems || []} />
+              <Checklist
+                taskId={task._id}
+                items={task.checklistItems || []}
+                disabled={task.status === TaskStatus.completed}
+              />
             </div>
           )}
 

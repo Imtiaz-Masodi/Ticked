@@ -9,9 +9,10 @@ import { useApiToast } from "../../utils/toastUtils";
 type ChecklistProps = {
   taskId: string;
   items: ChecklistItemType[];
+  disabled?: boolean;
 };
 
-function Checklist({ taskId, items }: ChecklistProps) {
+function Checklist({ taskId, items, disabled = false }: ChecklistProps) {
   const [showAddInput, setShowAddInput] = useState(false);
 
   const toast = useApiToast();
@@ -47,7 +48,7 @@ function Checklist({ taskId, items }: ChecklistProps) {
       {items.length > 0 && (
         <div className="space-y-1">
           {items.map((item) => (
-            <ChecklistItem key={item._id} item={item} taskId={taskId} />
+            <ChecklistItem key={item._id} item={item} taskId={taskId} disabled={disabled} />
           ))}
         </div>
       )}
@@ -63,7 +64,7 @@ function Checklist({ taskId, items }: ChecklistProps) {
       )}
 
       {/* Add item link */}
-      {!showAddInput && (
+      {!showAddInput && !disabled && (
         <div>
           <button
             onClick={() => setShowAddInput(true)}
