@@ -55,7 +55,7 @@ function RootContainer() {
           navItems={NAV_ITEMS}
           activeNavItemPath={location.pathname}
         />
-        <div className="py-16 md:pl-80 transition-all duration-300">
+        <div className="pt-16 md:pl-80 transition-all duration-300 h-screen">
           <Outlet />
         </div>
       </div>
