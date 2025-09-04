@@ -33,9 +33,9 @@ function Checklist({ taskId, items, disabled = false }: ChecklistProps) {
     }
   };
 
-  const handleAddItem = async (text: string) => {
+  const handleAddItem = async (text: string, showAddInput = false) => {
     await handleAddChecklistItem(text);
-    setShowAddInput(false);
+    setShowAddInput(showAddInput);
   };
 
   const handleCancelAdd = () => {

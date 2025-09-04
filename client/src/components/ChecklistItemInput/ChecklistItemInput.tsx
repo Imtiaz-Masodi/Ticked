@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Icon } from "../Icon";
 import { Icons } from "../Icon/IconMap";
 import { CircularLoader } from "../Loader";
@@ -7,7 +7,7 @@ type ChecklistItemInputProps = {
   initialValue?: string;
   placeholder?: string;
   isLoading?: boolean;
-  onSave: (text: string) => Promise<void> | void;
+  onSave: (text: string, savedWithEnter: boolean) => Promise<void> | void;
   onCancel: () => void;
   autoFocus?: boolean;
   showCancelButton?: boolean;
@@ -23,14 +23,21 @@ function ChecklistItemInput({
   showCancelButton = true,
 }: ChecklistItemInputProps) {
   const [text, setText] = useState(initialValue);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setText(initialValue);
   }, [initialValue]);
 
-  const handleSave = async () => {
+  const handleSave = async (savedWithEnter: boolean = false) => {
     if (text.trim()) {
-      await onSave(text.trim());
+      await onSave(text.trim(), savedWithEnter);
+      if (savedWithEnter) {
+        setText("");
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 50);
+      }
     }
   };
 
@@ -41,7 +48,7 @@ function ChecklistItemInput({
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      handleSave();
+      handleSave(true);
     } else if (e.key === "Escape") {
       handleCancel();
     }
@@ -60,10 +67,11 @@ function ChecklistItemInput({
         className="w-0 h-full flex-1 px-3 py-2 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
         autoFocus={autoFocus}
         disabled={isLoading}
+        ref={inputRef}
       />
 
       <button
-        onClick={handleSave}
+        onClick={() => handleSave(false)}
         disabled={isSaveDisabled}
         className={`w-8 h-8 rounded-lg transition-colors flex items-center justify-center ${
           isSaveDisabled
