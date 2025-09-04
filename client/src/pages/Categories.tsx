@@ -28,9 +28,7 @@ function Categories() {
   return (
     <>
       <div className="max-w-6xl mx-auto p-4">
-        <h1 className="text-xl font-medium text-zinc-600 dark:text-gray-300 self-start mx-2 mb-4">
-          Categories
-        </h1>
+        <h1 className="text-xl font-medium text-zinc-600 dark:text-gray-300 self-start mx-2 mb-4">Categories</h1>
 
         {isLoading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -42,14 +40,9 @@ function Categories() {
 
         {!isLoading && !categories.length && !showCreateCard && (
           <div className="max-w-screen-sm h-[80vh] mx-auto flex flex-col items-center justify-center px-2 gap-4">
-            <img
-              src="/assets/images/no-data.png"
-              className="w-[50%]"
-              alt="No categories available"
-            />
+            <img src="/assets/images/no-data.png" className="w-[50%]" alt="No categories available" />
             <span className="text-zinc-700 dark:text-gray-300 text-center px-4 text-sm md:text-base">
-              No categories available. Categories help organize your tasks
-              better.
+              No categories available. Categories help organize your tasks better.
             </span>
           </div>
         )}
@@ -70,12 +63,9 @@ function Categories() {
         )}
       </div>
 
-      {!showCreateCard && (
-        <FloatingActionButton
-          icon={Icons.add}
-          onClick={() => setShowCreateCard(true)}
-        />
-      )}
+      {!showCreateCard && <FloatingActionButton icon={Icons.add} onClick={() => setShowCreateCard(true)} />}
+
+      <div className="h-16 w-full" />
     </>
   );
 }

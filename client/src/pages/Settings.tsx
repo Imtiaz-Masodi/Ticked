@@ -88,6 +88,8 @@ const Settings: React.FC = () => {
           <p>Ticked Task Management App • Version 1.0.0</p>
         </div>
       </div>
+
+      <div className="h-16 w-full" />
     </div>
   );
 };

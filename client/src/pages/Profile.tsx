@@ -50,6 +50,8 @@ const Profile: React.FC = () => {
           <UpdatePassword user={user} showUpdateForm={showUpdatePasswordForm} />
         </div>
       </div>
+
+      <div className="h-16 w-full" />
     </div>
   );
 };
