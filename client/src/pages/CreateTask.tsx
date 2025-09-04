@@ -74,7 +74,6 @@ function CreateTask() {
 
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">
           <div className="flex flex-col gap-4">
-            {/* @ts-expect-error Ignore */}
             <TaskForm {...formik} />
           </div>
         </div>
