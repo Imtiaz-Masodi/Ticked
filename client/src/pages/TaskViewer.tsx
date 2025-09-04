@@ -226,7 +226,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   }
 
   return (
-    <div className={`${isInline ? "min-h-0 pt-2 mt-8" : "min-h-screen pt-4"} px-4`}>
+    <div className={`${isInline ? "min-h-0 pt-2 mt-8" : "h-full pt-4"} px-4`}>
       <div className="max-w-3xl mx-auto">
         {/* Task Content */}
         <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-8">

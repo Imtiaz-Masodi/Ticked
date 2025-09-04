@@ -59,7 +59,9 @@ function TasksListing() {
     <div className="mx-0 md:mx-2 mt-2">
       <div className={`${isLargeScreen && isViewingTask ? "flex gap-0 max-w-screen-2xl mx-auto" : ""}`}>
         {/* Tasks List - takes half width on large screens when viewing a task */}
-        <div className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"}`}>
+        <div
+          className={`${isLargeScreen && isViewingTask ? "flex-1" : "w-full"} h-[calc(100vh-4.5rem)] overflow-y-auto`}
+        >
           <TasksList />
         </div>
 

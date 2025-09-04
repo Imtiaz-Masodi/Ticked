@@ -162,6 +162,8 @@ function TasksList() {
           {renderTaskGroup(groupedTasks.backlog, "Backlog Tasks")}
         </>
       )}
+
+      <div className="h-16 lg:h-4 w-full" />
     </div>
   );
 }
