@@ -9,10 +9,10 @@ export function validateTaskForm(values: TaskFormValues) {
   } else if (title.length < 3) {
     errors.title = "Title must be at least 3 characters";
   }
-  if (category === null) {
+  if (!category) {
     errors.category = "Category is required";
   }
-  if (priority === null) {
+  if (!priority) {
     errors.priority = "Priority is required";
   }
 

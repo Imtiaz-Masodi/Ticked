@@ -11,4 +11,6 @@ export type TaskFormValues = {
   category?: Category;
 };
 
-export type TaskFormProps = FormikFormProps<TaskFormValues>;
+export type TaskFormProps = FormikFormProps<TaskFormValues> & {
+  submitButtonText?: string;
+};

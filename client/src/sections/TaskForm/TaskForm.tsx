@@ -13,10 +13,20 @@ import { getTomorrowDateString } from "../../helpers/dateHelper";
 import { Size } from "../../utils";
 
 function TaskForm(props: TaskFormProps) {
-  const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit, ...formik } = props;
+  const {
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    submitButtonText = "Create Task",
+    ...formik
+  } = props;
   const { data } = useGetCategoriesQuery();
   const categories = useMemo(() => data?.payload?.categories || [], [data]);
-  const [hasDueDate, setHasDueDate] = useState(false);
+  const [hasDueDate, setHasDueDate] = useState(!!values.dueDate);
 
   // Sync toggle state when form values change (e.g., when editing an existing task)
   useEffect(() => {
@@ -105,7 +115,7 @@ function TaskForm(props: TaskFormProps) {
         getLabel={(priority) => priority.label}
         options={priorityOptions}
         onChange={handleDropdownChange}
-        errorMessage={touched.priority ? errors.priority : undefined}
+        errorMessage={touched.priority ? (errors.priority as string) : undefined}
         disabled={isSubmitting}
       />
 
@@ -148,7 +158,7 @@ function TaskForm(props: TaskFormProps) {
       </div>
 
       <Button onClick={handleSubmit} isLoading={isSubmitting} className="mt-2 w-full">
-        Create Task
+        {submitButtonText}
       </Button>
     </>
   );
