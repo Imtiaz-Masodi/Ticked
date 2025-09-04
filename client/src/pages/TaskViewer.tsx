@@ -210,8 +210,10 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
       }
     } else {
       // Clear due date and time when toggle is turned off
-      formik.setFieldValue("dueDate", "");
-      formik.setFieldValue("dueTime", "");
+      setTimeout(() => {
+        formik.setFieldValue("dueDate", "");
+        formik.setFieldValue("dueTime", "");
+      }, 100);
     }
   };
 
@@ -349,7 +351,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
           )}
 
           {/* Task Details Grid */}
-          <div className="grid grid-cols-2 gap-6 mb-6">
+          <div className={`grid grid-cols-2 gap-6 ${isEditMode ? "mb-0" : "mb-6"}`}>
             {/* Category */}
             <div>
               {isEditMode ? (
@@ -412,8 +414,20 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             {/* Due Date - Spans both columns when in edit mode */}
             <div className={isEditMode ? "col-span-2" : ""}>
               {isEditMode ? (
-                <div className="space-y-4">
-                  {hasDueDate && (
+                <>
+                  <div className="flex items-center justify-between px-1">
+                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Set Due Date</label>
+                    <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} />
+                  </div>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      hasDueDate ? "max-h-40 opacity-100 mt-4" : "max-h-0 opacity-0"
+                    }`}
+                    style={{
+                      transform: hasDueDate ? "translateY(0)" : "translateY(-10px)",
+                    }}
+                  >
                     <div className="grid grid-cols-2 gap-4">
                       <Input
                         label="Due Date"
@@ -434,13 +448,8 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                         errorMessage={formik.touched.dueTime ? formik.errors.dueTime : undefined}
                       />
                     </div>
-                  )}
-
-                  <div className="flex items-center justify-between px-1">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Set Due Date</label>
-                    <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} />
                   </div>
-                </div>
+                </>
               ) : (
                 <>
                   <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Due Date</label>
@@ -464,43 +473,47 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             )}
           </div>
 
-          {/* Status Update Actions */}
-          <div className="border-t border-slate-200 dark:border-gray-700 pt-6">
-            <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-3">
-              Quick Status Update
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {statusOptions.map(({ label, value }) => (
-                <Button
-                  key={value}
-                  type={task.status === value ? ButtonType.solid : ButtonType.outline}
-                  variant={getStatusVariant(value)}
-                  size={Size.sm}
-                  onClick={() => handleTaskStatusUpdate(value)}
-                  disabled={task.status === value}
-                  className="text-sm"
-                >
-                  {label}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Task Metadata */}
-          <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
-              <div>
-                <span className="font-medium">Created:</span>{" "}
-                <RelativeDateText date={task.createdOn} showTime={false} useInheritedColor={true} />
-              </div>
-              {task.updatedOn && (
-                <div>
-                  <span className="font-medium">Last Updated:</span>{" "}
-                  <RelativeDateText date={task.updatedOn} showTime={true} useInheritedColor={true} />
+          {!isEditMode && (
+            <>
+              {/* Status Update Actions */}
+              <div className="border-t border-slate-200 dark:border-gray-700 pt-6">
+                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-3">
+                  Quick Status Update
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {statusOptions.map(({ label, value }) => (
+                    <Button
+                      key={value}
+                      type={task.status === value ? ButtonType.solid : ButtonType.outline}
+                      variant={getStatusVariant(value)}
+                      size={Size.sm}
+                      onClick={() => handleTaskStatusUpdate(value)}
+                      disabled={task.status === value}
+                      className="text-sm"
+                    >
+                      {label}
+                    </Button>
+                  ))}
                 </div>
-              )}
-            </div>
-          </div>
+              </div>
+
+              {/* Task Metadata */}
+              <div className="border-t border-slate-200 dark:border-gray-700 pt-6 mt-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 gap-y-2 text-sm text-slate-500 dark:text-gray-400">
+                  <div>
+                    <span className="font-medium">Created:</span>{" "}
+                    <RelativeDateText date={task.createdOn} showTime={false} useInheritedColor={true} />
+                  </div>
+                  {task.updatedOn && (
+                    <div>
+                      <span className="font-medium">Last Updated:</span>{" "}
+                      <RelativeDateText date={task.updatedOn} showTime={true} useInheritedColor={true} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Delete Confirmation Dialog */}

@@ -24,8 +24,10 @@ function TaskForm(props: TaskFormProps) {
       formik.setFieldValue("dueDate", getTomorrowDateString());
       formik.setFieldValue("dueTime", "12:00");
     } else if (!hasDueDate && values.dueDate) {
-      formik.setFieldValue("dueDate", "");
-      formik.setFieldValue("dueTime", "");
+      setTimeout(() => {
+        formik.setFieldValue("dueDate", "");
+        formik.setFieldValue("dueTime", "");
+      }, 100);
     }
   }, [formik, hasDueDate, values.dueDate]);
 
@@ -107,8 +109,20 @@ function TaskForm(props: TaskFormProps) {
         disabled={isSubmitting}
       />
 
-      {hasDueDate && (
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-4 px-1 mt-2">
+        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Has Due Date</label>
+        <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} disabled={isSubmitting} />
+      </div>
+
+      <div
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          hasDueDate ? "max-h-40 opacity-100" : "max-h-0 opacity-0"
+        }`}
+        style={{
+          transform: hasDueDate ? "translateY(0)" : "translateY(-10px)",
+        }}
+      >
+        <div className="flex items-start gap-2">
           <Input
             name="dueDate"
             label="Due Date"
@@ -131,11 +145,6 @@ function TaskForm(props: TaskFormProps) {
             disabled={isSubmitting}
           />
         </div>
-      )}
-
-      <div className="flex items-center justify-between px-1 mt-2">
-        <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Set Due Date</label>
-        <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} disabled={isSubmitting} />
       </div>
 
       <Button onClick={handleSubmit} isLoading={isSubmitting} className="mt-2 w-full">
