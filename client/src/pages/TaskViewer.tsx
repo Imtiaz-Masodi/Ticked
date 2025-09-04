@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useFormik, FormikHelpers } from "formik";
 import { Task } from "../types/Task";
@@ -13,13 +13,9 @@ import { ApiResponseStatus, Priority, TaskStatus, TaskStatusLabel, Size } from "
 import { priorityColorMap, priorityOptions, statusOptions, statusBadgeClasses } from "../utils/options";
 import { getUserFriendlyDateTime } from "../helpers/dateHelper";
 import { validateTaskForm } from "../sections/TaskForm/TaskForm.helper";
-import { TaskFormValues } from "../sections/TaskForm";
+import { TaskFormValues, TaskForm } from "../sections/TaskForm";
 import { Button } from "../components/Button";
 import { ButtonType, ButtonVariant } from "../components/Button/Button.enum";
-import { Input } from "../components/Input";
-import { TextArea } from "../components/TextArea";
-import { Dropdown } from "../components/Dropdown";
-import { Toggle } from "../components/Toggle";
 import { Icon } from "../components/Icon";
 import { Icons } from "../components/Icon/IconMap";
 import { useApiToast } from "../utils/toastUtils";
@@ -40,7 +36,6 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [hasDueDate, setHasDueDate] = useState(false);
   const toast = useApiToast();
 
   // API hooks
@@ -53,9 +48,6 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
   const task = taskData?.payload?.task;
   const categories = useMemo(() => categoriesData?.payload?.categories || [], [categoriesData]);
   const category = categories.find((cat) => cat._id === task?.categoryId);
-
-  // Category options
-  const categoryOptions = categories;
 
   // Status variant mapping
   const getStatusVariant = (status: TaskStatus): ButtonVariant => {
@@ -182,41 +174,6 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
     validate: validateTaskForm,
   });
 
-  // Sync toggle state with task's due date
-  useEffect(() => {
-    if (task) {
-      setHasDueDate(!!task.dueDate);
-    }
-  }, [task]);
-
-  // Handle toggle change for due date
-  const handleToggleChange = (value: boolean) => {
-    setHasDueDate(value);
-
-    if (value) {
-      // Set default values when toggle is turned on (if they're empty)
-      if (!formik.values.dueDate && !initialFormValues.dueDate) {
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowString = tomorrow.toISOString().split("T")[0];
-        formik.setFieldValue("dueDate", tomorrowString);
-      } else if (!formik.values.dueDate && initialFormValues.dueDate) {
-        formik.setFieldValue("dueDate", initialFormValues.dueDate);
-      }
-      if (!formik.values.dueTime && !initialFormValues.dueTime) {
-        formik.setFieldValue("dueTime", "12:00");
-      } else if (!formik.values.dueTime && initialFormValues.dueTime) {
-        formik.setFieldValue("dueTime", initialFormValues.dueTime);
-      }
-    } else {
-      // Clear due date and time when toggle is turned off
-      setTimeout(() => {
-        formik.setFieldValue("dueDate", "");
-        formik.setFieldValue("dueTime", "");
-      }, 100);
-    }
-  };
-
   if (isLoadingTask) {
     return <TaskViewerSkeleton isInline={isInline} />;
   }
@@ -303,75 +260,45 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
             </div>
           </div>
 
-          {/* Title */}
-          <div className={isEditMode ? "mb-6" : "mb-2"}>
-            {isEditMode ? (
-              <Input
-                label="Title"
-                name="title"
-                placeholder="Task title"
-                value={formik.values.title}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                errorMessage={formik.touched.title && formik.errors.title ? formik.errors.title : undefined}
-              />
-            ) : (
-              <h1 className="text-2xl font-semibold text-slate-800 dark:text-gray-200">{task.title}</h1>
-            )}
-          </div>
-
-          {/* Description */}
-          <div className="mb-2">
-            {isEditMode ? (
-              <TextArea
-                label="Description"
-                name="description"
-                placeholder="Task description"
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                rows={4}
-              />
-            ) : (
-              (task.description || task.checklistItems?.length === 0) && (
-                <p
-                  className={`${
-                    task.description ? "text-slate-600 dark:text-gray-400" : "text-slate-400 dark:text-gray-600 italic"
-                  } whitespace-pre-wrap`}
-                >
-                  {task.description || "- No task description provided -"}
-                </p>
-              )
-            )}
-          </div>
-
-          {/* Checklist */}
-          {!isEditMode && (
-            <div className="mb-4">
-              <Checklist
-                taskId={task._id}
-                items={task.checklistItems || []}
-                disabled={task.status === TaskStatus.completed}
-              />
+          {isEditMode ? (
+            <div className="space-y-4">
+              <TaskForm {...formik} submitButtonText="Update Task" />
             </div>
-          )}
+          ) : (
+            <>
+              {/* Title */}
+              <div className={isEditMode ? "mb-6" : "mb-2"}>
+                <h1 className="text-2xl font-semibold text-slate-800 dark:text-gray-200">{task.title}</h1>
+              </div>
 
-          {/* Task Details Grid */}
-          <div className={`grid grid-cols-2 gap-6 ${isEditMode ? "mb-0" : "mb-6"}`}>
-            {/* Category */}
-            <div>
-              {isEditMode ? (
-                <Dropdown
-                  name="category"
-                  label="Category"
-                  options={categoryOptions}
-                  value={formik.values.category}
-                  getLabel={(option) => option?.name || "Select category"}
-                  onChange={(_, selected) => formik.setFieldValue("category", selected)}
-                  errorMessage={formik.touched.category && formik.errors.category ? formik.errors.category : undefined}
+              {/* Description */}
+              <div className="mb-2">
+                {(task.description || task.checklistItems?.length === 0) && (
+                  <p
+                    className={`${
+                      task.description
+                        ? "text-slate-600 dark:text-gray-400"
+                        : "text-slate-400 dark:text-gray-600 italic"
+                    } whitespace-pre-wrap`}
+                  >
+                    {task.description || "- No task description provided -"}
+                  </p>
+                )}
+              </div>
+
+              {/* Checklist */}
+              <div className="mb-4">
+                <Checklist
+                  taskId={task._id}
+                  items={task.checklistItems || []}
+                  disabled={task.status === TaskStatus.completed}
                 />
-              ) : (
-                <>
+              </div>
+
+              {/* Task Details Grid */}
+              <div className="grid grid-cols-2 gap-6 mb-6">
+                {/* Category */}
+                <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Category</label>
                   <div className="flex items-center gap-2">
                     {category && (
@@ -386,23 +313,10 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                       </>
                     )}
                   </div>
-                </>
-              )}
-            </div>
+                </div>
 
-            {/* Priority */}
-            <div>
-              {isEditMode ? (
-                <Dropdown
-                  name="priority"
-                  label="Priority"
-                  options={priorityOptions}
-                  value={formik.values.priority}
-                  getLabel={(option) => option?.label || "Select priority"}
-                  onChange={(_, selected) => formik.setFieldValue("priority", selected)}
-                />
-              ) : (
-                <>
+                {/* Priority */}
+                <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Priority</label>
                   <div className="flex items-center gap-2">
                     <div
@@ -413,74 +327,27 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
                     />
                     <span className="text-slate-600 dark:text-gray-400 capitalize">{task.priority}</span>
                   </div>
-                </>
-              )}
-            </div>
+                </div>
 
-            {/* Due Date - Spans both columns when in edit mode */}
-            <div className={isEditMode ? "col-span-2" : ""}>
-              {isEditMode ? (
-                <>
-                  <div className="flex items-center justify-between px-1">
-                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Set Due Date</label>
-                    <Toggle size={Size.sm} checked={hasDueDate} onChange={handleToggleChange} />
-                  </div>
-
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                      hasDueDate ? "max-h-40 opacity-100 mt-4" : "max-h-0 opacity-0"
-                    }`}
-                    style={{
-                      transform: hasDueDate ? "translateY(0)" : "translateY(-10px)",
-                    }}
-                  >
-                    <div className="grid grid-cols-2 gap-4">
-                      <Input
-                        label="Due Date"
-                        type="date"
-                        name="dueDate"
-                        value={formik.values.dueDate}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        errorMessage={formik.touched.dueDate ? formik.errors.dueDate : undefined}
-                      />
-                      <Input
-                        label="Due Time"
-                        type="time"
-                        name="dueTime"
-                        value={formik.values.dueTime}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        errorMessage={formik.touched.dueTime ? formik.errors.dueTime : undefined}
-                      />
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
+                {/* Due Date */}
+                <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Due Date</label>
                   <span className="text-slate-600 dark:text-gray-400">
                     {task.dueDate ? getUserFriendlyDateTime(task.dueDate) : "No due date set"}
                   </span>
-                </>
-              )}
-            </div>
+                </div>
 
-            {/* Status - Only show when not in edit mode */}
-            {!isEditMode && (
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Status</label>
-                <div className="flex items-center gap-2">
-                  <Badge className={statusBadgeClasses[task.status as TaskStatus]}>
-                    {TaskStatusLabel[task.status as TaskStatus]}
-                  </Badge>
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">Status</label>
+                  <div className="flex items-center gap-2">
+                    <Badge className={statusBadgeClasses[task.status as TaskStatus]}>
+                      {TaskStatusLabel[task.status as TaskStatus]}
+                    </Badge>
+                  </div>
                 </div>
               </div>
-            )}
-          </div>
 
-          {!isEditMode && (
-            <>
               {/* Status Update Actions */}
               <div className="border-t border-slate-200 dark:border-gray-700 pt-6">
                 <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-3">
