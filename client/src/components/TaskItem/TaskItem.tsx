@@ -56,7 +56,7 @@ function TaskItem({ task }: TaskItemProps) {
             <SkeletonBox width="w-10" height="h-3" />
           )}
 
-          {task.status !== TaskStatus.completed && (
+          {task.status !== TaskStatus.completed && task.dueDate && (
             <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
               <Icon name={Icons.calendarClock} className="text-xs" />
               <RelativeDateText date={task.dueDate} showTime={false} className="text-xs" />
