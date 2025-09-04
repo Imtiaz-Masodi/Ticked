@@ -36,7 +36,7 @@ function ChecklistItemInput({
         setText("");
         setTimeout(() => {
           inputRef.current?.focus();
-        }, 50);
+        }, 10);
       }
     }
   };
