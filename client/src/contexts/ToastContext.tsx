@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, ReactNode } from "react";
+import React, { createContext, useReducer, ReactNode, useMemo, useCallback } from "react";
 import { Toast } from "../types/Toast";
 
 // Action types
@@ -31,9 +31,7 @@ const toastReducer = (state: ToastState, action: ToastAction): ToastState => {
     case "ADD_TOAST": {
       // Limit to maximum 5 toasts at once
       const newToasts =
-        state.toasts.length >= 5
-          ? [...state.toasts.slice(1), action.payload]
-          : [...state.toasts, action.payload];
+        state.toasts.length >= 5 ? [...state.toasts.slice(1), action.payload] : [...state.toasts, action.payload];
       return {
         ...state,
         toasts: newToasts,
@@ -65,28 +63,26 @@ interface ToastProviderProps {
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(toastReducer, initialState);
 
-  const addToast = (toast: Toast) => {
+  const addToast = useCallback((toast: Toast) => {
     dispatch({ type: "ADD_TOAST", payload: toast });
-  };
+  }, []);
 
-  const removeToast = (id: string) => {
+  const removeToast = useCallback((id: string) => {
     dispatch({ type: "REMOVE_TOAST", payload: id });
-  };
+  }, []);
 
-  const clearAllToasts = () => {
+  const clearAllToasts = useCallback(() => {
     dispatch({ type: "CLEAR_ALL_TOASTS" });
-  };
+  }, []);
 
-  const value: ToastContextType = {
-    toasts: state.toasts,
-    addToast,
-    removeToast,
-    clearAllToasts,
-  };
+  const value: ToastContextType = useMemo(() => ({
+      toasts: state.toasts,
+      addToast,
+      removeToast,
+      clearAllToasts,
+    }), [state.toasts, addToast, removeToast, clearAllToasts]);
 
-  return (
-    <ToastContext.Provider value={value}>{children}</ToastContext.Provider>
-  );
+  return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 };
 
 export { ToastContext };

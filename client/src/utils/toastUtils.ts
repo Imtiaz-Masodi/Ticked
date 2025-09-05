@@ -20,7 +20,6 @@ export const useApiToast = () => {
       }
     ) => {
       toast.success(message, {
-        title: options?.title || "Success",
         duration: 4000,
         action: options?.action,
       });
@@ -29,12 +28,8 @@ export const useApiToast = () => {
     /**
      * Show error toast for failed API operations
      */
-    apiError: (
-      message?: string,
-      options?: { title?: string; duration?: number }
-    ) => {
+    apiError: (message?: string, options?: { title?: string; duration?: number }) => {
       toast.error(message || "Something went wrong. Please try again.", {
-        title: options?.title || "Error",
         duration: options?.duration || 0, // Manual dismiss for errors
       });
     },
@@ -63,9 +58,8 @@ export const useApiToast = () => {
     /**
      * Show validation error toast
      */
-    validationError: (message: string, field?: string) => {
+    validationError: (message: string) => {
       toast.error(message, {
-        title: field ? `${field} Error` : "Validation Error",
         duration: 6000,
       });
     },
@@ -74,17 +68,13 @@ export const useApiToast = () => {
      * Show network error toast
      */
     networkError: () => {
-      toast.error(
-        "Network error. Please check your connection and try again.",
-        {
-          title: "Connection Error",
-          duration: 0,
-          action: {
-            label: "Retry",
-            onClick: () => window.location.reload(),
-          },
-        }
-      );
+      toast.error("Network error. Please check your connection and try again.", {
+        duration: 0,
+        action: {
+          label: "Retry",
+          onClick: () => window.location.reload(),
+        },
+      });
     },
 
     /**
@@ -92,7 +82,6 @@ export const useApiToast = () => {
      */
     sessionExpired: (onLogin?: () => void) => {
       toast.warning("Your session has expired. Please log in again.", {
-        title: "Session Expired",
         duration: 0,
         action: onLogin
           ? {
@@ -107,19 +96,15 @@ export const useApiToast = () => {
      * Show update available toast
      */
     updateAvailable: (onUpdate?: () => void) => {
-      toast.info(
-        "A new version is available. Update now for the latest features.",
-        {
-          title: "Update Available",
-          duration: 10000,
-          action: onUpdate
-            ? {
-                label: "Update",
-                onClick: onUpdate,
-              }
-            : undefined,
-        }
-      );
+      toast.info("A new version is available. Update now for the latest features.", {
+        duration: 10000,
+        action: onUpdate
+          ? {
+              label: "Update",
+              onClick: onUpdate,
+            }
+          : undefined,
+      });
     },
   };
 };

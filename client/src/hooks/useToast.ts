@@ -1,49 +1,48 @@
 import { useToastContext } from "./useToastContext";
 import { Toast, ToastOptions } from "../types/Toast";
 import { NotificationType } from "../components/Notification";
+import { useCallback } from "react";
 
 export const useToast = () => {
   const { toasts, addToast, removeToast, clearAllToasts } = useToastContext();
 
-  const showToast = (message: string, options: ToastOptions = {}) => {
+  const showToast = useCallback((message: string, options: ToastOptions = {}) => {
     const toast: Toast = {
       id: `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       type: options.type || NotificationType.INFO,
-      title: options.title,
       message,
       duration: options.duration !== undefined ? options.duration : 5000, // Default 5 seconds
-      dismissible:
-        options.dismissible !== undefined ? options.dismissible : true,
+      dismissible: options.dismissible !== undefined ? options.dismissible : true,
       action: options.action,
     };
 
     addToast(toast);
-  };
+  }, [addToast]);
 
-  const hideToast = (id: string) => {
-    removeToast(id);
-  };
+  const hideToast = useCallback((id: string) => {
+      removeToast(id);
+  }, [removeToast]);
 
-  const clearToasts = () => {
+  const clearToasts = useCallback(() => {
     clearAllToasts();
-  };
+  }, [clearAllToasts]);
 
   // Convenience methods
-  const success = (message: string, options?: Omit<ToastOptions, "type">) => {
+  const success = useCallback((message: string, options?: Omit<ToastOptions, "type">) => {
     showToast(message, { ...options, type: NotificationType.SUCCESS });
-  };
+  }, [showToast]);
 
-  const error = (message: string, options?: Omit<ToastOptions, "type">) => {
+  const error = useCallback((message: string, options?: Omit<ToastOptions, "type">) => {
     showToast(message, { ...options, type: NotificationType.ERROR });
-  };
+  }, [showToast]);
 
-  const warning = (message: string, options?: Omit<ToastOptions, "type">) => {
+  const warning = useCallback((message: string, options?: Omit<ToastOptions, "type">) => {
     showToast(message, { ...options, type: NotificationType.WARNING });
-  };
+  }, [showToast]);
 
-  const info = (message: string, options?: Omit<ToastOptions, "type">) => {
+  const info = useCallback((message: string, options?: Omit<ToastOptions, "type">) => {
     showToast(message, { ...options, type: NotificationType.INFO });
-  };
+  }, [showToast]);
 
   return {
     toasts,
