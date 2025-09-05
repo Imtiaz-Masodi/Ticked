@@ -64,3 +64,12 @@ export enum Breakpoints {
   DESKTOP = 1280,
   LARGE_DESKTOP = 1536,
 }
+
+/**
+ * Device type enum
+ */
+export enum DeviceType {
+  HANDHELD = "handheld",
+  DESKTOP = "desktop",
+  DESKTOP_WITH_TOUCH = "desktop-with-touch",
+}
