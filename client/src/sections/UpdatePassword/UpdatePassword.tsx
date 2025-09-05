@@ -16,7 +16,7 @@ interface UpdatePasswordProps {
 }
 
 export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user, showUpdateForm = false }) => {
-  const { showToast } = useToast();
+  const { successToast } = useToast();
   const formRef = useRef<HTMLDivElement>(null);
 
   // Password change state
@@ -76,10 +76,7 @@ export const UpdatePassword: React.FC<UpdatePasswordProps> = ({ user, showUpdate
       const result = await updatePassword(passwordForm);
 
       if (result.data?.status === ApiResponseStatus.success) {
-        showToast(result.data?.message || "Password updated successfully!", {
-          type: NotificationType.SUCCESS,
-          title: "Success",
-        });
+        successToast(result.data?.message || "Password updated successfully!");
         setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
         setPasswordErrors({});
 

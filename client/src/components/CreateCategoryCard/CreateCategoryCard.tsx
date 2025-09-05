@@ -20,7 +20,7 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
   const [categoryColor, setCategoryColor] = useState("#3B82F6"); // Default blue color
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [createCategory, { isLoading }] = useCreateCategoryMutation();
-  const { showToast } = useToast();
+  const { showToast, errorToast } = useToast();
 
   useEffect(() => {
     if (cardRef.current) {
@@ -30,10 +30,7 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
 
   const handleSave = async () => {
     if (!categoryName.trim()) {
-      showToast("Category name is required", {
-        type: NotificationType.ERROR,
-        title: "Validation Error",
-      });
+      errorToast("Category name is required");
       return;
     }
 
@@ -41,20 +38,15 @@ function CreateCategoryCard({ onCancel, onSuccess }: CreateCategoryCardProps) {
       const response = await createCategory({ categoryName: categoryName.trim(), categoryColorCode: categoryColor }).unwrap();
       showToast(response.message, {
         type: response.status === ApiResponseStatus.success ? NotificationType.SUCCESS : NotificationType.ERROR,
-        title: response.status === ApiResponseStatus.success ? "Success" : "Error",
       });
       if (response.status === ApiResponseStatus.success) onSuccess();
     } catch (error: unknown) {
       const errorMessage =
         error && typeof error === "object" && "data" in error
-          ? (error.data as { message?: string })?.message ||
-            "Failed to create category"
+          ? (error.data as { message?: string })?.message || "Failed to create category"
           : "Failed to create category";
 
-      showToast(errorMessage, {
-        type: NotificationType.ERROR,
-        title: "Error",
-      });
+      errorToast(errorMessage);
     }
   };
 

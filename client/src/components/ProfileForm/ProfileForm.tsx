@@ -9,7 +9,6 @@ import { ApiResponseStatus, Size } from "../../utils/enums";
 import { Icons } from "../Icon/IconMap";
 import { UpdateProfileRequestType } from "../../types/UpdateProfileRequestType";
 import { useToast } from "../../hooks";
-import { NotificationType } from "../Notification";
 import { formatDateToISOString } from "../../helpers/dateHelper";
 import { validateProfileForm } from "../../utils/validation";
 
@@ -29,7 +28,7 @@ interface ProfileFormProps {
 type ProfileFormValues = UpdateProfileRequestType;
 
 export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
-  const { showToast } = useToast();
+  const { successToast, errorToast } = useToast();
   const [isEditing, setIsEditing] = useState(false);
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
 
@@ -54,23 +53,14 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ user }) => {
         const response = await updateProfile(cleanValues).unwrap();
 
         if (response.status === ApiResponseStatus.success) {
-          showToast("Profile updated successfully!", {
-            type: NotificationType.SUCCESS,
-            title: "Success",
-          });
+          successToast("Profile updated successfully!");
           setIsEditing(false);
         } else {
-          showToast("Failed to update profile", {
-            type: NotificationType.ERROR,
-            title: "Error",
-          });
+          errorToast("Failed to update profile");
         }
       } catch (error: unknown) {
         const errorMessage = (error as { data?: { message?: string } })?.data?.message || "Failed to update profile";
-        showToast(errorMessage, {
-          type: NotificationType.ERROR,
-          title: "Error",
-        });
+        errorToast(errorMessage);
       }
     },
   });

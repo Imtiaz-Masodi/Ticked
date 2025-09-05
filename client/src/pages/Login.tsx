@@ -39,7 +39,6 @@ const Login = () => {
         if (response.message?.toLocaleLowerCase().includes("account not verified")) {
           showToast("Verify your email to log in", {
             type: NotificationType.INFO,
-            title: "Email Verification Required",
             duration: 0,
             action: {
               label: "Verify Now",

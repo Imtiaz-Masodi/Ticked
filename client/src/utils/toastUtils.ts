@@ -19,7 +19,7 @@ export const useApiToast = () => {
         action?: { label: string; onClick: (id: string) => void };
       }
     ) => {
-      toast.success(message, {
+      toast.successToast(message, {
         duration: 4000,
         action: options?.action,
       });
@@ -29,7 +29,7 @@ export const useApiToast = () => {
      * Show error toast for failed API operations
      */
     apiError: (message?: string, options?: { title?: string; duration?: number }) => {
-      toast.error(message || "Something went wrong. Please try again.", {
+      toast.errorToast(message || "Something went wrong. Please try again.", {
         duration: options?.duration || 0, // Manual dismiss for errors
       });
     },
@@ -59,7 +59,7 @@ export const useApiToast = () => {
      * Show validation error toast
      */
     validationError: (message: string) => {
-      toast.error(message, {
+      toast.errorToast(message, {
         duration: 6000,
       });
     },
@@ -68,7 +68,7 @@ export const useApiToast = () => {
      * Show network error toast
      */
     networkError: () => {
-      toast.error("Network error. Please check your connection and try again.", {
+      toast.errorToast("Network error. Please check your connection and try again.", {
         duration: 0,
         action: {
           label: "Retry",
@@ -81,7 +81,7 @@ export const useApiToast = () => {
      * Show session expired toast
      */
     sessionExpired: (onLogin?: () => void) => {
-      toast.warning("Your session has expired. Please log in again.", {
+      toast.warningToast("Your session has expired. Please log in again.", {
         duration: 0,
         action: onLogin
           ? {
@@ -96,7 +96,7 @@ export const useApiToast = () => {
      * Show update available toast
      */
     updateAvailable: (onUpdate?: () => void) => {
-      toast.info("A new version is available. Update now for the latest features.", {
+      toast.infoToast("A new version is available. Update now for the latest features.", {
         duration: 10000,
         action: onUpdate
           ? {
