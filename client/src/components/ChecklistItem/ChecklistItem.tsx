@@ -5,14 +5,14 @@ import { Icons } from "../Icon/IconMap";
 import ChecklistItemInput from "../ChecklistItemInput";
 import { Menu, MenuItem } from "../Menu";
 import { CircularLoader } from "../Loader";
-import { useMobileDetect } from "../../hooks/useMediaQuery";
 import {
   useUpdateChecklistItemMutation,
   useDeleteChecklistItemMutation,
   useUpdateTaskStatusMutation,
 } from "../../store/api/taskApi";
-import { ApiResponseStatus, Size, TaskStatus } from "../../utils/enums";
+import { ApiResponseStatus, DeviceType, Size, TaskStatus } from "../../utils/enums";
 import { useApiToast } from "../../utils/toastUtils";
+import { useDeviceType } from "../../hooks/useDevice";
 
 type ChecklistItemProps = {
   taskId: string;
@@ -28,7 +28,8 @@ function ChecklistItem({ checklistItem, taskId, disabled = false, taskCurrentSta
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
-  const isMobile = useMobileDetect();
+  const deviceType = useDeviceType();
+  const isHandheldDevice = deviceType === DeviceType.HANDHELD;
 
   // API hooks
   const [updateChecklistItem] = useUpdateChecklistItemMutation();
@@ -191,7 +192,7 @@ function ChecklistItem({ checklistItem, taskId, disabled = false, taskCurrentSta
 
           {!disabled && (
             <div className="flex items-center gap-1 relative">
-              {isMobile ? (
+              {isHandheldDevice ? (
                 <>
                   <button
                     ref={menuTriggerRef}
