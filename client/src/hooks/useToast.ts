@@ -49,9 +49,9 @@ export const useToast = () => {
     showToast,
     hideToast,
     clearToasts,
-    success,
-    error,
-    warning,
-    info,
+    successToast: success,
+    errorToast: error,
+    warningToast: warning,
+    infoToast: info,
   };
 };
