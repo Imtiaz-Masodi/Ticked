@@ -19,6 +19,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 function AppRoutes() {
   return (
     <Routes>
+      {/* /login */}
       <Route
         path={AUTH_ROUTES.LOGIN}
         element={
@@ -28,6 +29,7 @@ function AppRoutes() {
         }
       />
 
+      {/* /register */}
       <Route
         path={AUTH_ROUTES.REGISTER}
         element={
@@ -37,6 +39,7 @@ function AppRoutes() {
         }
       />
 
+      {/* /verify-email */}
       <Route
         path={AUTH_ROUTES.VERIFY_EMAIL}
         element={
@@ -46,6 +49,7 @@ function AppRoutes() {
         }
       />
 
+      {/* /forgot-password */}
       <Route
         path={AUTH_ROUTES.FORGOT_PASSWORD}
         element={
@@ -56,6 +60,7 @@ function AppRoutes() {
       />
 
       <Route element={<RootContainer />}>
+        {/* / */}
         <Route
           path={APP_ROUTES.HOME}
           index
@@ -67,6 +72,7 @@ function AppRoutes() {
         />
 
         {/* Tasks route with status filtering */}
+        {/* /tasks/:statusType */}
         <Route
           path={TASK_ROUTES.TASKS_BY_STATUS}
           element={
@@ -77,8 +83,10 @@ function AppRoutes() {
         />
 
         {/* Task viewing routes - same Home component for responsive behavior */}
+        {/* /task/:taskId */}
         <Route path={TASK_ROUTES.TASK_VIEW} element={<TasksListing />} />
 
+        {/* /task/new */}
         <Route
           path={TASK_ROUTES.TASK_NEW}
           element={
@@ -88,6 +96,7 @@ function AppRoutes() {
           }
         />
 
+        {/* /categories */}
         <Route
           path={APP_ROUTES.CATEGORIES}
           element={
@@ -97,6 +106,7 @@ function AppRoutes() {
           }
         />
 
+        {/* /settings */}
         <Route
           path={APP_ROUTES.SETTINGS}
           element={
@@ -106,6 +116,7 @@ function AppRoutes() {
           }
         />
 
+        {/* /profile */}
         <Route
           path={APP_ROUTES.PROFILE}
           element={
@@ -116,6 +127,7 @@ function AppRoutes() {
         />
       </Route>
 
+      {/* * (catch-all for 404) */}
       <Route
         path={APP_ROUTES.NOT_FOUND}
         element={
