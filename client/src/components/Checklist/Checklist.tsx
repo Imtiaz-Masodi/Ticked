@@ -1,21 +1,20 @@
 import { useState } from "react";
-import { ChecklistItem as ChecklistItemType } from "../../types/Task";
+import { Task } from "../../types/Task";
 import ChecklistItem from "../ChecklistItem";
 import ChecklistItemInput from "../ChecklistItemInput";
 import { useAddChecklistItemMutation } from "../../store/api/taskApi";
-import { ApiResponseStatus } from "../../utils/enums";
+import { ApiResponseStatus, TaskStatus } from "../../utils/enums";
 import { useApiToast } from "../../utils/toastUtils";
 
 type ChecklistProps = {
-  taskId: string;
-  items: ChecklistItemType[];
-  disabled?: boolean;
+  task: Task;
 };
 
-function Checklist({ taskId, items, disabled = false }: ChecklistProps) {
-  const [showAddInput, setShowAddInput] = useState(false);
-
+function Checklist({ task }: ChecklistProps) {
   const toast = useApiToast();
+  const [showAddInput, setShowAddInput] = useState(false);
+  const { _id: taskId, checklistItems, status: taskStatus } = task;
+  const taskCompleted = taskStatus === TaskStatus.completed;
 
   // Checklist API hooks
   const [addChecklistItem, { isLoading: isAddingChecklistItem }] = useAddChecklistItemMutation();
@@ -45,10 +44,16 @@ function Checklist({ taskId, items, disabled = false }: ChecklistProps) {
   return (
     <div className="space-y-3">
       {/* Checklist items */}
-      {items.length > 0 && (
+      {checklistItems.length > 0 && (
         <div className="space-y-1">
-          {items.map((item) => (
-            <ChecklistItem key={item._id} item={item} taskId={taskId} disabled={disabled} />
+          {checklistItems.map((checklistItem) => (
+            <ChecklistItem
+              key={checklistItem._id}
+              taskId={taskId}
+              checklistItem={checklistItem}
+              taskCurrentStatus={task.status}
+              disabled={taskCompleted}
+            />
           ))}
         </div>
       )}
@@ -64,13 +69,13 @@ function Checklist({ taskId, items, disabled = false }: ChecklistProps) {
       )}
 
       {/* Add item link */}
-      {!showAddInput && !disabled && (
+      {!showAddInput && !taskCompleted && (
         <div>
           <button
             onClick={() => setShowAddInput(true)}
             className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300 transition-colors"
           >
-            {items.length === 0 ? "+ Create Checklist" : "+ Add Item"}
+            {checklistItems.length === 0 ? "+ Create Checklist" : "+ Add Item"}
           </button>
         </div>
       )}

@@ -6,17 +6,23 @@ import ChecklistItemInput from "../ChecklistItemInput";
 import { Menu, MenuItem } from "../Menu";
 import { CircularLoader } from "../Loader";
 import { useMobileDetect } from "../../hooks/useMediaQuery";
-import { useUpdateChecklistItemMutation, useDeleteChecklistItemMutation } from "../../store/api/taskApi";
-import { ApiResponseStatus, Size } from "../../utils/enums";
+import {
+  useUpdateChecklistItemMutation,
+  useDeleteChecklistItemMutation,
+  useUpdateTaskStatusMutation,
+} from "../../store/api/taskApi";
+import { ApiResponseStatus, Size, TaskStatus } from "../../utils/enums";
 import { useApiToast } from "../../utils/toastUtils";
 
 type ChecklistItemProps = {
-  item: ChecklistItemType;
   taskId: string;
+  checklistItem: ChecklistItemType;
+  taskCurrentStatus?: TaskStatus;
   disabled?: boolean;
 };
 
-function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
+function ChecklistItem({ checklistItem, taskId, disabled = false, taskCurrentStatus }: ChecklistItemProps) {
+  const toast = useApiToast();
   const [isEditing, setIsEditing] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -24,11 +30,10 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
   const menuTriggerRef = useRef<HTMLButtonElement>(null);
   const isMobile = useMobileDetect();
 
-  const toast = useApiToast();
-
   // API hooks
   const [updateChecklistItem] = useUpdateChecklistItemMutation();
   const [deleteChecklistItem] = useDeleteChecklistItemMutation();
+  const [updateTaskStatus] = useUpdateTaskStatusMutation();
 
   const handleUpdateChecklistItem = async (itemId: string, updates: Partial<ChecklistItemType>) => {
     setIsUpdating(true);
@@ -61,12 +66,33 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
   };
 
   const handleToggleComplete = async () => {
-    await handleUpdateChecklistItem(item._id, { completed: !item.completed });
+    const updatedChecklistItemStatus = !checklistItem.completed;
+
+    // Update the checklist item first
+    await handleUpdateChecklistItem(checklistItem._id, { completed: updatedChecklistItemStatus });
+
+    // If the checklist item is being completed (checked) and the task is in todo or backlog status,
+    // update the task status to inprogress
+    if (
+      updatedChecklistItemStatus &&
+      taskCurrentStatus &&
+      (taskCurrentStatus === TaskStatus.todo || taskCurrentStatus === TaskStatus.backlog)
+    ) {
+      try {
+        await updateTaskStatus({
+          taskId,
+          taskStatus: TaskStatus.inprogress,
+        });
+      } catch (error) {
+        console.error("Failed to update task status:", error);
+        // Don't show error toast as the main action (checking item) succeeded
+      }
+    }
   };
 
   const handleSaveEdit = async (text: string) => {
-    if (text.trim() && text.trim() !== item.text) {
-      await handleUpdateChecklistItem(item._id, { text: text.trim() });
+    if (text.trim() && text.trim() !== checklistItem.text) {
+      await handleUpdateChecklistItem(checklistItem._id, { text: text.trim() });
     }
     setIsEditing(false);
   };
@@ -76,7 +102,7 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
   };
 
   const handleDelete = async () => {
-    await handleDeleteChecklistItem(item._id);
+    await handleDeleteChecklistItem(checklistItem._id);
   };
 
   const handleMenuItemClick = (menuId: string) => {
@@ -113,7 +139,7 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
     <div className="py-px">
       {isEditing && !disabled ? (
         <ChecklistItemInput
-          initialValue={item.text}
+          initialValue={checklistItem.text}
           placeholder="Edit checklist item..."
           isLoading={isUpdating}
           onSave={handleSaveEdit}
@@ -125,8 +151,8 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
             <div className="relative flex flex-row justify-start items-center gap-2">
               <input
                 type="checkbox"
-                name={item._id}
-                id={item._id}
+                name={checklistItem._id}
+                id={checklistItem._id}
                 className={`
                   appearance-none peer size-4 
                   border border-gray-300 dark:border-gray-600 rounded-full bg-transparent shrink-0 
@@ -135,7 +161,7 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
                   dark:disabled:border-gray-600 dark:disabled:checked:bg-gray-600
                   cursor-pointer
                 `}
-                checked={item.completed}
+                checked={checklistItem.completed}
                 disabled={isUpdating || isDeleting || disabled}
                 onChange={handleToggleComplete}
               />
@@ -147,18 +173,18 @@ function ChecklistItem({ item, taskId, disabled = false }: ChecklistItemProps) {
                 `}
               />
               <label
-                htmlFor={item._id}
+                htmlFor={checklistItem._id}
                 className={`
                   cursor-pointer peer-disabled:text-gray-400 dark:peer-disabled:text-gray-500 peer-disabled:cursor-not-allowed 
                   whitespace-nowrap select-none  text-sm
                   ${
-                    item.completed
+                    checklistItem.completed
                       ? "line-through text-gray-500 dark:text-gray-400"
                       : "text-zinc-700 dark:text-gray-200"
                   }
                 `}
               >
-                {item.text}
+                {checklistItem.text}
               </label>
             </div>
           </div>

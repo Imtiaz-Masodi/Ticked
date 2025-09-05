@@ -288,11 +288,7 @@ function TaskViewer({ isInline = false }: TaskViewerProps = {}) {
 
               {/* Checklist */}
               <div className="mb-4">
-                <Checklist
-                  taskId={task._id}
-                  items={task.checklistItems || []}
-                  disabled={task.status === TaskStatus.completed}
-                />
+                <Checklist task={task} />
               </div>
 
               {/* Task Details Grid */}
