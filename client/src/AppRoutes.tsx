@@ -71,8 +71,7 @@ function AppRoutes() {
           }
         />
 
-        {/* Tasks route with status filtering */}
-        {/* /tasks/:statusType */}
+        {/* /tasks/:statusType - Tasks route with status filtering */}
         <Route
           path={TASK_ROUTES.TASKS_BY_STATUS}
           element={
@@ -82,7 +81,6 @@ function AppRoutes() {
           }
         />
 
-        {/* Task viewing routes - same Home component for responsive behavior */}
         {/* /task/:taskId */}
         <Route path={TASK_ROUTES.TASK_VIEW} element={<TasksListing />} />
 
