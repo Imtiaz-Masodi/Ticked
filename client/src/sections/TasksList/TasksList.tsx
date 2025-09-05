@@ -138,11 +138,9 @@ function TasksList() {
     );
   };
 
-  // Calculate total tasks count for NoData check
-  const totalTasks = groupedTasks.active.length + groupedTasks.completed.length + groupedTasks.backlog.length;
   const hasActiveFiltersOrSearch = hasActiveSearchOrFilter(searchFilterState.state);
 
-  if (!isLoading && totalTasks === 0) {
+  if (!isLoading && groupedTasks.totalTasksCount === 0) {
     // If only route-specific filters are applied (no additional user filters), show NoData
     // Otherwise, show NoFilterResults for additional user-applied filters
     if (hasActiveFiltersOrSearch && !isOnlyRouteSpecificFilters) {
@@ -153,9 +151,9 @@ function TasksList() {
 
   return (
     <div className="max-w-screen-lg mx-auto flex flex-col items-center justify-center px-4 gap-4 mt-3">
-      {isLoading && <TasksPageSkeleton taskItemsCount={15} />}
+      {isLoading && groupedTasks.totalTasksCount === 0 && <TasksPageSkeleton taskItemsCount={15} />}
 
-      {!isLoading && (
+      {groupedTasks.totalTasksCount > 0 && (
         <>
           {renderTaskGroup(groupedTasks.active, "Active Tasks")}
           {renderTaskGroup(groupedTasks.completed, "Completed Tasks")}

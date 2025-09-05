@@ -8,6 +8,7 @@ export type GroupedTasks = {
   active: Task[];
   completed: Task[];
   backlog: Task[];
+  totalTasksCount: number;
 };
 
 // Helper function to group tasks by status in a single loop
@@ -18,12 +19,15 @@ export const groupTasksByStatus = (tasks: Task[]): GroupedTasks => {
         case TaskStatus.todo:
         case TaskStatus.inprogress:
           groups.active.push(task);
+          groups.totalTasksCount++;
           break;
         case TaskStatus.completed:
           groups.completed.push(task);
+          groups.totalTasksCount++;
           break;
         case TaskStatus.backlog:
           groups.backlog.push(task);
+          groups.totalTasksCount++;
           break;
       }
       return groups;
@@ -32,6 +36,7 @@ export const groupTasksByStatus = (tasks: Task[]): GroupedTasks => {
       active: [] as Task[],
       completed: [] as Task[],
       backlog: [] as Task[],
+      totalTasksCount: 0,
     }
   );
 };
