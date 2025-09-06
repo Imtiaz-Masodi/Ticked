@@ -12,15 +12,19 @@ interface ToastItemProps {
 const typeStyles = Object.freeze({
   [NotificationType.SUCCESS]: {
     container: "bg-green-50 border-green-200 text-green-800",
+    actionButtonContainer: "bg-green-800/10 hover:bg-green-800/15",
   },
   [NotificationType.ERROR]: {
     container: "bg-red-50 border-red-200 text-red-800",
+    actionButtonContainer: "bg-red-800/10 hover:bg-red-800/15",
   },
   [NotificationType.WARNING]: {
     container: "bg-yellow-50 border-yellow-200 text-yellow-800",
+    actionButtonContainer: "bg-yellow-800/10 hover:bg-yellow-800/15",
   },
   [NotificationType.INFO]: {
     container: "bg-blue-50 border-blue-200 text-blue-800",
+    actionButtonContainer: "bg-blue-800/10 hover:bg-blue-800/15",
   },
 });
 
@@ -78,7 +82,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
   return (
     <div
       className={`
-        relative w-full border rounded-lg shadow-lg p-1 mb-3
+        relative w-full border rounded-lg shadow-lg p-2 mb-3
         transform transition-all duration-300 ease-in-out box-border
         ${styles.container}
         ${
@@ -94,22 +98,20 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
     >
       <div className="flex items-center">
         {/* Content */}
-        <div className="ml-3 flex-1">
+        <div className="ml-3 flex justify-between items-center gap-2 flex-1">
           <p className="text-sm select-none">{toast.message}</p>
 
           {/* Action button */}
           {toast.action && (
-            <div className="mt-2">
-              <button
-                onClick={() => {
-                  toast.action?.onClick(toast.id);
-                  onDismiss(toast.id);
-                }}
-                className="text-sm font-medium underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded select-none"
-              >
-                {toast.action.label}
-              </button>
-            </div>
+            <button
+              onClick={() => {
+                toast.action?.onClick(toast.id);
+                onDismiss(toast.id);
+              }}
+              className={`text-xs font-medium uppercase px-2 py-1 bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-current rounded select-none ${styles.actionButtonContainer}`}
+            >
+              {toast.action.label}
+            </button>
           )}
         </div>
 
