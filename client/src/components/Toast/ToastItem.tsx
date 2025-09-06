@@ -98,7 +98,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onDismiss }) => {
     >
       <div className="flex items-center">
         {/* Content */}
-        <div className="ml-3 flex justify-between items-center gap-2 flex-1">
+        <div className="ml-3 flex justify-between items-center gap-4 flex-1">
           <p className="text-sm select-none">{toast.message}</p>
 
           {/* Action button */}
