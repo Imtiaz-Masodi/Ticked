@@ -36,6 +36,7 @@ import DarkModeComponent from "../../assets/svg/dark_mode.svg";
 import DocumentComponent from "../../assets/svg/document.svg";
 import FilterComponent from "../../assets/svg/filter.svg";
 import CalendarClockComponent from "../../assets/svg/calendar_clock.svg";
+import RefreshComponent from "../../assets/svg/refresh.svg";
 
 export enum Icons {
   hidden = "hidden",
@@ -75,6 +76,7 @@ export enum Icons {
   document = "document",
   filter = "filter",
   calendarClock = "calendar-clock",
+  refresh = "refresh",
 }
 
 type IconMapType = {
@@ -118,4 +120,5 @@ export const IconMap: IconMapType = {
   [Icons.document]: DocumentComponent,
   [Icons.filter]: FilterComponent,
   [Icons.calendarClock]: CalendarClockComponent,
+  [Icons.refresh]: RefreshComponent,
 };
