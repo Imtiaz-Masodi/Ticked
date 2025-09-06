@@ -7,18 +7,48 @@ import { CategoryCardSkeleton } from "../components/Skeleton";
 import { CreateCategoryCard } from "../components/CreateCategoryCard";
 import { FloatingActionButton } from "../components/FloatingActionButton";
 import { Icons } from "../components/Icon/IconMap";
+import { Button } from "../components/Button";
+import { ButtonType, ButtonVariant } from "../components/Button/Button.enum";
+import { Size } from "../utils/enums";
+import { EmptyStateIcon } from "../components/EmptyStateIcon";
 
 function Categories() {
   const [showCreateCard, setShowCreateCard] = useState(false);
   const isUserLoggedIn = authHelper.isUserLoggedIn();
-  const { data, isLoading, error } = useGetCategoriesQuery();
+  const { data, isLoading, error, refetch } = useGetCategoriesQuery();
 
   if (!isUserLoggedIn) return null;
 
-  if (error) {
+  if (error && !isLoading) {
     return (
-      <div className="h-[80vh] flex items-center justify-center">
-        <p className="text-red-500 dark:text-red-400 text-center">Error loading categories</p>
+      <div className="h-[60vh] max-w-md mx-auto flex items-center">
+        <div className="p-8 flex flex-col items-center text-center">
+          {/* Error Icon using EmptyStateIcon */}
+          <EmptyStateIcon
+            icon={Icons.error}
+            iconClassName="text-red-500 dark:text-red-400"
+            borderColor="border-red-300 dark:border-red-600 mb-6"
+            bgColor="bg-red-100 dark:bg-red-900/30"
+            size="lg"
+          />
+
+          {/* Error Message */}
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-2">Failed to Load Categories</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+            We couldn't load your categories at this time. Please check your connection and try again.
+          </p>
+
+          {/* Action Button */}
+          <Button
+            type={ButtonType.solid}
+            size={Size.sm}
+            variant={ButtonVariant.primary}
+            startIcon={Icons.refresh}
+            onClick={() => refetch()}
+          >
+            Try Again
+          </Button>
+        </div>
       </div>
     );
   }
