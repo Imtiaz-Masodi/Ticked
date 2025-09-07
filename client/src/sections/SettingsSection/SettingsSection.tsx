@@ -6,12 +6,15 @@ interface SettingsSectionProps {
   title: string;
   description: string;
   icon: Icons;
+  className?: string;
   children: React.ReactNode;
 }
 
-const SettingsSection: React.FC<SettingsSectionProps> = ({ title, description, icon, children }) => {
+const SettingsSection: React.FC<SettingsSectionProps> = ({ title, description, icon, children, className = "" }) => {
   return (
-    <div className="bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-6">
+    <div
+      className={`bg-white/70 dark:bg-gray-800/50 backdrop-blur-sm border border-slate-200/50 dark:border-gray-700/50 rounded-2xl shadow-xl shadow-slate-200/20 dark:shadow-gray-900/20 p-6 ${className}`}
+    >
       {/* Section Header */}
       <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
         <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">

@@ -13,6 +13,7 @@ interface SettingsSectionConfig {
   description: string;
   icon: Icons;
   component: React.ComponentType;
+  className?: string;
 }
 
 const Settings: React.FC = () => {
@@ -38,6 +39,7 @@ const Settings: React.FC = () => {
         description: "Set default options for your tasks",
         icon: Icons.task,
         component: TaskPreferencesSection,
+        className: "relative z-20",
       },
       {
         id: "notifications",
@@ -45,6 +47,7 @@ const Settings: React.FC = () => {
         description: "Control how you receive updates",
         icon: Icons.notification,
         component: NotificationSettingsSection,
+        className: "relative z-10",
       },
       {
         id: "data",
@@ -76,6 +79,7 @@ const Settings: React.FC = () => {
                 title={section.title}
                 description={section.description}
                 icon={section.icon}
+                className={section.className}
               >
                 <SectionComponent />
               </SettingsSection>
