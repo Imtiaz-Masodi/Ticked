@@ -45,11 +45,11 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
 
   return (
     <>
-      {/* Overlay for mobile with CSS fade effect */}
+      {/* Backdrop/Overlay for mobile with CSS fade effect */}
       {isMobile && (
         <div
           className={`
-            fixed inset-0 top-[64px] bg-black z-20 transition-opacity duration-300 ease-in-out
+            fixed inset-0 top-[64px] bg-black z-50 transition-opacity duration-300 ease-in-out
             ${isOpen ? "opacity-50 pointer-events-auto z-10" : "opacity-0 pointer-events-none -z-10"}
           `}
           onClick={onClose}
@@ -59,7 +59,7 @@ export const NavigationDrawer = ({ isOpen, onClose, navItems, activeNavItemPath 
       {/* Drawer */}
       <div
         className={`
-          fixed top-16 bottom-0 left-0 z-30
+          fixed top-16 bottom-0 left-0 z-50
           w-80 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out
           border-r border-r-zinc-200 dark:border-r-gray-700
           ${isOpen || !isMobile ? "translate-x-0" : "-translate-x-full"}
