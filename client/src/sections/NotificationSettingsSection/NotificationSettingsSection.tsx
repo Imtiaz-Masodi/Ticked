@@ -28,6 +28,7 @@ const NotificationSettingsSection: React.FC = () => {
             value={sessionDuration}
             getLabel={(option) => option}
             onChange={(_, selected) => setSessionDuration(selected as string)}
+            className="min-w-36"
           />
         }
       />
