@@ -1,5 +1,6 @@
-import React, { createContext, useReducer, ReactNode, useMemo, useCallback } from "react";
+import React, { createContext, useReducer, ReactNode, useMemo, useCallback, useEffect } from "react";
 import { Toast } from "../types/Toast";
+import { ERROR_NOTIFICATION_EVENT } from "../utils/errorUtils";
 
 // Action types
 type ToastAction =
@@ -75,12 +76,33 @@ export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     dispatch({ type: "CLEAR_ALL_TOASTS" });
   }, []);
 
-  const value: ToastContextType = useMemo(() => ({
+  useEffect(() => {
+    const listener = (event: Event) => {
+      const { errorMessage, notificationType } = (event as CustomEvent).detail;
+      addToast({
+        id: Date.now().toString(),
+        message: errorMessage,
+        type: notificationType,
+        duration: 3000,
+        dismissible: true,
+      });
+    };
+    document.addEventListener(ERROR_NOTIFICATION_EVENT, listener);
+
+    return () => {
+      document.removeEventListener(ERROR_NOTIFICATION_EVENT, listener);
+    };
+  }, [addToast]);
+
+  const value: ToastContextType = useMemo(
+    () => ({
       toasts: state.toasts,
       addToast,
       removeToast,
       clearAllToasts,
-    }), [state.toasts, addToast, removeToast, clearAllToasts]);
+    }),
+    [state.toasts, addToast, removeToast, clearAllToasts]
+  );
 
   return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
 };
