@@ -5,6 +5,7 @@ import { Task } from "../../types/Task";
 import { NoData } from "../../components/NoData";
 import { NoFilterResults } from "../../components/NoFilterResults";
 import { TasksPageSkeleton } from "../../components/Skeleton";
+import ApiErrorState from "../../components/ApiErrorState";
 import { TaskStatus, StatusType } from "../../utils/enums";
 import {
   groupTasksByStatus,
@@ -18,9 +19,10 @@ import { useSearchFilter } from "../../hooks";
 import { filterTasks, hasActiveSearchOrFilter } from "../../utils/taskFilterUtils";
 import { useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { RTKQueryError } from "../../utils/errorUtils";
 
 function TasksList() {
-  const { data, isLoading } = useGetTasksQuery();
+  const { data, isLoading, error: getTasksError, refetch } = useGetTasksQuery();
   const [updateTaskStatus] = useUpdateTaskStatusMutation();
   const { apiSuccess } = useApiToast();
   const toast = useToast();
@@ -139,6 +141,18 @@ function TasksList() {
   };
 
   const hasActiveFiltersOrSearch = hasActiveSearchOrFilter(searchFilterState.state);
+
+  // Show error state if there's an error loading tasks
+  if (getTasksError && !isLoading) {
+    return (
+      <ApiErrorState
+        error={getTasksError as RTKQueryError}
+        title="Failed to Load Tasks"
+        message="We couldn't load your tasks. Please try again."
+        onRetry={() => refetch()}
+      />
+    );
+  }
 
   if (!isLoading && groupedTasks.totalTasksCount === 0) {
     // If only route-specific filters are applied (no additional user filters), show NoData
