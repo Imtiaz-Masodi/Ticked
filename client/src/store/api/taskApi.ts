@@ -3,6 +3,7 @@ import { Task, ChecklistItem } from "../../types/Task";
 import { customBaseQuery } from "./customBaseQuery";
 import { ApiResponse } from "../../types/ApiResponse";
 import { TaskStatus } from "../../utils/enums";
+import { withErrorNotification } from "../../utils/rtkQueryUtils";
 
 export const taskApi = createApi({
   reducerPath: "taskApi",
@@ -47,29 +48,41 @@ export const taskApi = createApi({
       invalidatesTags: [{ type: "Task", id: "LIST" }],
     }),
     updateTask: builder.mutation<ApiResponse<unknown>, { task: Task }>({
-      query: ({ task }) => ({
-        url: `/task/update/${task._id}`,
-        method: "PUT",
-        data: task,
-      }),
+      query: ({ task }) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/update/${task._id}`,
+          method: "PUT",
+          data: task,
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, { task }) => [{ type: "Task", id: task._id }],
     }),
     updateTaskStatus: builder.mutation<ApiResponse<unknown>, { taskId: string; taskStatus: string }>({
-      query: ({ taskId, taskStatus }) => ({
-        url: `/task/update-status/${taskId}`,
-        method: "PUT",
-        data: { status: taskStatus },
-      }),
+      query: ({ taskId, taskStatus }) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/update-status/${taskId}`,
+          method: "PUT",
+          data: { status: taskStatus },
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, { taskId }) => [
         { type: "Task", id: taskId },
         { type: "Task", id: "LIST" },
       ],
     }),
     deleteTask: builder.mutation({
-      query: (id) => ({
-        url: `/task/delete/${id}`,
-        method: "DELETE",
-      }),
+      query: (id) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/delete/${id}`,
+          method: "DELETE",
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, id) => [
         { type: "Task", id },
         { type: "Task", id: "LIST" },
@@ -77,11 +90,15 @@ export const taskApi = createApi({
     }),
     // Checklist Items Management
     addChecklistItem: builder.mutation<ApiResponse<{ task: Task }>, { taskId: string; text: string }>({
-      query: ({ taskId, text }) => ({
-        url: `/task/${taskId}/checklist`,
-        method: "POST",
-        data: { text },
-      }),
+      query: ({ taskId, text }) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/${taskId}/checklist`,
+          method: "POST",
+          data: { text },
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, { taskId }) => [
         { type: "Task", id: taskId },
         { type: "Task", id: "LIST" },
@@ -91,21 +108,29 @@ export const taskApi = createApi({
       ApiResponse<{ task: Task }>,
       { taskId: string; itemId: string; updates: Partial<ChecklistItem> }
     >({
-      query: ({ taskId, itemId, updates }) => ({
-        url: `/task/${taskId}/checklist/${itemId}`,
-        method: "PUT",
-        data: updates,
-      }),
+      query: ({ taskId, itemId, updates }) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/${taskId}/checklist/${itemId}`,
+          method: "PUT",
+          data: updates,
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, { taskId }) => [
         { type: "Task", id: taskId },
         { type: "Task", id: "LIST" },
       ],
     }),
     deleteChecklistItem: builder.mutation<ApiResponse<{ task: Task }>, { taskId: string; itemId: string }>({
-      query: ({ taskId, itemId }) => ({
-        url: `/task/${taskId}/checklist/${itemId}`,
-        method: "DELETE",
-      }),
+      query: ({ taskId, itemId }) => {
+        const { meta } = withErrorNotification();
+        return {
+          url: `/task/${taskId}/checklist/${itemId}`,
+          method: "DELETE",
+          meta,
+        };
+      },
       invalidatesTags: (_result, _error, { taskId }) => [
         { type: "Task", id: taskId },
         { type: "Task", id: "LIST" },
