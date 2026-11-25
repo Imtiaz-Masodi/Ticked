@@ -11,7 +11,7 @@
     "task",
     "management"
   ],
-  "author": "Muhammad Imtiaz",
+  "author": "Mohd Imtiaz",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
