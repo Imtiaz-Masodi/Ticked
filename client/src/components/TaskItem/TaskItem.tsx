@@ -25,7 +25,8 @@ function TaskItem({ task }: TaskItemProps) {
   const { totalItems, completedItems, isCompleted } = calculateChecklistProgress(task);
 
   const handleTaskClick = () => {
-    navigate(`/task/${task._id}`);
+    // replace should be true when the url is of task viewer and false otherwise
+    navigate(`/task/${task._id}`, { replace: taskId ? true : false });
   };
 
   return (
